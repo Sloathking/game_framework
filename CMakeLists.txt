@@ -5,21 +5,25 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 add_executable(${PROJECT_NAME} main.cpp
-        include/Game.h
-        src/Game.cpp
-        include/Constants.h
-        include/Actor.h
-        src/Actor.cpp
-        include/Component.h
-        src/Component.cpp
-        include/SpriteComponent.h
-        src/SpriteComponent.cpp
-        include/Math.h
-        src/Math.cpp
-        include/AnimSpriteComponent.h
-        src/AnimSpriteComponent.cpp
-        include/BGSpriteComponent.h
-        src/BGSpriteComponent.cpp)
+        Engine/include/Game.h
+        Engine/src/Game.cpp
+        Engine/include/Constants.h
+        Engine/include/Actor.h
+        Engine/src/Actor.cpp
+        Engine/include/Component.h
+        Engine/src/Component.cpp
+        Engine/include/SpriteComponent.h
+        Engine/src/SpriteComponent.cpp
+        Engine/include/Math.h
+        Engine/src/Math.cpp
+        Engine/include/AnimSpriteComponent.h
+        Engine/src/AnimSpriteComponent.cpp
+        Engine/include/BGSpriteComponent.h
+        Engine/src/BGSpriteComponent.cpp
+        Game/Ship.cpp
+        Game/Ship.h
+        Game/Skeleton.cpp
+        Game/Skeleton.h)
 
 file(
         DOWNLOAD
