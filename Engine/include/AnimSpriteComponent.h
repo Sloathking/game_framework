@@ -10,19 +10,22 @@
 #include <string>
 #include <unordered_map>
 
+
 class AnimSpriteComponent : public SpriteComponent
 {
 public:
+    enum LoopingType { NO_LOOP, LOOP };
+
     explicit AnimSpriteComponent(class Actor* owner, int drawOrder = 100);
 
     // update anim every frame
     void Update(float deltaTime) override;
 
     // add animation to Animations
-    void AddAnimation(const int& num, const std::vector<SDL_Texture*>& texture);
+    void AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& texture);
 
     // update an animation in Animations
-    void UpdateAnimation(const int& num, const std::vector<SDL_Texture*>& texture);
+    void UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& texture);
 
     // play animation in Animations
     void PlayAnimation(const int& num);
@@ -33,19 +36,19 @@ public:
     // stop animation
     void StopAnimation() { mAnimate = false; }
 
-    // plan an animation in Animations once
-    void OneshotAnimation(const std::string& name);
-
     // set / get anim FPS
     [[nodiscard]] float GetAnimFPS() const { return mAnimFPS; }
     void SetAnimFPS(const float fps) { mAnimFPS = fps; }
+
+    // get num of current anim playing
+    int GetCurrAnim() const { return mCurrAnim; }
 
 private:
     // set textures used for anim
     void SetAnimTextures(const std::vector<SDL_Texture*>& textures);
 
     // map to hold animations
-    std::unordered_map<int, std::vector<SDL_Texture*>> animations{};
+    std::unordered_map<int, std::pair<LoopingType, std::vector<SDL_Texture*>>> animations{};
 
     // all textures in the anim
     std::vector<SDL_Texture*> mAnimTextures;

@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "Actor.h"
+
 class Game
 {
 public:
@@ -20,10 +22,10 @@ public:
     void Shutdown();
 
     void AddActor(class Actor* actor);
-    void RemoveActor(class Actor* actor);
+    void RemoveActor(Actor* actor);
 
     void AddSprite(class SpriteComponent* sprite);
-    void RemoveSprite(class SpriteComponent* sprite);
+    void RemoveSprite(SpriteComponent* sprite);
 
     SDL_Renderer* GetRenderer() const { return mRenderer; }
     SDL_Texture* GetTexture(const std::string& fileName);
@@ -49,17 +51,17 @@ private:
     Uint64 mTicksCount;
 
     // vectors to hold active Actors and pending Actors
-    std::vector<class Actor*> mActors;
-    std::vector<class Actor*> mPendingActors;
+    std::vector<Actor*> mActors;
+    std::vector<Actor*> mPendingActors;
     bool mUpdatingActors;
 
     // map of loaded textures
     std::unordered_map<std::string, SDL_Texture*> mTextures;
 
     // all the drawn sprite components
-    std::vector<class SpriteComponent*> mSprites;
+    std::vector<SpriteComponent*> mSprites;
 
-    class Skeleton* mSkeleton{};
+    class TileMap* mTileMap;
 };
 
 #endif //CLION_GAME_PROGRAMMING_GAME_H

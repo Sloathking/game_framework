@@ -6,6 +6,7 @@
 #include "../include/Actor.h"
 #include "../include/SpriteComponent.h"
 #include "../include/BGSpriteComponent.h"
+#include "../include/TileMap.h"
 #include "../../Game/Skeleton.h"
 
 #include <random>
@@ -189,7 +190,6 @@ void Game::ProcessInput()
 		default:
 			break;
 		}
-		mSkeleton->HandleEvent(event);
 	}
 }
 
@@ -230,45 +230,23 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput() const
 {
-	SDL_SetRenderDrawColor(mRenderer, 245, 245, 245, 255);
+	SDL_SetRenderDrawColor(mRenderer, 100, 100, 100, 255);
 	SDL_RenderClear(mRenderer);
 
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer);
+
+	const SDL_FRect playerSquare{ .x = mTileMap->GetPosition().x - 1, .y = mTileMap->GetPosition().y - 1, .w = 2, .h = 2 };
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+	SDL_RenderRect(mRenderer, &playerSquare);
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	// skeleton
-	mSkeleton = new Skeleton(this);
-	mSkeleton->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
-	mSkeleton->SetScale(2.0f);
-
-	/*// create actor for background
-	auto* temp = new Actor(this);
-	temp->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
-
-	// create the 'far back' background
-	auto* bg = new BGSpriteComponent(temp);
-	bg->SetScreenSize(Vector2(windowWidth, windowHeight));
-	std::vector<SDL_Texture*> bgtexs{
-		GetTexture("Assets/FarBack01.png"),
-		GetTexture("Assets/FarBack02.png"),
-	};
-	bg->SetBGTextures(bgtexs);
-	bg->SetScrollSpeed(-50.0f);
-
-	// creat the closer bg
-	bg = new BGSpriteComponent(temp, 50);
-	bg->SetScreenSize(Vector2(windowWidth, windowHeight));
-	bgtexs = {
-		GetTexture("Assets/Stars.png"),
-		GetTexture("Assets/Stars.png"),
-	};
-	bg->SetBGTextures(bgtexs);
-	bg->SetScrollSpeed(-100.0f);*/
+	mTileMap = new TileMap(this);
+	mTileMap->SetPosition(Vector2(0.0f, 0.0f));
 }
 
 void Game::UnloadData() const

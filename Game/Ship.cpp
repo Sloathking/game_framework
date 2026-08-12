@@ -17,7 +17,7 @@ Ship::Ship(Game* game) : Actor(game)
         game->GetTexture("Assets/Ship03.png"),
         game->GetTexture("Assets/Ship04.png"),
     };
-    animSprite->AddAnimation(0, anims);
+    animSprite->AddAnimation(0, AnimSpriteComponent::LOOP, anims);
     animSprite->PlayAnimation(0);
 }
 

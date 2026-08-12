@@ -8,9 +8,6 @@
 #include "../Engine/include/Actor.h"
 #include <SDL3/SDL_Events.h>
 
-#include <unordered_map>
-#include <string>
-
 enum animNames { DEFAULT = 0, WALKING = 1, RUNNING = 2, JUMPING = 3, PUNCH = 4 };
 
 class Skeleton : public Actor
@@ -24,6 +21,8 @@ public:
 private:
     class AnimSpriteComponent* mAnimSprite;
 
+    float mRightSpeed{0};
+    float mDownSpeed{0};
 };
 
 

@@ -11,7 +11,7 @@
 class SpriteComponent : public Component
 {
 public:
-    explicit SpriteComponent(class Actor* owner, int drawOrder = 100);
+    explicit SpriteComponent(Actor* owner, int drawOrder = 100);
     ~SpriteComponent() override;
 
     virtual void Draw(SDL_Renderer* renderer);

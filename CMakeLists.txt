@@ -23,7 +23,14 @@ add_executable(${PROJECT_NAME} main.cpp
         Game/Ship.cpp
         Game/Ship.h
         Game/Skeleton.cpp
-        Game/Skeleton.h)
+        Game/Skeleton.h
+        Engine/src/TileMapComponent.cpp
+        Engine/include/TileMapComponent.h
+        Engine/include/CSVUtils.h
+        Engine/src/TileMap.cpp
+        Engine/include/TileMap.h
+        Engine/src/Texture.cpp
+        Engine/include/Texture.h)
 
 file(
         DOWNLOAD
