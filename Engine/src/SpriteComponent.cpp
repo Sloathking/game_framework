@@ -18,10 +18,8 @@ SpriteComponent::~SpriteComponent()
 void SpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip,
     const float width, const float height)
 {
-    SDL_Log("%d", mTexWidth);
-    SDL_Log("%f", anchorOffset.x);
     //Set texture position
-    SDL_FRect dstRect{ .x = mOwner->GetPosition().x + anchorOffset.x + mXOffset, .y = mOwner->GetPosition().y + mYOffset,
+    SDL_FRect dstRect{ .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + mXOffset, .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + mYOffset,
         .w = static_cast<float>( mTexWidth ), .h = static_cast<float>( mTexHeight ) };
 
     //Default to clip dimensions if clip is given
@@ -46,17 +44,16 @@ void SpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip,
     else flipMode = flipHorizontal ? SDL_FLIP_HORIZONTAL : flipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
 
     SDL_FPoint anchor;
-    anchor.x = 0;
-    anchor.y = 0;
+    anchor.x = anchorOffsets[mRotPoint].x;
+    anchor.y = anchorOffsets[mRotPoint].y;
 
-    mDegrees = 0;
+    mDegrees += 1;
 
     //Render texture
     SDL_RenderTextureRotated(renderer, mTexture, clip, &dstRect, mDegrees, &anchor, flipMode);
 
-    //SDL_Log("X: %f | Y: %f | W: %f | H: %f", dstRect.x, dstRect.y, dstRect.w, dstRect.h);
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &dstRect);
+    /*SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &dstRect);*/
 }
 
 void SpriteComponent::SetTexture(SDL_Texture* texture)
@@ -64,4 +61,10 @@ void SpriteComponent::SetTexture(SDL_Texture* texture)
     mTexture = texture;
     mTexWidth = texture->w;
     mTexHeight = texture->h;
+
+    anchorOffsets = {
+        { TopLeft, Vector2(0,0) },{ TopCenter, Vector2(-(mTexWidth * 0.5f),0) }, { TopRight, Vector2(-mTexWidth,0) },
+        { CenterLeft, Vector2(0,-(mTexHeight * 0.5f)) },{ CenterCenter, Vector2(-(mTexWidth * 0.5f),-(mTexHeight * 0.5f)) }, { CenterRight, Vector2(-mTexWidth,-(mTexHeight * 0.5f)) },
+        { BottomLeft, Vector2(0,-(mTexHeight)) },{ BottomCenter, Vector2(-(mTexWidth * 0.5f),-(mTexHeight)) }, { BottomRight, Vector2(-mTexWidth,-(mTexHeight)) },
+    };
 }

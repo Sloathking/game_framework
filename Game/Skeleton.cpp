@@ -10,6 +10,7 @@
 Skeleton::Skeleton(Game* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
+    currAnchor = 0;
     mAnimSprite->SetAnimFPS(12.0f);
     mAnimSprite->SetFlipHorizontal(true);
     std::vector<SDL_Texture*> anims{};
@@ -89,13 +90,10 @@ void Skeleton::HandleEvent(const SDL_Event& event)
         switch (event.button.button)
         {
         case 1:
-            mAnimSprite->SetAnchor(AnimSpriteComponent::TopLeft);
-            break;
-        case 2:
-            mAnimSprite->SetAnchor(AnimSpriteComponent::TopCenter);
-            break;
-        case 3:
-            mAnimSprite->SetAnchor(AnimSpriteComponent::TopRight);
+            //mAnimSprite->SetAnchor(static_cast<SpriteComponent::AnchorPoint>(currAnchor));
+            mAnimSprite->SetRotPoint(static_cast<SpriteComponent::AnchorPoint>(currAnchor));
+            currAnchor++;
+            if (currAnchor > 8) currAnchor = 0;
             break;
         default:
             break;

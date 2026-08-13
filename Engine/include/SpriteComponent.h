@@ -45,20 +45,13 @@ public:
     void SetFlipVertical(const bool flip) { flipVertical = flip; }
 
     [[nodiscard]] AnchorPoint GetAnchor() const { return mAnchor; }
-    void SetAnchor(const AnchorPoint anchor)
-    {
-        mAnchor = anchor;
-        anchorOffset = anchorOffsets[mAnchor];
-    }
+    void SetAnchor(const AnchorPoint anchor) { mAnchor = anchor; }
 
     [[nodiscard]] AnchorPoint GetRotPoint() const { return mRotPoint; }
     void SetRotPoint(const AnchorPoint rotPoint) { mRotPoint = rotPoint; }
 
 protected:
-    std::unordered_map<AnchorPoint, Vector2> anchorOffsets{
-        { TopLeft, Vector2(0,0) },{ TopCenter, Vector2(-(mTexWidth * 0.5f),0) }, { TopRight, Vector2(-mTexWidth,0) },
-    };
-    Vector2 anchorOffset{0, 0 };
+    std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
 
     SDL_Texture* mTexture{ nullptr };
     int mDrawOrder;
@@ -73,8 +66,8 @@ protected:
     bool flipHorizontal{ false };
     bool flipVertical{ false };
 
-    AnchorPoint mAnchor{ TopLeft };
-    AnchorPoint mRotPoint{ CenterCenter };
+    AnchorPoint mAnchor{ CenterCenter };
+    AnchorPoint mRotPoint{ TopLeft };
 
 };
 
