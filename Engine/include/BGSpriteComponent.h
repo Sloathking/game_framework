@@ -2,8 +2,8 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_BGSPRITECOMPONENT_H
-#define CLION_GAME_PROGRAMMING_BGSPRITECOMPONENT_H
+#ifndef BGSPRITECOMPONENT_H
+#define BGSPRITECOMPONENT_H
 
 #include "../include/SpriteComponent.h"
 #include "../include/Math.h"
@@ -16,7 +16,7 @@ public:
 
     // update draw override
     void Update(float deltaTime) override;
-    void Draw(SDL_Renderer* renderer) override;
+    void Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height) override;
 
     // set the texture used for the background
     void SetBGTextures(const std::vector<SDL_Texture*>& textures);
@@ -39,4 +39,4 @@ private:
     float mScrollSpeed;
 };
 
-#endif //CLION_GAME_PROGRAMMING_BGSPRITECOMPONENT_H
+#endif //BGSPRITECOMPONENT_H

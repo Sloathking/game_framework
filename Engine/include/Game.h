@@ -2,8 +2,8 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_GAME_H
-#define CLION_GAME_PROGRAMMING_GAME_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <SDL3/SDL.h>
 #include <vector>
@@ -21,7 +21,7 @@ public:
     void RunLoop();
     void Shutdown();
 
-    void AddActor(class Actor* actor);
+    void AddActor(Actor* actor);
     void RemoveActor(Actor* actor);
 
     void AddSprite(class SpriteComponent* sprite);
@@ -61,7 +61,9 @@ private:
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
 
-    class TileMap* mTileMap;
+    //class TileMap* mTileMap;
+    class Skeleton* mSkeleton;
+    class Ship* mShip;
 };
 
-#endif //CLION_GAME_PROGRAMMING_GAME_H
+#endif //GAME_H

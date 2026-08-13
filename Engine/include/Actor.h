@@ -2,8 +2,8 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_ACTOR_H
-#define CLION_GAME_PROGRAMMING_ACTOR_H
+#ifndef ACTOR_H
+#define ACTOR_H
 #include <vector>
 #include "Math.h"
 
@@ -60,7 +60,7 @@ private:
     float mRotation;	// rotation angle (in radians)
 
     // components held by actor
-    std::vector<class Component*> mComponents;
-    class Game* mGame;
+    std::vector<Component*> mComponents;
+    Game* mGame;
 };
-#endif //CLION_GAME_PROGRAMMING_ACTOR_H
+#endif //ACTOR_H

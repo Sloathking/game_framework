@@ -9,9 +9,9 @@
 
 TileMap::TileMap(Game* game) : Actor(game)
 {
-    mClosestTileMap = new TileMapComponent(this);
-    mClosestTileMap->SetTexture(game->GetTexture("../../Game/Assets/tiles.png"));
+    /*mClosestTileMap = new TileMapComponent(this);
+    mClosestTileMap->LoadTexture("Assets/Tiles.png");*/
 
-    const std::string fileName{"../../Game/Assets/MapLayer1.csv"};
-    mClosestTileMap->ReadFile(fileName);
+    /*const std::string fileName{"../../Game/Assets/MapLayer1.csv"};
+    mClosestTileMap->ReadFile(fileName);*/
 }

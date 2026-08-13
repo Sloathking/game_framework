@@ -20,6 +20,7 @@ public:
     [[nodiscard]] float GetDownSpeed() const { return mDownSpeed; }
 
 private:
+    class AnimSpriteComponent* mAnimSprite;
     float mRightSpeed{ 0 };
     float mDownSpeed{ 0 };
 };

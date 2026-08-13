@@ -10,15 +10,16 @@
 
 Ship::Ship(Game* game) : Actor(game)
 {
-    const auto animSprite{ new AnimSpriteComponent(this) };
-    const std::vector<SDL_Texture*> anims{
+    mAnimSprite = new AnimSpriteComponent(this);
+    const std::vector<SDL_Texture*> textures {
         game->GetTexture("Assets/Ship01.png"),
         game->GetTexture("Assets/Ship02.png"),
         game->GetTexture("Assets/Ship03.png"),
-        game->GetTexture("Assets/Ship04.png"),
+        game->GetTexture("Assets/Ship04.png")
     };
-    animSprite->AddAnimation(0, AnimSpriteComponent::LOOP, anims);
-    animSprite->PlayAnimation(0);
+
+    mAnimSprite->AddAnimation(0, AnimSpriteComponent::LOOP, textures);
+    mAnimSprite->PlayAnimation(0);
 }
 
 void Ship::UpdateActor(const float deltaTime)

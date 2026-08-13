@@ -10,7 +10,6 @@
 #include "../include/CSVUTils.h"
 #include "../include/Actor.h"
 
-
 TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder)
 {
 
@@ -26,7 +25,7 @@ void TileMapComponent::Update(const float deltaTime)
 
 }
 
-void TileMapComponent::Draw(SDL_Renderer* renderer)
+void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height)
 {
 
 }

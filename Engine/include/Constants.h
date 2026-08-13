@@ -2,8 +2,8 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_CONSTANTS_H
-#define CLION_GAME_PROGRAMMING_CONSTANTS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include <string>
 
@@ -16,4 +16,4 @@ inline bool vSyncEnabled{ true };
 inline bool fpsCapEnabled{ true };
 inline bool logFPSandVSYNC{ false };
 
-#endif //CLION_GAME_PROGRAMMING_CONSTANTS_H
+#endif //CONSTANTS_H

@@ -5,8 +5,8 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-#ifndef CLION_GAME_PROGRAMMING_MATH_H
-#define CLION_GAME_PROGRAMMING_MATH_H
+#ifndef MATH_H
+#define MATH_H
 
 #include <cmath>
 #include <memory.h>
@@ -1026,4 +1026,4 @@ namespace Color
 	static const Vector3 LightGreen(0.56f, 0.93f, 0.56f);
 }
 
-#endif //CLION_GAME_PROGRAMMING_MATH_H
+#endif //MATH_H

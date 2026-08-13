@@ -2,30 +2,29 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_ANIMSPRITECOMPONENT_H
-#define CLION_GAME_PROGRAMMING_ANIMSPRITECOMPONENT_H
+#ifndef ANIMSPRITECOMPONENT_H
+#define ANIMSPRITECOMPONENT_H
 
 #include "SpriteComponent.h"
 #include <vector>
 #include <string>
 #include <unordered_map>
 
-
 class AnimSpriteComponent : public SpriteComponent
 {
 public:
     enum LoopingType { NO_LOOP, LOOP };
 
-    explicit AnimSpriteComponent(class Actor* owner, int drawOrder = 100);
+    explicit AnimSpriteComponent(Actor* owner, int drawOrder = 100);
 
     // update anim every frame
     void Update(float deltaTime) override;
 
     // add animation to Animations
-    void AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& texture);
+    void AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures);
 
     // update an animation in Animations
-    void UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& texture);
+    void UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures);
 
     // play animation in Animations
     void PlayAnimation(const int& num);
@@ -66,4 +65,4 @@ private:
     bool mAnimate{ false };
 };
 
-#endif //CLION_GAME_PROGRAMMING_ANIMSPRITECOMPONENT_H
+#endif //ANIMSPRITECOMPONENT_H

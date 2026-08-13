@@ -2,8 +2,8 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef CLION_GAME_PROGRAMMING_COMPONENT_H
-#define CLION_GAME_PROGRAMMING_COMPONENT_H
+#ifndef COMPONENT_H
+#define COMPONENT_H
 
 class Component
 {
@@ -21,10 +21,10 @@ public:
 
 protected:
     // owning Actor
-    class Actor* mOwner;
+    Actor* mOwner;
 
     // update order of component
     int mUpdateOrder;
 };
 
-#endif //CLION_GAME_PROGRAMMING_COMPONENT_H
+#endif //COMPONENT_H

@@ -26,7 +26,7 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer* renderer)
+void BGSpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height)
 {
     for (auto& bg : mBGTextures)
     {
@@ -35,7 +35,7 @@ void BGSpriteComponent::Draw(SDL_Renderer* renderer)
         dstRect.h = mScreenSize.y;
         dstRect.x = mOwner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
         dstRect.y = mOwner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
-        SDL_RenderTexture(mOwner->GetGame()->GetRenderer(), bg.mTexture, nullptr, &dstRect);
+        SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
     }
 }
 

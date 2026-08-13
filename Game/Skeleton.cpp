@@ -11,17 +11,18 @@ Skeleton::Skeleton(Game* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
+    mAnimSprite->SetFlipHorizontal(true);
     std::vector<SDL_Texture*> anims{};
 
     anims.clear();
     anims.emplace_back(game->GetTexture("Assets/Character01.png"));
-    mAnimSprite->AddAnimation(static_cast<int>(DEFAULT), AnimSpriteComponent::LOOP, anims);
+    mAnimSprite->AddAnimation(DEFAULT, AnimSpriteComponent::LOOP, anims);
 
     anims.clear();
     std::string fileNameStart = "Assets/Character0";
     for (int i = 1; i <= 6; ++i)
         anims.emplace_back(game->GetTexture(fileNameStart + std::to_string(i) + ".png"));
-    mAnimSprite->AddAnimation(static_cast<int>(WALKING), AnimSpriteComponent::LOOP, anims);
+    mAnimSprite->AddAnimation(WALKING, AnimSpriteComponent::LOOP, anims);
 
     anims.clear();
     for (int i = 7; i <= 9; i++)
@@ -29,14 +30,14 @@ Skeleton::Skeleton(Game* game) : Actor(game)
     fileNameStart = "Assets/Character";
     for (int i = 10; i <= 15; i++)
         anims.emplace_back(game->GetTexture(fileNameStart + std::to_string(i) + ".png"));
-    mAnimSprite->AddAnimation(static_cast<int>(JUMPING), AnimSpriteComponent::NO_LOOP, anims);
+    mAnimSprite->AddAnimation(JUMPING, AnimSpriteComponent::NO_LOOP, anims);
 
     anims.clear();
     for (int i = 16; i <= 18; i++)
         anims.emplace_back(game->GetTexture(fileNameStart + std::to_string(i) + ".png"));
-    mAnimSprite->AddAnimation(static_cast<int>(PUNCH), AnimSpriteComponent::NO_LOOP, anims);
+    mAnimSprite->AddAnimation(PUNCH, AnimSpriteComponent::NO_LOOP, anims);
 
-    mAnimSprite->PlayAnimation(static_cast<int>(DEFAULT));
+    mAnimSprite->PlayAnimation(DEFAULT);
 }
 
 void Skeleton::UpdateActor(const float deltaTime)
@@ -78,6 +79,23 @@ void Skeleton::HandleEvent(const SDL_Event& event)
             break;
         case SDLK_V:
             mAnimSprite->PlayAnimation(PUNCH);
+            break;
+        default:
+            break;
+        }
+    }
+    if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+    {
+        switch (event.button.button)
+        {
+        case 1:
+            mAnimSprite->SetAnchor(AnimSpriteComponent::TopLeft);
+            break;
+        case 2:
+            mAnimSprite->SetAnchor(AnimSpriteComponent::TopCenter);
+            break;
+        case 3:
+            mAnimSprite->SetAnchor(AnimSpriteComponent::TopRight);
             break;
         default:
             break;

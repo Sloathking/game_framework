@@ -49,4 +49,8 @@ list(APPEND LIBS SDL3::SDL3)
 CPMAddPackage("gh:libsdl-org/SDL_image#bec9134")
 list(APPEND LIBS SDL3_image::SDL3_image)
 
+set(SDLTTF_VENDORED ON)
+CPMAddPackage("gh:libsdl-org/SDL_ttf#a1ce367")
+list(APPEND LIBS SDL3_ttf::SDL3_ttf)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})

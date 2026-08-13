@@ -4,12 +4,17 @@
 
 #include "../include/Texture.h"
 
-#include "../include/Constants.h"
 #include <SDL3_image/SDL_image.h>
+#include "../include/Constants.h"
+#include "../include/Game.h"
 
-Texture::Texture(class Actor* owner, int updateOrder) : Component(owner, updateOrder)
+Texture::Texture() = default;
+
+Texture::Texture(Game* game, const std::string& fileName)
 {
-
+    mTexture = game->GetTexture(fileName);
+    mWidth = mTexture->w;
+    mHeight = mTexture->h;
 }
 
 Texture::~Texture()
@@ -18,7 +23,7 @@ Texture::~Texture()
     Destroy();
 }
 
-bool Texture::LoadFromFile( const std::string& path )
+bool Texture::LoadTexture(const Game* game, const std::string& path)
 {
     //Clean up texture if it already exists
     Destroy();
@@ -38,7 +43,7 @@ bool Texture::LoadFromFile( const std::string& path )
         else
         {
             //Create texture from surface
-            if( mTexture = SDL_CreateTextureFromSurface( mRenderer, loadedSurface ); mTexture == nullptr )
+            if( mTexture = SDL_CreateTextureFromSurface( game->GetRenderer(), loadedSurface ); mTexture == nullptr )
             {
                 SDL_Log( "Unable to create texture from loaded pixels! SDL error: %s\n", SDL_GetError() );
             }
@@ -72,7 +77,7 @@ bool LTexture::LoadFromRenderedText( std::string textureText, SDL_Color textColo
     else
     {
         //Create texture from surface
-        if( mTexture = SDL_CreateTextureFromSurface( gRenderer, textSurface ); mTexture == nullptr )
+        if( mTexture = SDL_CreateTextureFromSurface( mOwner->GetGame()->GetRenderer(), textSurface ); mTexture == nullptr )
         {
             SDL_Log( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
         }
@@ -100,25 +105,27 @@ void Texture::Destroy()
     mHeight = 0;
 }
 
-void Texture::SetColor( Uint8 r, Uint8 g, Uint8 b )
+void Texture::SetColor(const Uint8 r, const Uint8 g, const Uint8 b) const
 {
     SDL_SetTextureColorMod( mTexture, r, g, b );
 }
 
-void Texture::SetAlpha( Uint8 alpha )
+void Texture::SetAlpha(const Uint8 alpha ) const
 {
     SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void Texture::SetBlending( SDL_BlendMode blendMode )
+void Texture::SetBlending(const SDL_BlendMode blendMode ) const
 {
     SDL_SetTextureBlendMode( mTexture, blendMode );
 }
 
-void Texture::Render( float x, float y, SDL_FRect* clip, float width, float height, double degrees, SDL_FPoint* center, SDL_FlipMode flipMode )
+void Texture::Draw(SDL_Renderer* renderer, const float x, const float y, const SDL_FRect* clip,
+    const float width, const float height, const double degrees,
+    const SDL_FPoint* center, const SDL_FlipMode flipMode ) const
 {
     //Set texture position
-    SDL_FRect dstRect{ x, y, static_cast<float>( mWidth ), static_cast<float>( mHeight ) };
+    SDL_FRect dstRect{ .x = x, .y = y, .w = static_cast<float>( mWidth ), .h = static_cast<float>( mHeight ) };
 
     //Default to clip dimensions if clip is given
     if( clip != nullptr )
@@ -138,5 +145,5 @@ void Texture::Render( float x, float y, SDL_FRect* clip, float width, float heig
     }
 
     //Render texture
-    SDL_RenderTextureRotated( mRenderer, mTexture, clip, &dstRect, degrees, center, flipMode );
+    SDL_RenderTextureRotated( renderer, mTexture, clip, &dstRect, degrees, center, flipMode );
 }

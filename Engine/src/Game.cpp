@@ -4,13 +4,18 @@
 #include "../include/Game.h"
 #include "../include/Constants.h"
 #include "../include/Actor.h"
+#include "../include/Texture.h"
 #include "../include/SpriteComponent.h"
 #include "../include/BGSpriteComponent.h"
 #include "../include/TileMap.h"
 #include "../../Game/Skeleton.h"
+#include "../../Game/Ship.h"
+
+#include <SDL3_image/SDL_image.h>
 
 #include <random>
 #include <ranges>
+
 
 Game::Game() : mWindow{ nullptr }, mRenderer{ nullptr }, mIsRunning{ true }, mTicksCount{ 0 }, mUpdatingActors{ false }
 {
@@ -108,8 +113,7 @@ void Game::RemoveActor(Actor* actor)
 
 void Game::AddSprite(SpriteComponent* sprite)
 {
-	// find insertion point in sorted vector
-	// (first element with drawOrder higher)
+	// find insertion point in sorted vector (first element with drawOrder higher)
 	const int drawOrder = sprite->GetDrawOder();
 	auto iter = mSprites.begin();
 	for (; iter != mSprites.end(); ++iter)
@@ -128,8 +132,9 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 {
 	SDL_Texture* tex{ nullptr };
 	const std::string filePath = "../../Game/" + fileName;
+
 	// is texture already in map
-	if (const auto iter = mTextures.find(filePath); iter != mTextures.end()) tex = iter->second;
+	if (const auto iter = mTextures.find(fileName); iter != mTextures.end()) tex = iter->second;
 	else
 	{
 		// load from file
@@ -190,6 +195,7 @@ void Game::ProcessInput()
 		default:
 			break;
 		}
+		mSkeleton->HandleEvent(event);
 	}
 }
 
@@ -234,19 +240,29 @@ void Game::GenerateOutput() const
 	SDL_RenderClear(mRenderer);
 
 	for (const auto sprite : mSprites)
-		sprite->Draw(mRenderer);
+		sprite->Draw(mRenderer, nullptr, -1, -1);
 
-	const SDL_FRect playerSquare{ .x = mTileMap->GetPosition().x - 1, .y = mTileMap->GetPosition().y - 1, .w = 2, .h = 2 };
+	const SDL_FRect skeleSquare{ .x = mSkeleton->GetPosition().x - 1, .y = mSkeleton->GetPosition().y - 1, .w = 2, .h = 2 };
 	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderRect(mRenderer, &playerSquare);
+	SDL_RenderRect(mRenderer, &skeleSquare);
+
+	/*const SDL_FRect shipSquare{ .x = mShip->GetPosition().x - 1, .y = mShip->GetPosition().y - 1, .w = 2, .h = 2 };
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+	SDL_RenderRect(mRenderer, &shipSquare);*/
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	mTileMap = new TileMap(this);
-	mTileMap->SetPosition(Vector2(0.0f, 0.0f));
+	// mShip = new Ship(this);
+	// mShip->SetPosition(Vector2(100.0f, 200.0f));
+
+	mSkeleton = new Skeleton(this);
+	mSkeleton->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
+
+	/*mTileMap = new TileMap(this);
+	mTileMap->SetPosition(Vector2(0.0f, 0.0f));*/
 }
 
 void Game::UnloadData() const
