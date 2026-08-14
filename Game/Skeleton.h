@@ -23,8 +23,6 @@ private:
 
     float mRightSpeed{0};
     float mDownSpeed{0};
-
-    int currAnchor;
 };
 
 

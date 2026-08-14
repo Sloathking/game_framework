@@ -15,31 +15,78 @@ TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteCo
 
 }
 
-TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder, const std::string& fileName) : SpriteComponent(owner, drawOrder)
-{
-    ReadFile(fileName);
-}
-
 void TileMapComponent::Update(const float deltaTime)
 {
 
 }
 
-void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height)
+void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const float width, const float height)
 {
+    for (TileData& tile : mTiles)
+    {
+        SDL_FRect srcRect{ .x = mTileWidth * tile.spriteCoords.x, .y = mTileWidth * tile.spriteCoords.y, .w = mTileWidth, .h = mTileHeight };
 
+        SDL_FRect dstRect{ .x = mOwner->GetPosition().x + mTileWidth * tile.xOffset, .y = mOwner->GetPosition().y + mTileHeight * tile.yOffset,
+            .w = mTileWidth, .h = mTileHeight };
+
+        //Default to clip dimensions if clip is given
+        if( clip != nullptr )
+        {
+            dstRect.w = clip->w;
+            dstRect.h = clip->h;
+        }
+
+        //Resize if new dimensions are given
+        if( width > 0 )
+        {
+            dstRect.w = width;
+        }
+        if( height > 0 )
+        {
+            dstRect.h = height;
+        }
+
+        SDL_FlipMode flipMode;
+        if (flipHorizontal and flipVertical) flipMode = SDL_FLIP_HORIZONTAL_AND_VERTICAL;
+        else flipMode = flipHorizontal ? SDL_FLIP_HORIZONTAL : flipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
+
+        SDL_FPoint anchor;
+        anchor.x = rotOffsets[mRotPoint].x;
+        anchor.y = rotOffsets[mRotPoint].y;
+
+        //Render texture
+        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, mDegrees, &anchor, flipMode);
+    }
 }
 
 void TileMapComponent::ReadFile(const std::string& fileName)
 {
-    for (std::ifstream file(fileName); auto& x : CSVRange(file))
+    mTiles.erase(mTiles.begin(), mTiles.end());
+    int row = 0;
+    for (std::ifstream file(fileName); auto& line : CSVRange(file))
     {
-        std::vector<int> nums;
-        //auto result = std::from_chars(row[0], row[row.size()]);
-        for (int y = 0; y < x.size(); ++y)
+        int col = 0;
+        for (int c = 0; c < line.size(); ++c)
         {
-            nums.push_back(stoi(x[y]));
+            TileData tile;
+            const int num = stoi(line[c]);
+            if (num == -1) continue;
+
+            int yPos = num / mSpriteRows;
+            int xPos = num % mSpriteRows;
+            tile = TileData(col, row, Vector2(xPos, yPos));
+
+            mTiles.emplace_back(tile);
+            col++;
         }
-        mTileNums.push_back(nums);
+        row++;
     }
+}
+
+void TileMapComponent::SetSpriteProperties(const int rows, const int cols, const float width, const float height)
+{
+    mSpriteRows = rows;
+    mSpriteCols = cols;
+    mTileWidth = width;
+    mTileHeight = height;
 }

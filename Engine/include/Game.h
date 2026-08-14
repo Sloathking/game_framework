@@ -61,9 +61,7 @@ private:
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
 
-    //class TileMap* mTileMap;
-    class Skeleton* mSkeleton;
-    class Ship* mShip;
+    class TileMap* mTileMap;
 };
 
 #endif //GAME_H

@@ -195,7 +195,6 @@ void Game::ProcessInput()
 		default:
 			break;
 		}
-		mSkeleton->HandleEvent(event);
 	}
 }
 
@@ -242,27 +241,17 @@ void Game::GenerateOutput() const
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
 
-	const SDL_FRect skeleSquare{ .x = mSkeleton->GetPosition().x - 1, .y = mSkeleton->GetPosition().y - 1, .w = 2, .h = 2 };
+	const SDL_FRect tileMapSquare{ .x = mTileMap->GetPosition().x - 1, .y = mTileMap->GetPosition().y - 1, .w = 2, .h = 2 };
 	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderRect(mRenderer, &skeleSquare);
-
-	/*const SDL_FRect shipSquare{ .x = mShip->GetPosition().x - 1, .y = mShip->GetPosition().y - 1, .w = 2, .h = 2 };
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderRect(mRenderer, &shipSquare);*/
+	SDL_RenderRect(mRenderer, &tileMapSquare);
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	// mShip = new Ship(this);
-	// mShip->SetPosition(Vector2(100.0f, 200.0f));
-
-	mSkeleton = new Skeleton(this);
-	mSkeleton->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
-
-	/*mTileMap = new TileMap(this);
-	mTileMap->SetPosition(Vector2(0.0f, 0.0f));*/
+	mTileMap = new TileMap(this);
+	mTileMap->SetPosition(Vector2(0.0f, 0.0f));
 }
 
 void Game::UnloadData() const

@@ -17,8 +17,8 @@ public:
 
 private:
     class TileMapComponent* mClosestTileMap;
-    /*TileMapComponent* mMiddleTileMap;
-    TileMapComponent* mFarthestTileMap;*/
+    TileMapComponent* mMiddleTileMap;
+    TileMapComponent* mFarthestTileMap;
 
 };
 

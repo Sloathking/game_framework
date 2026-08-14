@@ -10,7 +10,6 @@
 Skeleton::Skeleton(Game* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
-    currAnchor = 0;
     mAnimSprite->SetAnimFPS(12.0f);
     mAnimSprite->SetFlipHorizontal(true);
     std::vector<SDL_Texture*> anims{};
@@ -72,7 +71,7 @@ void Skeleton::HandleEvent(const SDL_Event& event)
             mDownSpeed -= 300.0f;
             if (mAnimSprite->GetCurrAnim() != WALKING) mAnimSprite->PlayAnimation(WALKING);
             break;
-        case SDLK_S: mDownSpeed += 300.0f; break;
+        case SDLK_S:mDownSpeed += 300.0f; break;
         case SDLK_A: mRightSpeed -= 300.0f; break;
         case SDLK_D: mRightSpeed += 300.0f; break;
         case SDLK_SPACE:
@@ -80,20 +79,6 @@ void Skeleton::HandleEvent(const SDL_Event& event)
             break;
         case SDLK_V:
             mAnimSprite->PlayAnimation(PUNCH);
-            break;
-        default:
-            break;
-        }
-    }
-    if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
-    {
-        switch (event.button.button)
-        {
-        case 1:
-            //mAnimSprite->SetAnchor(static_cast<SpriteComponent::AnchorPoint>(currAnchor));
-            mAnimSprite->SetRotPoint(static_cast<SpriteComponent::AnchorPoint>(currAnchor));
-            currAnchor++;
-            if (currAnchor > 8) currAnchor = 0;
             break;
         default:
             break;

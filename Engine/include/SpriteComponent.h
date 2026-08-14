@@ -35,7 +35,7 @@ public:
     void SetOffset(const float x, const float y) { mXOffset = x; mYOffset = y; }
     void SetOffset(const Vector2 vec) { mXOffset = vec.x; mYOffset = vec.y; }
 
-    [[nodiscard]] double GetDegrees() const { return mDegrees; }
+    double GetDegrees() const { return mDegrees; }
     void SetDegrees(const double degrees) { mDegrees = degrees; }
 
     [[nodiscard]] bool IsFlippedHorizontal() const { return flipHorizontal; }
@@ -52,6 +52,7 @@ public:
 
 protected:
     std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
+    std::unordered_map<AnchorPoint, Vector2> rotOffsets{};
 
     SDL_Texture* mTexture{ nullptr };
     int mDrawOrder;
@@ -66,7 +67,7 @@ protected:
     bool flipHorizontal{ false };
     bool flipVertical{ false };
 
-    AnchorPoint mAnchor{ CenterCenter };
+    AnchorPoint mAnchor{ TopLeft };
     AnchorPoint mRotPoint{ TopLeft };
 
 };
