@@ -11,19 +11,14 @@
 class Ship : public Actor
 {
 public:
-    explicit Ship(class Game* game);
+    explicit Ship(Game* game);
 
     void UpdateActor(float deltaTime) override;
-    void HandleEvent(const SDL_Event& event);
-
-    [[nodiscard]] float GetRightSpeed() const { return mRightSpeed; }
-    [[nodiscard]] float GetDownSpeed() const { return mDownSpeed; }
+    void HandleEvent(const SDL_Event& event) override;
 
 private:
-    class AnimSpriteComponent* mAnimSprite;
-    float mRightSpeed{ 0 };
-    float mDownSpeed{ 0 };
-};
+    class SpriteComponent* mShipSprite;
 
+};
 
 #endif //SHIP_H

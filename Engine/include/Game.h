@@ -27,8 +27,11 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(SpriteComponent* sprite);
 
-    SDL_Renderer* GetRenderer() const { return mRenderer; }
     SDL_Texture* GetTexture(const std::string& fileName);
+
+    // game functions
+    void AddAsteroid(class Asteroid* asteroid) { mAsteroids.emplace_back(asteroid); }
+    void RemoveAsteroid(Asteroid* asteroid);
 
 private:
     // helper functions for the game loop
@@ -61,7 +64,9 @@ private:
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
 
-    class TileMap* mTileMap;
+    class Ship* mShip;
+    std::vector<Asteroid*> mAsteroids;
+
 };
 
 #endif //GAME_H

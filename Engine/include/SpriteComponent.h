@@ -35,22 +35,21 @@ public:
     void SetOffset(const float x, const float y) { mXOffset = x; mYOffset = y; }
     void SetOffset(const Vector2 vec) { mXOffset = vec.x; mYOffset = vec.y; }
 
-    double GetDegrees() const { return mDegrees; }
-    void SetDegrees(const double degrees) { mDegrees = degrees; }
+    double GetRotation() const { return mRotation; }
+    void SetRotation(const float rotation) { mRotation = rotation; }
 
-    [[nodiscard]] bool IsFlippedHorizontal() const { return flipHorizontal; }
-    void SetFlipHorizontal(const bool flip) { flipHorizontal = flip; }
-
-    [[nodiscard]] bool IsFlippedVertical() const { return flipVertical; }
-    void SetFlipVertical(const bool flip) { flipVertical = flip; }
+    [[nodiscard]] SDL_FlipMode GetFlipMode() const { return spriteFlipMode; }
+    void SetFlipMode(const SDL_FlipMode flip) { spriteFlipMode = flip; }
 
     [[nodiscard]] AnchorPoint GetAnchor() const { return mAnchor; }
     void SetAnchor(const AnchorPoint anchor) { mAnchor = anchor; }
 
-    [[nodiscard]] AnchorPoint GetRotPoint() const { return mRotPoint; }
-    void SetRotPoint(const AnchorPoint rotPoint) { mRotPoint = rotPoint; }
+    [[nodiscard]] AnchorPoint GetCenter() const { return mRotPoint; }
+    void SetCenter(const AnchorPoint rotPoint) { mRotPoint = rotPoint; }
 
 protected:
+    SDL_FPoint* GetCenter(const SDL_FRect& dstRect);
+
     std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
     std::unordered_map<AnchorPoint, Vector2> rotOffsets{};
 
@@ -62,10 +61,11 @@ protected:
     float mXOffset{ 0.0 };
     float mYOffset{ 0.0 };
 
-    double mDegrees{ 0.0 };
+    float mRotation{ 0.0 };
 
-    bool flipHorizontal{ false };
-    bool flipVertical{ false };
+    SDL_FlipMode spriteFlipMode{SDL_FLIP_NONE};
+
+    SDL_FPoint mCenter;
 
     AnchorPoint mAnchor{ TopLeft };
     AnchorPoint mRotPoint{ TopLeft };

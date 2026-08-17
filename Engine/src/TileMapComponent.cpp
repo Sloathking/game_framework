@@ -24,10 +24,19 @@ void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const
 {
     for (TileData& tile : mTiles)
     {
-        SDL_FRect srcRect{ .x = mTileWidth * tile.spriteCoords.x, .y = mTileWidth * tile.spriteCoords.y, .w = mTileWidth, .h = mTileHeight };
+        SDL_FRect srcRect{
+            .x = mTileWidth * tile.spriteCoords.x,
+            .y = mTileWidth * tile.spriteCoords.y,
+            .w = mTileWidth,
+            .h = mTileHeight
+        };
 
-        SDL_FRect dstRect{ .x = mOwner->GetPosition().x + mTileWidth * tile.xOffset, .y = mOwner->GetPosition().y + mTileHeight * tile.yOffset,
-            .w = mTileWidth, .h = mTileHeight };
+        SDL_FRect dstRect{
+            .x = mOwner->GetPosition().x + mTileWidth * tile.xOffset,
+            .y = mOwner->GetPosition().y + mTileHeight * tile.yOffset,
+            .w = mTileWidth * mOwner->GetScale(),
+            .h = mTileHeight * mOwner->GetScale()
+        };
 
         //Default to clip dimensions if clip is given
         if( clip != nullptr )
@@ -46,16 +55,12 @@ void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const
             dstRect.h = height;
         }
 
-        SDL_FlipMode flipMode;
-        if (flipHorizontal and flipVertical) flipMode = SDL_FLIP_HORIZONTAL_AND_VERTICAL;
-        else flipMode = flipHorizontal ? SDL_FLIP_HORIZONTAL : flipVertical ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
-
         SDL_FPoint anchor;
         anchor.x = rotOffsets[mRotPoint].x;
         anchor.y = rotOffsets[mRotPoint].y;
 
         //Render texture
-        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, mDegrees, &anchor, flipMode);
+        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(mRotation), &anchor, spriteFlipMode);
     }
 }
 
@@ -72,8 +77,8 @@ void TileMapComponent::ReadFile(const std::string& fileName)
             const int num = stoi(line[c]);
             if (num == -1) continue;
 
-            int yPos = num / mSpriteRows;
-            int xPos = num % mSpriteRows;
+            const int yPos = num / mSpriteRows;
+            const int xPos = num % mSpriteRows;
             tile = TileData(col, row, Vector2(xPos, yPos));
 
             mTiles.emplace_back(tile);

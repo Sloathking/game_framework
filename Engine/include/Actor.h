@@ -4,8 +4,10 @@
 
 #ifndef ACTOR_H
 #define ACTOR_H
+
 #include <vector>
 #include "Math.h"
+#include <SDL3/SDL_events.h>
 
 class Actor
 {
@@ -31,6 +33,11 @@ public:
     // any Actor-specific update code (overridable)
     virtual void UpdateActor(float deltaTime);
 
+    // called from game, passes event to comps
+    void ProcessInput(const SDL_Event& event);
+    // actor-specific handling
+    virtual void HandleEvent(const SDL_Event& event);
+
     // getters/setters
     [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
     void SetPosition(const Vector2& pos) { mPosition = pos; }
@@ -40,6 +47,8 @@ public:
 
     [[nodiscard]] float GetRotation() const { return mRotation; }
     void SetRotation(const float rotation) { mRotation = rotation; }
+
+    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), -Math::Sin(mRotation)); }
 
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }

@@ -5,7 +5,7 @@
 #include "../include/Game.h"
 #include "../include/Component.h"
 
-Actor::Actor(class Game* game) : mState{ EActive }, mPosition{ Vector2(0.0f, 0.0f) }, mScale{ 1.0f }, mRotation{ 0.0f }, mGame{ game }
+Actor::Actor(Game* game) : mState{ EActive }, mPosition{ Vector2(0.0f, 0.0f) }, mScale{ 1.0f }, mRotation{ 0.0f }, mGame{ game }
 {
     mGame->AddActor(this);
 }
@@ -36,7 +36,22 @@ void Actor::UpdateComponents(const float deltaTime) const
 }
 
 // any Actor-specific update code (overridable)
-void Actor::UpdateActor(float deltaTime)
+void Actor::UpdateActor(const float deltaTime)
+{
+
+}
+
+void Actor::ProcessInput(const SDL_Event& event)
+{
+    if (mState == EActive)
+    {
+        for (const auto comp : mComponents)
+            comp->HandleEvent(event);
+        HandleEvent(event);
+    }
+}
+
+void Actor::HandleEvent(const SDL_Event& event)
 {
 
 }

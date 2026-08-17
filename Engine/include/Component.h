@@ -5,6 +5,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <SDL3/SDL_events.h>
+
 class Component
 {
 public:
@@ -16,6 +18,8 @@ public:
 
     // update this component by delta time
     virtual void Update(float deltaTime);
+
+    virtual void HandleEvent(const SDL_Event& event) {}
 
     [[nodiscard]] int GetUpdateOrder() const { return mUpdateOrder; }
 

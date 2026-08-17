@@ -16,7 +16,7 @@ public:
     explicit Skeleton(Game* game);
 
     void UpdateActor(float deltaTime) override;
-    void HandleEvent(const SDL_Event& event);
+    void HandleEvent(const SDL_Event& event) override;
 
 private:
     class AnimSpriteComponent* mAnimSprite;

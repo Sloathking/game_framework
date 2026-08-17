@@ -11,7 +11,6 @@ Skeleton::Skeleton(Game* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
-    mAnimSprite->SetFlipHorizontal(true);
     std::vector<SDL_Texture*> anims{};
 
     anims.clear();

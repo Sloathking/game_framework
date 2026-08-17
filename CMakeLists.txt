@@ -29,8 +29,14 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/include/CSVUtils.h
         Engine/src/TileMap.cpp
         Engine/include/TileMap.h
-        Engine/src/Texture.cpp
-        Engine/include/Texture.h)
+        Engine/src/MoveComponent.cpp
+        Engine/include/MoveComponent.h
+        Game/Asteroid.cpp
+        Game/Asteroid.h
+        Engine/src/Random.cpp
+        Engine/include/Random.h
+        Engine/src/InputComponent.cpp
+        Engine/include/InputComponent.h)
 
 file(
         DOWNLOAD

@@ -4,18 +4,11 @@
 #include "../include/Game.h"
 #include "../include/Constants.h"
 #include "../include/Actor.h"
-#include "../include/Texture.h"
 #include "../include/SpriteComponent.h"
-#include "../include/BGSpriteComponent.h"
-#include "../include/TileMap.h"
-#include "../../Game/Skeleton.h"
+#include "../../Game/Asteroid.h"
 #include "../../Game/Ship.h"
-
-#include <SDL3_image/SDL_image.h>
-
 #include <random>
 #include <ranges>
-
 
 Game::Game() : mWindow{ nullptr }, mRenderer{ nullptr }, mIsRunning{ true }, mTicksCount{ 0 }, mUpdatingActors{ false }
 {
@@ -36,7 +29,7 @@ bool Game::Initialize()
 	else
 	{
 		// create window with renderer
-		if (SDL_CreateWindowAndRenderer(windowTitle.c_str(), windowWidth, windowHeight, 0, &mWindow, &mRenderer) == false)
+		if (SDL_CreateWindowAndRenderer(windowTitle.c_str(),static_cast<int>(windowWidth), static_cast<int>(windowHeight), 0, &mWindow, &mRenderer) == false)
 		{
 			SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
 			success = false;
@@ -195,6 +188,10 @@ void Game::ProcessInput()
 		default:
 			break;
 		}
+		mUpdatingActors = true;
+		for (const auto actor : mActors)
+			actor->ProcessInput(event);
+		mUpdatingActors = false;
 	}
 }
 
@@ -241,17 +238,21 @@ void Game::GenerateOutput() const
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
 
-	const SDL_FRect tileMapSquare{ .x = mTileMap->GetPosition().x - 1, .y = mTileMap->GetPosition().y - 1, .w = 2, .h = 2 };
+	const SDL_FRect shipSquare{ .x = mShip->GetPosition().x - 1, .y = mShip->GetPosition().y - 1, .w = 2, .h = 2 };
 	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderRect(mRenderer, &tileMapSquare);
+	SDL_RenderRect(mRenderer, &shipSquare);
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	mTileMap = new TileMap(this);
-	mTileMap->SetPosition(Vector2(0.0f, 0.0f));
+	constexpr int numAsteroid = 20;
+	for (int i = 0; i < numAsteroid; ++i)
+		new Asteroid(this);
+
+	mShip = new Ship(this);
+	mShip->SetPosition(Vector2(windowWidth * 0.5f, windowHeight* 0.5f));
 }
 
 void Game::UnloadData() const
@@ -263,4 +264,10 @@ void Game::UnloadData() const
 	// destroy textures
 	for (const auto& val : mTextures | std::views::values)
 		SDL_DestroyTexture(val);
+}
+
+void Game::RemoveAsteroid(Asteroid* asteroid)
+{
+	auto it = std::ranges::find(mAsteroids.begin(), mAsteroids.end(), asteroid);
+	if (it != mAsteroids.end()) mAsteroids.erase(it);
 }
