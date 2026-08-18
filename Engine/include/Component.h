@@ -21,6 +21,9 @@ public:
 
     virtual void HandleEvent(const SDL_Event& event) {}
 
+    [[nodiscard]] bool GetUpdateState() const { return mUpdate; }
+    void SetUpdateState(const bool update) { mUpdate = update; }
+
     [[nodiscard]] int GetUpdateOrder() const { return mUpdateOrder; }
 
 protected:
@@ -29,6 +32,9 @@ protected:
 
     // update order of component
     int mUpdateOrder;
+
+    // whether this component should Update
+    bool mUpdate{true};
 };
 
 #endif //COMPONENT_H

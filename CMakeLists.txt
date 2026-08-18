@@ -36,7 +36,12 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/src/Random.cpp
         Engine/include/Random.h
         Engine/src/InputComponent.cpp
-        Engine/include/InputComponent.h)
+        Engine/include/InputComponent.h
+        Engine/src/CircleComponent.cpp
+        Engine/include/CircleComponent.h
+        Game/Laser.cpp
+        Game/Laser.h
+)
 
 file(
         DOWNLOAD

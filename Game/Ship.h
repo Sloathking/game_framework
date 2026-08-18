@@ -18,6 +18,11 @@ public:
 
 private:
     class SpriteComponent* mShipSprite;
+    class InputComponent* mInputComp;
+    class CircleComponent* mCollider;
+
+    float mLaserCooldown{0.0};
+    float mInvisibleTimer{0.0};
 
 };
 

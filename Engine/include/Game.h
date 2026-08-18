@@ -32,6 +32,7 @@ public:
     // game functions
     void AddAsteroid(class Asteroid* asteroid) { mAsteroids.emplace_back(asteroid); }
     void RemoveAsteroid(Asteroid* asteroid);
+    std::vector<Asteroid*>& GetAsteroids() { return mAsteroids; }
 
 private:
     // helper functions for the game loop

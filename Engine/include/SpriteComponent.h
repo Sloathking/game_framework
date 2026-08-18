@@ -25,6 +25,9 @@ public:
 
     virtual void SetTexture(SDL_Texture* texture);
 
+    [[nodiscard]] bool GetVisibility() const { return mIsVisible; }
+    void SetVisibility(const bool visible) { mIsVisible = visible; }
+
     [[nodiscard]] int GetDrawOder() const { return mDrawOrder; }
 
     [[nodiscard]] int GetTexWidth() const { return mTexWidth; }
@@ -50,6 +53,8 @@ public:
 protected:
     SDL_FPoint* GetCenter(const SDL_FRect& dstRect);
 
+    bool mIsVisible{true};
+
     std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
     std::unordered_map<AnchorPoint, Vector2> rotOffsets{};
 
@@ -65,7 +70,7 @@ protected:
 
     SDL_FlipMode spriteFlipMode{SDL_FLIP_NONE};
 
-    SDL_FPoint mCenter;
+    SDL_FPoint mCenter{.x = 0.0f,.y = 0.0f};
 
     AnchorPoint mAnchor{ TopLeft };
     AnchorPoint mRotPoint{ TopLeft };

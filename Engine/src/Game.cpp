@@ -242,6 +242,13 @@ void Game::GenerateOutput() const
 	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
 	SDL_RenderRect(mRenderer, &shipSquare);
 
+	for (const auto* asteroid : mAsteroids)
+	{
+		const Vector2 pos = asteroid->GetPosition();
+		const SDL_FRect asteroidRect{.x = pos.x - 1, .y = pos.y - 1, .w = 2, .h = 2};
+		SDL_RenderRect(mRenderer, &asteroidRect);
+	}
+
 	SDL_RenderPresent(mRenderer);
 }
 

@@ -17,30 +17,33 @@ SpriteComponent::~SpriteComponent()
 
 void SpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const float width, const float height)
 {
-    //Set texture position
-    SDL_FRect dstRect{
-        .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + mXOffset,
-        .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + mYOffset,
-        .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
-        .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
-    };
-
-    //Default to clip dimensions if clip is given
-    if( clip != nullptr )
+    if (mIsVisible)
     {
-        dstRect.w = clip->w;
-        dstRect.h = clip->h;
+        //Set texture position
+        SDL_FRect dstRect{
+            .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + mXOffset,
+            .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + mYOffset,
+            .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
+            .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
+        };
+
+        //Default to clip dimensions if clip is given
+        if( clip != nullptr )
+        {
+            dstRect.w = clip->w;
+            dstRect.h = clip->h;
+        }
+
+        //Resize if new dimensions are given
+        if( width > 0 ) dstRect.w = width;
+        if( height > 0 ) dstRect.h = height;
+
+        // calc rotation point
+        const SDL_FPoint* center = GetCenter(dstRect);
+
+        //Render texture
+        SDL_RenderTextureRotated(renderer, mTexture, clip, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), center, spriteFlipMode);
     }
-
-    //Resize if new dimensions are given
-    if( width > 0 ) dstRect.w = width;
-    if( height > 0 ) dstRect.h = height;
-
-    // calc rotation point
-    const SDL_FPoint* center = GetCenter(dstRect);
-
-    //Render texture
-    SDL_RenderTextureRotated(renderer, mTexture, clip, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), center, spriteFlipMode);
 }
 
 void SpriteComponent::SetTexture(SDL_Texture* texture)

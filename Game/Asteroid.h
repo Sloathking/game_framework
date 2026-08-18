@@ -12,6 +12,14 @@ class Asteroid : public Actor
 {
 public:
     explicit Asteroid(Game* game);
+    ~Asteroid() override;
+
+    [[nodiscard]] class CircleComponent* GetCircle() const { return mCircleComp; }
+
+private:
+    class MoveComponent* mMoveComp;
+    CircleComponent* mCircleComp;
+
 };
 
 
