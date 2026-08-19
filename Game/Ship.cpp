@@ -12,6 +12,8 @@
 #include "Laser.h"
 #include "../Engine/include/CircleComponent.h"
 
+#include <SDL3/SDL_render.h>
+
 Ship::Ship(Game* game) : Actor(game)
 {
     mShipSprite = new SpriteComponent(this);
@@ -34,30 +36,14 @@ Ship::Ship(Game* game) : Actor(game)
 
 void Ship::UpdateActor(const float deltaTime)
 {
-    mLaserCooldown -= deltaTime;
+    if (mLaserCooldown >= 0.0)
+        mLaserCooldown -= deltaTime;
 
     mInvisibleTimer -= deltaTime;
     if (mInvisibleTimer <= 0.0f)
     {
         mShipSprite->SetVisibility(true);
         mInputComp->SetUpdateState(true);
-    }
-
-    // check for collision with Collider for each Asteroid in game
-    for (const auto* asteroid : GetGame()->GetAsteroids())
-    {
-        // if we're colliding with an Asteroid
-        if (Intersect( *mCollider,*asteroid->GetCircle()))
-        {
-            mShipSprite->SetVisibility(false);
-            mInputComp->SetUpdateState(false);
-            mInvisibleTimer = 2.0;
-
-            // move Ship to center of screen, 0 out rotation
-            SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
-            mInputComp->SetForwardSpeed(0.0f);
-            SetRotation(0.0f);
-        }
     }
 }
 
@@ -66,7 +52,7 @@ void Ship::HandleEvent(const SDL_Event& event)
     if (event.key.key == SDLK_SPACE and mLaserCooldown <= 0.0f)
     {
         // create a laser and set its position/rotation to mine
-        auto* laser = new Laser(GetGame());
+        auto* laser = new Laser(GetGame(), GetForward());
         laser->SetPosition(GetPosition());
         laser->SetRotation(GetRotation());
 

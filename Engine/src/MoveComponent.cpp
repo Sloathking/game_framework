@@ -15,6 +15,7 @@ MoveComponent::MoveComponent(Actor* owner, const int updateOrder) : Component(ow
 
 void MoveComponent::Update(const float deltaTime)
 {
+    // physics based movement
     Vector2 newPos = mOwner->GetPosition();
     Vector2 accel;
     // (semi-implicit) Euler Integration
@@ -29,7 +30,8 @@ void MoveComponent::Update(const float deltaTime)
     mOwner->SetPosition(newPos);
 
     mSumOfForces = Vector2::Zero;
-    /*
+
+    // physics and non-physics
     if (!Math::NearZero(mAngularSpeed))
     {
         float rot = mOwner->GetRotation();
@@ -37,12 +39,14 @@ void MoveComponent::Update(const float deltaTime)
         mOwner->SetRotation(rot);
     }
 
+/*  // non-physics
     if (!Math::NearZero(mForwardSpeed))
     {
         Vector2 pos = mOwner->GetPosition();
         pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
         mOwner->SetPosition(pos);
-    }*/
+    }
+*/
 }
 
 void MoveComponent::AddForce(const Vector2 force)

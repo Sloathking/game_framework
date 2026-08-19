@@ -9,7 +9,7 @@
 #include "../Engine/include/SpriteComponent.h"
 #include "../Engine/include/MoveComponent.h"
 
-Laser::Laser(Game* game) : Actor(game)
+Laser::Laser(Game* game, const Vector2 dir) : Actor(game)
 {
     // create sprite comp
     auto* spriteComp = new SpriteComponent(this);
@@ -17,7 +17,8 @@ Laser::Laser(Game* game) : Actor(game)
 
     // create move comp
     auto* moveComp = new MoveComponent(this);
-    moveComp->SetForwardSpeed(800.0f);
+    moveComp->SetMass(0.1f);
+    moveComp->AddForce(dir * 6000);
 
     mCircleComp = new CircleComponent(this);
     mCircleComp->SetRadius(11.0f);
@@ -27,16 +28,4 @@ void Laser::UpdateActor(const float deltaTime)
 {
     mDeathTimer -= deltaTime;
     if (mDeathTimer <= 0.0f) SetState(EDead);
-
-    // does Laser intersect with an Asteroid
-    for (const auto asteroid : GetGame()->GetAsteroids())
-    {
-        if (Intersect(*mCircleComp, *asteroid->GetCircle()))
-        {
-            // if this laser intersects with an asteroid, set ourselves and the asteroid to dead
-            SetState(EDead);
-            asteroid->SetState(EDead);
-            break;
-        }
-    }
 }

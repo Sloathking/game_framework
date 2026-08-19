@@ -41,6 +41,10 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/include/CircleComponent.h
         Game/Laser.cpp
         Game/Laser.h
+        Engine/src/AIComponent.cpp
+        Engine/include/AIComponent.h
+        Engine/src/AIState.cpp
+        Engine/include/AIState.h
 )
 
 file(

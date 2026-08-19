@@ -26,16 +26,10 @@ Asteroid::Asteroid(Game* game) : Actor(game)
     // create move comp and set forward speed
     mMoveComp = new MoveComponent(this);
     mMoveComp->SetMass(1.0f);
-    mMoveComp->AddForce(Vector2(Random::GetFloatRange(-1, 1) * Random::GetFloatRange(500, 1000),
-        Random::GetFloatRange(-1, 1) * Random::GetFloatRange(500, 1000)));
+    mMoveComp->AddForce(GetForward() * 1000);
 
     mCircleComp = new CircleComponent(this);
     mCircleComp->SetRadius(40.0f);
-
-    game->AddAsteroid(this);
 }
 
-Asteroid::~Asteroid()
-{
-    GetGame()->RemoveAsteroid(this);
-}
+Asteroid::~Asteroid() = default;

@@ -71,5 +71,8 @@ private:
     // components held by actor
     std::vector<Component*> mComponents;
     Game* mGame;
+
+    // forward vector
+    Vector2 mForward{Vector2(0,0)};
 };
 #endif //ACTOR_H

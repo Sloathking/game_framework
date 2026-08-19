@@ -27,6 +27,8 @@ public:
 
     void AddForce(Vector2 force);
 
+    void ClearVelocity() { mVelocity = Vector2(0,0); }
+
 private:
     // controls rotation radians/s
     float mAngularSpeed{0.0};

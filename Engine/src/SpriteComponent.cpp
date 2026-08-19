@@ -1,9 +1,11 @@
 //
 // Created by sloath on 06-Aug-26.
 //
+
 #include "../include/SpriteComponent.h"
 #include "../include/Actor.h"
 #include "../include/Game.h"
+
 
 SpriteComponent::SpriteComponent(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {

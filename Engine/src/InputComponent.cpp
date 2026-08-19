@@ -4,6 +4,8 @@
 
 #include "../include/InputComponent.h"
 
+#include "../include/Actor.h"
+
 InputComponent::InputComponent(Actor* mOwner, const int updateOrder) : MoveComponent(mOwner, updateOrder)
 {
 
@@ -14,10 +16,9 @@ void InputComponent::HandleEvent(const SDL_Event& event)
     if (mUpdate)
     {
         // calc forward speed for MoveComponent
-        float forwardSpeed = 0.0f;
-        if (event.key.key == mForwardKey) forwardSpeed += mMaxForwardSpeed;
-        if (event.key.key == mBackKey) forwardSpeed -= mMaxForwardSpeed;
-        SetForwardSpeed(forwardSpeed);
+        if (event.key.key == mForwardKey) AddForce(mOwner->GetForward() * 10000);
+        if (event.key.key == mBackKey) AddForce(mOwner->GetForward() * -10000);
+        //SetForwardSpeed(forwardSpeed);
 
         // calc angular speed for MoveComponent
         float angularSpeed = 0.0f;

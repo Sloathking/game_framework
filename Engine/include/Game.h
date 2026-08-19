@@ -29,10 +29,10 @@ public:
 
     SDL_Texture* GetTexture(const std::string& fileName);
 
+    SDL_Renderer* GetRenderer() const { return mRenderer; }
+
     // game functions
-    void AddAsteroid(class Asteroid* asteroid) { mAsteroids.emplace_back(asteroid); }
-    void RemoveAsteroid(Asteroid* asteroid);
-    std::vector<Asteroid*>& GetAsteroids() { return mAsteroids; }
+
 
 private:
     // helper functions for the game loop
@@ -64,9 +64,6 @@ private:
 
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
-
-    class Ship* mShip;
-    std::vector<Asteroid*> mAsteroids;
 
 };
 

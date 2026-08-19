@@ -238,28 +238,12 @@ void Game::GenerateOutput() const
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
 
-	const SDL_FRect shipSquare{ .x = mShip->GetPosition().x - 1, .y = mShip->GetPosition().y - 1, .w = 2, .h = 2 };
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderRect(mRenderer, &shipSquare);
-
-	for (const auto* asteroid : mAsteroids)
-	{
-		const Vector2 pos = asteroid->GetPosition();
-		const SDL_FRect asteroidRect{.x = pos.x - 1, .y = pos.y - 1, .w = 2, .h = 2};
-		SDL_RenderRect(mRenderer, &asteroidRect);
-	}
-
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	constexpr int numAsteroid = 20;
-	for (int i = 0; i < numAsteroid; ++i)
-		new Asteroid(this);
 
-	mShip = new Ship(this);
-	mShip->SetPosition(Vector2(windowWidth * 0.5f, windowHeight* 0.5f));
 }
 
 void Game::UnloadData() const
@@ -271,10 +255,4 @@ void Game::UnloadData() const
 	// destroy textures
 	for (const auto& val : mTextures | std::views::values)
 		SDL_DestroyTexture(val);
-}
-
-void Game::RemoveAsteroid(Asteroid* asteroid)
-{
-	auto it = std::ranges::find(mAsteroids.begin(), mAsteroids.end(), asteroid);
-	if (it != mAsteroids.end()) mAsteroids.erase(it);
 }
