@@ -5,10 +5,10 @@
 #ifndef AICOMPONENT_H
 #define AICOMPONENT_H
 
+#include "Component.h"
+
 #include <string>
 #include <unordered_map>
-
-#include "Component.h"
 
 class AIComponent : public Component
 {
@@ -24,7 +24,7 @@ public:
 private:
     std::unordered_map<std::string, AIState*> mStateMap;
 
-    AIState* mCurrState;
+    AIState* mCurrState{nullptr};
 
 };
 

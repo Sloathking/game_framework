@@ -5,15 +5,13 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "../include/Actor.h"
+#include "../Engine/include/Actor.h"
 
 
 class TileMap : public Actor
 {
 public:
     explicit TileMap(Game* game);
-
-    //void UpdateActor(float deltaTime);
 
 private:
     class TileMapComponent* mClosestTileMap;

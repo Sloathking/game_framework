@@ -7,7 +7,7 @@
 #include "../Engine/include/CircleComponent.h"
 #include "Asteroid.h"
 #include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/MoveComponent.h"
+#include "../Engine/include/PhysicsMoveComponent.h"
 
 Laser::Laser(Game* game, const Vector2 dir) : Actor(game)
 {
@@ -16,7 +16,7 @@ Laser::Laser(Game* game, const Vector2 dir) : Actor(game)
     spriteComp->SetTexture(game->GetTexture("Assets/Laser2.png"));
 
     // create move comp
-    auto* moveComp = new MoveComponent(this);
+    auto* moveComp = new PhysicsMoveComponent(this);
     moveComp->SetMass(0.1f);
     moveComp->AddForce(dir * 6000);
 

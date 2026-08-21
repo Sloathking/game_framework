@@ -5,10 +5,14 @@
 #include "../include/Constants.h"
 #include "../include/Actor.h"
 #include "../include/SpriteComponent.h"
-#include "../../Game/Asteroid.h"
-#include "../../Game/Ship.h"
+#include "../../Game/Grid.h"
+#include "../../Game/Enemy.h"
+
 #include <random>
 #include <ranges>
+
+#include "../../Game/Tile.h"
+
 
 Game::Game() : mWindow{ nullptr }, mRenderer{ nullptr }, mIsRunning{ true }, mTicksCount{ 0 }, mUpdatingActors{ false }
 {
@@ -151,7 +155,6 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 	return tex;
 }
 
-// helper functions for the game loop
 void Game::ProcessInput()
 {
 	SDL_Event event;
@@ -181,10 +184,21 @@ void Game::ProcessInput()
 				vSyncEnabled = !vSyncEnabled;
 				SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
 				break;
+			case SDLK_B:
+				mGrid->BuildTower();
+				break;
 			default:
 				break;
 			}
 			break;
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+			switch (event.button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				mGrid->ProcessClick(event.button.x, event.button.y);
+			default:
+				break;
+			}
 		default:
 			break;
 		}
@@ -232,18 +246,32 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput() const
 {
-	SDL_SetRenderDrawColor(mRenderer, 100, 100, 100, 255);
+	SDL_SetRenderDrawColor(mRenderer, 34, 139, 34, 255);
 	SDL_RenderClear(mRenderer);
 
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
+
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+
+	const Vector2 startGrid = mGrid->GetStartTile()->GetPosition();
+	const SDL_FRect startRect{.x = startGrid.x - 1, .y = startGrid.y - 1, .w = 2, .h = 2};
+	SDL_RenderFillRect(mRenderer, &startRect);
+
+	const Vector2 endGrid = mGrid->GetEndTile()->GetPosition();
+	const SDL_FRect endRect{.x = endGrid.x - 1, .y = endGrid.y - 1, .w = 2, .h = 2};
+	SDL_RenderFillRect(mRenderer, &endRect);
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-
+	mGrid = new Grid(this);
+	for (const std::vector<Vector2> tiles = mGrid->GetTilePositions(); const Vector2& tile : tiles)
+	{
+		SDL_Log("X: %f | Y: %f", tile.x, tile.y);
+	}
 }
 
 void Game::UnloadData() const
@@ -255,4 +283,24 @@ void Game::UnloadData() const
 	// destroy textures
 	for (const auto& val : mTextures | std::views::values)
 		SDL_DestroyTexture(val);
+}
+
+Enemy* Game::GetNearestEnemy(const Vector2& pos) const
+{
+	Enemy* best = nullptr;
+	if (!mEnemies.empty())
+	{
+		best = mEnemies[0];
+		// save distance squared of first enemy and test if others are closed
+		float bestDistSq = (pos - mEnemies[0]->GetPosition()).LengthSq();
+		for (size_t i = 1; i < mEnemies.size(); ++i)
+		{
+			if (const float currDistSq = (pos - mEnemies[i]->GetPosition()).LengthSq(); currDistSq < bestDistSq)
+			{
+				bestDistSq = currDistSq;
+				best = mEnemies[i];
+			}
+		}
+	}
+	return best;
 }

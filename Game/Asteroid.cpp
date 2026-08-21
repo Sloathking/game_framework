@@ -7,7 +7,7 @@
 #include "../Engine/include/Constants.h"
 #include "../Engine/include/Random.h"
 #include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/MoveComponent.h"
+#include "../Engine/include/PhysicsMoveComponent.h"
 #include "../Engine/include/CircleComponent.h"
 
 Asteroid::Asteroid(Game* game) : Actor(game)
@@ -24,7 +24,7 @@ Asteroid::Asteroid(Game* game) : Actor(game)
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 
     // create move comp and set forward speed
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new PhysicsMoveComponent(this);
     mMoveComp->SetMass(1.0f);
     mMoveComp->AddForce(GetForward() * 1000);
 

@@ -17,7 +17,7 @@ public:
     [[nodiscard]] class CircleComponent* GetCircle() const { return mCircleComp; }
 
 private:
-    class MoveComponent* mMoveComp;
+    class PhysicsMoveComponent* mMoveComp;
     CircleComponent* mCircleComp;
 
 };

@@ -29,10 +29,10 @@ public:
 
     SDL_Texture* GetTexture(const std::string& fileName);
 
-    SDL_Renderer* GetRenderer() const { return mRenderer; }
-
     // game functions
-
+    class Grid* GetGrid() const { return mGrid; }
+    std::vector<class Enemy*>& GetEnemies() { return mEnemies; }
+    Enemy* GetNearestEnemy(const Vector2& pos) const;
 
 private:
     // helper functions for the game loop
@@ -64,6 +64,11 @@ private:
 
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
+
+    // game-specific vectors
+    std::vector<Enemy*> mEnemies;
+    Grid* mGrid;
+    float mNextEnemy;
 
 };
 

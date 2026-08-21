@@ -27,8 +27,8 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/src/TileMapComponent.cpp
         Engine/include/TileMapComponent.h
         Engine/include/CSVUtils.h
-        Engine/src/TileMap.cpp
-        Engine/include/TileMap.h
+        Game/TileMap.cpp
+        Game/TileMap.h
         Engine/src/MoveComponent.cpp
         Engine/include/MoveComponent.h
         Game/Asteroid.cpp
@@ -45,6 +45,22 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/include/AIComponent.h
         Engine/src/AIState.cpp
         Engine/include/AIState.h
+        Engine/src/NavComponent.cpp
+        Engine/include/NavComponent.h
+        Game/Tile.cpp
+        Game/Tile.h
+        Game/Grid.cpp
+        Game/Grid.h
+        Game/Tower.cpp
+        Game/Tower.h
+        Game/Enemy.cpp
+        Game/Enemy.h
+        Game/Bullet.cpp
+        Game/Bullet.h
+        Engine/src/PhysicsMoveComponent.cpp
+        Engine/include/PhysicsMoveComponent.h
+        Engine/src/PhysicsInputComponent.cpp
+        Engine/include/PhysicsInputComponent.h
 )
 
 file(

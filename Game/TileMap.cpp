@@ -2,10 +2,10 @@
 // Created by sloath on 12-Aug-26.
 //
 
-#include "../include/TileMap.h"
+#include "TileMap.h"
 
-#include "../include/Game.h"
-#include "../include/TileMapComponent.h"
+#include "../Engine/include/Game.h"
+#include "../Engine/include/TileMapComponent.h"
 
 TileMap::TileMap(Game* game) : Actor(game)
 {

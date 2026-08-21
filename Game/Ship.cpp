@@ -8,7 +8,7 @@
 #include "../Engine/include/Game.h"
 #include "../Engine/include/Constants.h"
 #include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/InputComponent.h"
+#include "../Engine/include/PhysicsInputComponent.h"
 #include "Laser.h"
 #include "../Engine/include/CircleComponent.h"
 
@@ -24,9 +24,8 @@ Ship::Ship(Game* game) : Actor(game)
     mCollider = new CircleComponent(this);
     mCollider->SetRadius(40.0f);
 
-    mInputComp = new InputComponent(this);
+    mInputComp = new PhysicsInputComponent(this);
     mInputComp->SetMass(10.0f);
-    mInputComp->SetMaxForwardSpeed(300.0f);
     mInputComp->SetMaxAngularSpeed(Math::TwoPi);
     mInputComp->SetForwardKey(SDLK_W);
     mInputComp->SetBackKey(SDLK_S);

@@ -18,7 +18,7 @@ public:
 
 private:
     class SpriteComponent* mShipSprite;
-    class InputComponent* mInputComp;
+    class PhysicsInputComponent* mInputComp;
     class CircleComponent* mCollider;
 
     float mLaserCooldown{0.0};

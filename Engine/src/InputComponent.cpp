@@ -15,10 +15,12 @@ void InputComponent::HandleEvent(const SDL_Event& event)
 {
     if (mUpdate)
     {
+        float forwardSpeed = 0.0f;
+
         // calc forward speed for MoveComponent
-        if (event.key.key == mForwardKey) AddForce(mOwner->GetForward() * 10000);
-        if (event.key.key == mBackKey) AddForce(mOwner->GetForward() * -10000);
-        //SetForwardSpeed(forwardSpeed);
+        if (event.key.key == mForwardKey) forwardSpeed += mMaxForwardSpeed;
+        if (event.key.key == mBackKey) forwardSpeed -= mMaxForwardSpeed;
+        SetForwardSpeed(forwardSpeed);
 
         // calc angular speed for MoveComponent
         float angularSpeed = 0.0f;
