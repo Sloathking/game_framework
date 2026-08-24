@@ -16,13 +16,11 @@ public:
     explicit Skeleton(Game* game);
 
     void UpdateActor(float deltaTime) override;
-    void HandleEvent(const SDL_Event& event) override;
+    void ActorInput(const InputState& state) override;
 
 private:
     class AnimSpriteComponent* mAnimSprite;
 
-    float mRightSpeed{0};
-    float mDownSpeed{0};
 };
 
 

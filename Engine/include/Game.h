@@ -10,8 +10,6 @@
 #include <unordered_map>
 #include <string>
 
-#include "Actor.h"
-
 class Game
 {
 public:
@@ -21,7 +19,7 @@ public:
     void RunLoop();
     void Shutdown();
 
-    void AddActor(Actor* actor);
+    void AddActor(class Actor* actor);
     void RemoveActor(Actor* actor);
 
     void AddSprite(class SpriteComponent* sprite);
@@ -29,10 +27,9 @@ public:
 
     SDL_Texture* GetTexture(const std::string& fileName);
 
+    SDL_Window* GetWindow () const { return mWindow; }
+
     // game functions
-    class Grid* GetGrid() const { return mGrid; }
-    std::vector<class Enemy*>& GetEnemies() { return mEnemies; }
-    Enemy* GetNearestEnemy(const Vector2& pos) const;
 
 private:
     // helper functions for the game loop
@@ -43,21 +40,24 @@ private:
     void UnloadData() const;
 
     // window created by SDL
-    SDL_Window* mWindow;
+    SDL_Window* mWindow{nullptr};
 
     // renderer created by SDL
-    SDL_Renderer* mRenderer;
+    SDL_Renderer* mRenderer{nullptr};
 
     // game should continue to run
-    bool mIsRunning;
+    bool mIsRunning{true};
 
     // previous tick count
-    Uint64 mTicksCount;
+    Uint64 mTicksCount{0};
+
+    // input system for stuff **UPDATE LATER**
+    class InputSystem* mInputSystem{};
 
     // vectors to hold active Actors and pending Actors
     std::vector<Actor*> mActors;
     std::vector<Actor*> mPendingActors;
-    bool mUpdatingActors;
+    bool mUpdatingActors{false};
 
     // map of loaded textures
     std::unordered_map<std::string, SDL_Texture*> mTextures;
@@ -66,9 +66,6 @@ private:
     std::vector<SpriteComponent*> mSprites;
 
     // game-specific vectors
-    std::vector<Enemy*> mEnemies;
-    Grid* mGrid;
-    float mNextEnemy;
 
 };
 

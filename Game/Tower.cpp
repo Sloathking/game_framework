@@ -26,7 +26,7 @@ void Tower::UpdateActor(const float deltaTime)
 {
     Actor::UpdateActor(deltaTime);
     mNextAttack -= deltaTime;
-    if (mNextAttack <= 0.0f)
+    /*if (mNextAttack <= 0.0f)
     {
         if (const Enemy* enemy = GetGame()->GetNearestEnemy(GetPosition()))
         {
@@ -42,5 +42,5 @@ void Tower::UpdateActor(const float deltaTime)
             }
         }
         mNextAttack += AttackTime;
-    }
+    }*/
 }

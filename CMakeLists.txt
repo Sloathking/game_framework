@@ -61,6 +61,8 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/include/PhysicsMoveComponent.h
         Engine/src/PhysicsInputComponent.cpp
         Engine/include/PhysicsInputComponent.h
+        Engine/src/InputSystem.cpp
+        Engine/include/InputSystem.h
 )
 
 file(

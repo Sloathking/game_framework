@@ -11,7 +11,7 @@ class Enemy : public Actor
 {
 public:
     explicit Enemy(Game* game);
-    ~Enemy();
+    ~Enemy() override;
 
     void UpdateActor(float deltaTime) override;
     [[nodiscard]] class CircleComponent* GetCircle() const { return mCircleComp; }
@@ -20,6 +20,5 @@ private:
     CircleComponent* mCircleComp;
 
 };
-
 
 #endif //ENEMY_H

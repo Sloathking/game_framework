@@ -3,29 +3,28 @@
 //
 
 #include "../include/InputComponent.h"
-
-#include "../include/Actor.h"
+#include "../include/InputSystem.h"
 
 InputComponent::InputComponent(Actor* mOwner, const int updateOrder) : MoveComponent(mOwner, updateOrder)
 {
 
 }
 
-void InputComponent::HandleEvent(const SDL_Event& event)
+void InputComponent::ProcessInput(const InputState& state)
 {
     if (mUpdate)
     {
         float forwardSpeed = 0.0f;
 
         // calc forward speed for MoveComponent
-        if (event.key.key == mForwardKey) forwardSpeed += mMaxForwardSpeed;
-        if (event.key.key == mBackKey) forwardSpeed -= mMaxForwardSpeed;
+        if (state.Keyboard.GetKeyState(mForwardKey) == EPressed) forwardSpeed += mMaxForwardSpeed;
+        if (state.Keyboard.GetKeyState(mBackKey) == EPressed) forwardSpeed -= mMaxForwardSpeed;
         SetForwardSpeed(forwardSpeed);
 
         // calc angular speed for MoveComponent
         float angularSpeed = 0.0f;
-        if (event.key.key == mClockwiseKey) angularSpeed += mMaxAngularSpeed;
-        if (event.key.key == mCounterClockwiseKey) angularSpeed -= mMaxAngularSpeed;
+        if (state.Keyboard.GetKeyState(mClockwiseKey) == EPressed) angularSpeed += mMaxAngularSpeed;
+        if (state.Keyboard.GetKeyState(mCounterClockwiseKey) == EPressed) angularSpeed -= mMaxAngularSpeed;
         SetAngularSpeed(angularSpeed);
     }
 }

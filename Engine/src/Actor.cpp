@@ -3,6 +3,7 @@
 //
 #include "../include/Actor.h"
 #include "../include/Game.h"
+#include "../include/InputSystem.h"
 #include "../include/Component.h"
 
 Actor::Actor(Game* game) : mState{ EActive }, mPosition{ Vector2(0.0f, 0.0f) }, mScale{ 1.0f }, mRotation{ 0.0f }, mGame{ game }
@@ -41,17 +42,17 @@ void Actor::UpdateActor(const float deltaTime)
 
 }
 
-void Actor::ProcessInput(const SDL_Event& event)
+void Actor::ProcessInput(const InputState& state)
 {
     if (mState == EActive)
     {
         for (const auto comp : mComponents)
-            comp->HandleEvent(event);
-        HandleEvent(event);
+            comp->ProcessInput(state);
+        ProcessInput(state);
     }
 }
 
-void Actor::HandleEvent(const SDL_Event& event)
+void Actor::ActorInput(const InputState& state)
 {
 
 }

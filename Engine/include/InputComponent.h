@@ -12,7 +12,7 @@ class InputComponent : public MoveComponent
 public:
     explicit InputComponent(Actor* mOwner, int updateOrder = 10);
 
-    void HandleEvent(const SDL_Event& event) override;
+    void ProcessInput(const InputState& state) override;
 
     // getters/setters
     [[nodiscard]] float GetMaxForwardSpeed() const { return mMaxForwardSpeed; }
@@ -21,17 +21,17 @@ public:
     [[nodiscard]] float GetMaxAngularSpeed() const { return mMaxAngularSpeed; }
     void SetMaxAngularSpeed(const float speed) { mMaxAngularSpeed = speed; }
 
-    [[nodiscard]] int GetForwardKey() const { return mForwardKey; }
-    void SetForwardKey(const int key) { mForwardKey = key; }
+    [[nodiscard]] SDL_Scancode GetForwardKey() const { return mForwardKey; }
+    void SetForwardKey(const SDL_Scancode key) { mForwardKey = key; }
 
-    [[nodiscard]] int GetBackKey() const { return mBackKey; }
-    void SetBackKey(const int key) { mBackKey = key; }
+    [[nodiscard]] SDL_Scancode GetBackKey() const { return mBackKey; }
+    void SetBackKey(const SDL_Scancode key) { mBackKey = key; }
 
-    [[nodiscard]] int GetClockwiseKey() const { return mClockwiseKey; }
-    void SetClockwiseKey(const int key) { mClockwiseKey = key; }
+    [[nodiscard]] SDL_Scancode GetClockwiseKey() const { return mClockwiseKey; }
+    void SetClockwiseKey(const SDL_Scancode key) { mClockwiseKey = key; }
 
-    [[nodiscard]] int GetCounterClockwiseKey() const { return mCounterClockwiseKey; }
-    void SetCounterClockwiseKey(const int key) { mCounterClockwiseKey = key; }
+    [[nodiscard]] SDL_Scancode GetCounterClockwiseKey() const { return mCounterClockwiseKey; }
+    void SetCounterClockwiseKey(const SDL_Scancode key) { mCounterClockwiseKey = key; }
 
 private:
     // max forward/angular speeds
@@ -39,12 +39,11 @@ private:
     float mMaxAngularSpeed{0.0};
 
     // keys for forward/back movement
-    int mForwardKey{0};
-    int mBackKey{0};
-
+    SDL_Scancode mForwardKey{};
+    SDL_Scancode mBackKey{};
     // keys for angular movement
-    int mClockwiseKey{0};
-    int mCounterClockwiseKey{0};
+    SDL_Scancode mClockwiseKey{};
+    SDL_Scancode mCounterClockwiseKey{};
 };
 
 #endif //INPUTCOMPONENT_H

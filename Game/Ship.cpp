@@ -8,11 +8,11 @@
 #include "../Engine/include/Game.h"
 #include "../Engine/include/Constants.h"
 #include "../Engine/include/SpriteComponent.h"
+#include "../Engine/include/InputSystem.h"
 #include "../Engine/include/PhysicsInputComponent.h"
-#include "Laser.h"
 #include "../Engine/include/CircleComponent.h"
+#include "Laser.h"
 
-#include <SDL3/SDL_render.h>
 
 Ship::Ship(Game* game) : Actor(game)
 {
@@ -27,10 +27,10 @@ Ship::Ship(Game* game) : Actor(game)
     mInputComp = new PhysicsInputComponent(this);
     mInputComp->SetMass(10.0f);
     mInputComp->SetMaxAngularSpeed(Math::TwoPi);
-    mInputComp->SetForwardKey(SDLK_W);
-    mInputComp->SetBackKey(SDLK_S);
-    mInputComp->SetClockwiseKey(SDLK_A);
-    mInputComp->SetCounterClockwiseKey(SDLK_D);
+    mInputComp->SetForwardKey(SDL_SCANCODE_W);
+    mInputComp->SetBackKey(SDL_SCANCODE_S);
+    mInputComp->SetClockwiseKey(SDL_SCANCODE_A);
+    mInputComp->SetCounterClockwiseKey(SDL_SCANCODE_D);
 }
 
 void Ship::UpdateActor(const float deltaTime)
@@ -46,9 +46,9 @@ void Ship::UpdateActor(const float deltaTime)
     }
 }
 
-void Ship::HandleEvent(const SDL_Event& event)
+void Ship::ActorInput(const InputState& state)
 {
-    if (event.key.key == SDLK_SPACE and mLaserCooldown <= 0.0f)
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_SPACE) and mLaserCooldown <= 0.0f)
     {
         // create a laser and set its position/rotation to mine
         auto* laser = new Laser(GetGame(), GetForward());

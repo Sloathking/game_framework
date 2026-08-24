@@ -55,14 +55,11 @@ Grid::Grid(Game* game) : Actor(game)
 
 void Grid::ProcessClick(int x, int y)
 {
-    SDL_Log("X: %i | Y: %i", x, y);
     y -= static_cast<int>(StartY - TileSize / 2);
-    SDL_Log("Y: %i", y);
     if (y >= 0)
     {
         x /= static_cast<int>(TileSize);
         y /= static_cast<int>(TileSize);
-        SDL_Log("X: %i | Y: %i", x, y);
         if (x >= 0 and x < static_cast<int>(NumCols) and y >= 0 and y < static_cast<int>(NumCols))
             SelectTile(y, x);
     }

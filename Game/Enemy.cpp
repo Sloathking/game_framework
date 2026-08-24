@@ -13,7 +13,7 @@
 
 Enemy::Enemy(Game* game) : Actor(game)
 {
-    game->GetEnemies().emplace_back(this);
+    //game->GetEnemies().emplace_back(this);
 
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(game->GetTexture("Assets/Airplane.png"));
@@ -21,12 +21,12 @@ Enemy::Enemy(Game* game) : Actor(game)
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 
     // set pos to start tile of curr grid
-    SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
+    //SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
 
     // setup nav comp
     auto* navComp = new NavComponent(this);
     navComp->SetForwardSpeed(150.0f);
-    navComp->StartPath(GetGame()->GetGrid()->GetStartTile());
+    //navComp->StartPath(GetGame()->GetGrid()->GetStartTile());
 
     // set up collision
     mCircleComp = new CircleComponent(this);
@@ -35,8 +35,8 @@ Enemy::Enemy(Game* game) : Actor(game)
 
 Enemy::~Enemy()
 {
-    const auto it = std::ranges::find(GetGame()->GetEnemies().begin(), GetGame()->GetEnemies().end(), this);
-    GetGame()->GetEnemies().erase(it);
+    // const auto it = std::ranges::find(GetGame()->GetEnemies().begin(), GetGame()->GetEnemies().end(), this);
+    // GetGame()->GetEnemies().erase(it);
 }
 
 void Enemy::UpdateActor(const float deltaTime)
@@ -44,6 +44,6 @@ void Enemy::UpdateActor(const float deltaTime)
     Actor::UpdateActor(deltaTime);
 
     // am i near the end tile?
-    Vector2 diff = GetPosition() - GetGame()->GetGrid()->GetEndTile()->GetPosition();
-    if (Math::NearZero(diff.Length(), 10.0f)) SetState(EDead);
+    // Vector2 diff = GetPosition() - GetGame()->GetGrid()->GetEndTile()->GetPosition();
+    // if (Math::NearZero(diff.Length(), 10.0f)) SetState(EDead);
 }

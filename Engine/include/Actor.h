@@ -34,9 +34,10 @@ public:
     virtual void UpdateActor(float deltaTime);
 
     // called from game, passes event to comps
-    void ProcessInput(const SDL_Event& event);
+    void ProcessInput(const struct InputState& state);
+
     // actor-specific handling
-    virtual void HandleEvent(const SDL_Event& event);
+    virtual void ActorInput(const InputState& state);
 
     // getters/setters
     [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }

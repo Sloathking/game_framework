@@ -30,6 +30,7 @@ void Bullet::UpdateActor(const float deltaTime)
 {
     Actor::UpdateActor(deltaTime);
 
+    /*
     // check for collision vs enemies
     for (Enemy* e : GetGame()->GetEnemies())
     {
@@ -41,6 +42,7 @@ void Bullet::UpdateActor(const float deltaTime)
             break;
         }
     }
+    */
 
     mLiveTime -= deltaTime;
     if (mLiveTime <= 0.0f) SetState(EDead);

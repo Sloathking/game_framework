@@ -5,19 +5,12 @@
 #include "../include/Constants.h"
 #include "../include/Actor.h"
 #include "../include/SpriteComponent.h"
-#include "../../Game/Grid.h"
-#include "../../Game/Enemy.h"
+#include "../include/InputSystem.h"
 
 #include <random>
 #include <ranges>
 
-#include "../../Game/Tile.h"
-
-
-Game::Game() : mWindow{ nullptr }, mRenderer{ nullptr }, mIsRunning{ true }, mTicksCount{ 0 }, mUpdatingActors{ false }
-{
-
-}
+Game::Game() = default;
 
 // initialize the game
 bool Game::Initialize()
@@ -49,6 +42,13 @@ bool Game::Initialize()
 		}
 	}
 
+	mInputSystem = new InputSystem();
+	if (!mInputSystem->Initialize(this))
+	{
+		SDL_Log("Failed to initialize InputSystem");
+		success = false;
+	}
+
 	LoadData();
 
 	mTicksCount = SDL_GetTicksNS();
@@ -71,6 +71,9 @@ void Game::RunLoop()
 void Game::Shutdown()
 {
 	UnloadData();
+
+	mInputSystem->Shutdown();
+	delete mInputSystem;
 
 	SDL_DestroyRenderer(mRenderer);
 	mRenderer = nullptr;
@@ -157,6 +160,8 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 
 void Game::ProcessInput()
 {
+	mInputSystem->PrepareForUpdate();
+
 	SDL_Event event;
 	SDL_zero(event);
 
@@ -168,45 +173,31 @@ void Game::ProcessInput()
 		case SDL_EVENT_QUIT:
 			mIsRunning = false;
 			break;
-		case SDL_EVENT_KEY_DOWN:
-			switch (event.key.key)
-			{
-			case SDLK_ESCAPE:
-				mIsRunning = false;
-				break;
-			case SDLK_F1:
-				logFPSandVSYNC = !logFPSandVSYNC;
-				break;
-			case SDLK_F2:
-				fpsCapEnabled = !fpsCapEnabled;
-				break;
-			case SDLK_F3:
-				vSyncEnabled = !vSyncEnabled;
-				SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
-				break;
-			case SDLK_B:
-				mGrid->BuildTower();
-				break;
-			default:
-				break;
-			}
-			break;
-		case SDL_EVENT_MOUSE_BUTTON_DOWN:
-			switch (event.button.button)
-			{
-			case SDL_BUTTON_LEFT:
-				mGrid->ProcessClick(event.button.x, event.button.y);
-			default:
-				break;
-			}
 		default:
 			break;
 		}
-		mUpdatingActors = true;
-		for (const auto actor : mActors)
-			actor->ProcessInput(event);
-		mUpdatingActors = false;
 	}
+
+	mInputSystem->Update();
+	const InputState& state = mInputSystem->GetState();
+
+	// process any keys here as desired...
+	if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EPressed)
+		mIsRunning = false;
+	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F1) == EPressed)
+		logFPSandVSYNC = !logFPSandVSYNC;
+	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F2) == EPressed)
+		fpsCapEnabled = !fpsCapEnabled;
+	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F3) == EPressed)
+	{
+		vSyncEnabled = !vSyncEnabled;
+		SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
+	}
+
+	mUpdatingActors = true;
+	for (const auto actor : mActors)
+		actor->ProcessInput(state);
+	mUpdatingActors = false;
 }
 
 void Game::UpdateGame()
@@ -252,26 +243,12 @@ void Game::GenerateOutput() const
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
 
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-
-	const Vector2 startGrid = mGrid->GetStartTile()->GetPosition();
-	const SDL_FRect startRect{.x = startGrid.x - 1, .y = startGrid.y - 1, .w = 2, .h = 2};
-	SDL_RenderFillRect(mRenderer, &startRect);
-
-	const Vector2 endGrid = mGrid->GetEndTile()->GetPosition();
-	const SDL_FRect endRect{.x = endGrid.x - 1, .y = endGrid.y - 1, .w = 2, .h = 2};
-	SDL_RenderFillRect(mRenderer, &endRect);
-
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-	mGrid = new Grid(this);
-	for (const std::vector<Vector2> tiles = mGrid->GetTilePositions(); const Vector2& tile : tiles)
-	{
-		SDL_Log("X: %f | Y: %f", tile.x, tile.y);
-	}
+
 }
 
 void Game::UnloadData() const
@@ -283,24 +260,4 @@ void Game::UnloadData() const
 	// destroy textures
 	for (const auto& val : mTextures | std::views::values)
 		SDL_DestroyTexture(val);
-}
-
-Enemy* Game::GetNearestEnemy(const Vector2& pos) const
-{
-	Enemy* best = nullptr;
-	if (!mEnemies.empty())
-	{
-		best = mEnemies[0];
-		// save distance squared of first enemy and test if others are closed
-		float bestDistSq = (pos - mEnemies[0]->GetPosition()).LengthSq();
-		for (size_t i = 1; i < mEnemies.size(); ++i)
-		{
-			if (const float currDistSq = (pos - mEnemies[i]->GetPosition()).LengthSq(); currDistSq < bestDistSq)
-			{
-				bestDistSq = currDistSq;
-				best = mEnemies[i];
-			}
-		}
-	}
-	return best;
 }

@@ -42,45 +42,9 @@ Skeleton::Skeleton(Game* game) : Actor(game)
 void Skeleton::UpdateActor(const float deltaTime)
 {
     Actor::UpdateActor(deltaTime);
-
-    Vector2 pos = GetPosition();
-    pos.x += mRightSpeed * deltaTime;
-    pos.y += mDownSpeed * deltaTime;
-
-    // restrict pos to left half of screen
-    if (pos.x < 0) pos.x = 0;
-    else if (pos.x > windowWidth) pos.x = windowWidth;
-
-    if (pos.y < 0) pos.y = 0;
-    else if (pos.y > windowHeight) pos.y = windowHeight;
-
-    SetPosition(pos);
 }
 
-void Skeleton::HandleEvent(const SDL_Event& event)
+void Skeleton::ActorInput(const InputState& state)
 {
-    mRightSpeed = 0.0f;
-    mDownSpeed = 0.0f;
 
-    if (event.type == SDL_EVENT_KEY_DOWN)
-    {
-        switch (event.key.key)
-        {
-        case SDLK_W:
-            mDownSpeed -= 300.0f;
-            if (mAnimSprite->GetCurrAnim() != WALKING) mAnimSprite->PlayAnimation(WALKING);
-            break;
-        case SDLK_S:mDownSpeed += 300.0f; break;
-        case SDLK_A: mRightSpeed -= 300.0f; break;
-        case SDLK_D: mRightSpeed += 300.0f; break;
-        case SDLK_SPACE:
-            mAnimSprite->PlayAnimation(JUMPING);
-            break;
-        case SDLK_V:
-            mAnimSprite->PlayAnimation(PUNCH);
-            break;
-        default:
-            break;
-        }
-    }
 }

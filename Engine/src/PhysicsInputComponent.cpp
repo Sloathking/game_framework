@@ -5,25 +5,26 @@
 #include "../include/PhysicsInputComponent.h"
 
 #include "../include/Actor.h"
+#include "../include/InputSystem.h"
 
 PhysicsInputComponent::PhysicsInputComponent(Actor* mOwner, const int updateOrder) : PhysicsMoveComponent(mOwner, updateOrder)
 {
 
 }
 
-void PhysicsInputComponent::HandleEvent(const SDL_Event& event)
+void PhysicsInputComponent::ProcessInput(const InputState& state)
 {
     if (mUpdate)
     {
         // calc forward speed for MoveComponent
-        if (event.key.key == mForwardKey) AddForce(mOwner->GetForward() * 10000);
-        if (event.key.key == mBackKey) AddForce(mOwner->GetForward() * -10000);
+        if (state.Keyboard.GetKeyState(mForwardKey) == EPressed) AddForce(mOwner->GetForward() * 10000);
+        if (state.Keyboard.GetKeyState(mBackKey) == EPressed) AddForce(mOwner->GetForward() * -10000);
         //SetForwardSpeed(forwardSpeed);
 
         // calc angular speed for MoveComponent
         float angularSpeed = 0.0f;
-        if (event.key.key == mClockwiseKey) angularSpeed += mMaxAngularSpeed;
-        if (event.key.key == mCounterClockwiseKey) angularSpeed -= mMaxAngularSpeed;
+        if (state.Keyboard.GetKeyState(mClockwiseKey) == EPressed) angularSpeed += mMaxAngularSpeed;
+        if (state.Keyboard.GetKeyState(mCounterClockwiseKey) == EPressed) angularSpeed -= mMaxAngularSpeed;
         SetAngularSpeed(angularSpeed);
     }
 }

@@ -14,7 +14,7 @@ public:
     explicit Ship(Game* game);
 
     void UpdateActor(float deltaTime) override;
-    void HandleEvent(const SDL_Event& event) override;
+    void ActorInput(const InputState& state) override;
 
 private:
     class SpriteComponent* mShipSprite;
