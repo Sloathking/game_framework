@@ -18,7 +18,7 @@ bool Game::Initialize()
 	bool success{ true };
 
 	// init SDL
-	if (SDL_Init(SDL_INIT_VIDEO) == false)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD) == false)
 	{
 		SDL_Log("Unable to initialize SDL! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -173,6 +173,11 @@ void Game::ProcessInput()
 		case SDL_EVENT_QUIT:
 			mIsRunning = false;
 			break;
+		case SDL_EVENT_MOUSE_WHEEL:
+		case SDL_EVENT_GAMEPAD_ADDED:
+		case SDL_EVENT_GAMEPAD_REMOVED:
+			mInputSystem->ProcessEvent(event);
+			break;
 		default:
 			break;
 		}
@@ -193,6 +198,9 @@ void Game::ProcessInput()
 		vSyncEnabled = !vSyncEnabled;
 		SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
 	}
+
+	if (state.Controller.GetButtonState(SDL_GAMEPAD_BUTTON_SOUTH) == EPressed)
+		SDL_Log("A Pressed");
 
 	mUpdatingActors = true;
 	for (const auto actor : mActors)
