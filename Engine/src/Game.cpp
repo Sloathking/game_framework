@@ -98,7 +98,7 @@ void Game::RemoveActor(Actor* actor)
 	auto iter = std::ranges::find(mPendingActors.begin(), mPendingActors.end(), actor);
 	if (iter != mPendingActors.end())
 	{
-		std::iter_swap(mPendingActors.end(), iter);
+		std::iter_swap(mPendingActors.end() - 1, iter);
 		mPendingActors.pop_back();
 	}
 
@@ -199,7 +199,7 @@ void Game::ProcessInput()
 		SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
 	}
 
-	if (state.Controller.GetButtonState(SDL_GAMEPAD_BUTTON_SOUTH) == EPressed)
+	if (state.Controllers[0].GetButtonState(SDL_GAMEPAD_BUTTON_SOUTH) == EPressed)
 		SDL_Log("A Pressed");
 
 	mUpdatingActors = true;
@@ -236,8 +236,11 @@ void Game::UpdateGame()
 			deadActors.emplace_back(actor);
 
 	// delete dead Actors (which removes them from mActors)
-	for (const auto actor : deadActors)
+	for (auto actor : deadActors)
+	{
 		delete actor;
+		actor = nullptr;
+	}
 
 	if (logFPSandVSYNC)
 		SDL_Log("Delta Time: %f | FPS Capped: %c | VSync: %c", deltaTime, fpsCapEnabled ? 'T' : 'F', vSyncEnabled ? 'T' : 'F');
@@ -259,11 +262,14 @@ void Game::LoadData()
 
 }
 
-void Game::UnloadData() const
+void Game::UnloadData()
 {
 	// delete actors
 	while (!mActors.empty())
+	{
 		delete mActors.back();
+		mActors.pop_back();
+	}
 
 	// destroy textures
 	for (const auto& val : mTextures | std::views::values)

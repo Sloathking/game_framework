@@ -11,6 +11,8 @@
 #include <vector>
 #include <map>
 
+static constexpr int mMaxControllers = 4;
+
 enum ButtonState
 {
     ENone,
@@ -44,11 +46,11 @@ class MouseState
 public:
     enum MouseButton
     {
-        Left = 1,
-        Middle = 2,
-        Right = 3,
-        X1 = 4,
-        X2 = 5
+        Left = SDL_BUTTON_LEFT,
+        Middle = SDL_BUTTON_MIDDLE,
+        Right = SDL_BUTTON_RIGHT,
+        X1 = SDL_BUTTON_X1,
+        X2 = SDL_BUTTON_X2
     };
 
     friend class InputSystem;
@@ -65,8 +67,8 @@ public:
 
 private:
     Vector2 mMousePos{0, 0};
-    Uint32 mCurrButtons{0};
-    Uint32 mPrevButtons{0};
+    SDL_MouseButtonFlags mCurrButtons{0};
+    SDL_MouseButtonFlags mPrevButtons{0};
     Vector2 mScrollWheel{0, 0};
     bool mIsRelative{false};
 };
@@ -112,7 +114,7 @@ struct InputState
     KeyboardState Keyboard;
     MouseState Mouse;
     ControllerState Controller;
-    //std::map<SDL_Gamepad*, ControllerState> Controllers;
+    std::vector<ControllerState> Controllers{mMaxControllers};
 };
 
 class InputSystem
@@ -131,7 +133,7 @@ public:
     void ProcessEvent(const SDL_Event& event);
 
     [[nodiscard]] const InputState& GetState() const { return mState; }
-    [[nodiscard]] SDL_Gamepad* GetController() { return mController; }
+    //[[nodiscard]] SDL_Gamepad* GetController() const { return mController; }
 
     void SetRelativeMouseMode(bool value);
 
@@ -141,15 +143,14 @@ public:
     [[nodiscard]] Vector2 Filter2D(int inputX, int inputY) const;
 
 private:
-    //
     const float deadZone{250.0f};
     const float deadZone2D{8000.0f};
     const float maxValue{30000.0f};
 
     Game* mGame{};
     InputState mState{};
-    SDL_Gamepad* mController{};
-    //std::vector<SDL_Gamepad*> mGamepads;
+    //SDL_Gamepad* mController{};
+    std::vector<SDL_Gamepad*> mGamepads{mMaxControllers};
 
 };
 

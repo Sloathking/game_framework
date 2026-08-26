@@ -37,7 +37,7 @@ private:
     void UpdateGame();
     void GenerateOutput() const;
     void LoadData();
-    void UnloadData() const;
+    void UnloadData();
 
     // window created by SDL
     SDL_Window* mWindow{nullptr};
