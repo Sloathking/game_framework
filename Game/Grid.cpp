@@ -123,7 +123,7 @@ bool Grid::FindPath(Tile* start, Tile* goal) const
         // if open set is empty, all possible paths are exhausted
         if (openSet.empty()) break;
 
-        auto it = std::ranges::min_element(openSet.begin(), openSet.end(),
+        auto it = std::min_element(openSet.begin(), openSet.end(),
             [](const Tile* a, const Tile* b) { return a->f < b->f; });
 
         // set to current and move from open to closed

@@ -35,7 +35,7 @@ Enemy::Enemy(Game* game) : Actor(game)
 
 Enemy::~Enemy()
 {
-    // const auto it = std::ranges::find(GetGame()->GetEnemies().begin(), GetGame()->GetEnemies().end(), this);
+    // const auto it = std::find(GetGame()->GetEnemies().begin(), GetGame()->GetEnemies().end(), this);
     // GetGame()->GetEnemies().erase(it);
 }
 

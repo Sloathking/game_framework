@@ -5,8 +5,9 @@
 #include "../include/Game.h"
 #include "../include/InputSystem.h"
 #include "../include/Component.h"
+#include <algorithm>
 
-Actor::Actor(Game* game) : mState{ EActive }, mPosition{ Vector2(0.0f, 0.0f) }, mScale{ 1.0f }, mRotation{ 0.0f }, mGame{ game }
+Actor::Actor(Game* game) : mGame{ game }
 {
     mGame->AddActor(this);
 }
@@ -48,7 +49,7 @@ void Actor::ProcessInput(const InputState& state)
     {
         for (const auto comp : mComponents)
             comp->ProcessInput(state);
-        ProcessInput(state);
+        ActorInput(state);
     }
 }
 
@@ -57,11 +58,9 @@ void Actor::ActorInput(const InputState& state)
 
 }
 
-// add/remove components
 void Actor::AddComponent(Component* component)
 {
-    // find insertion point in sorted vector
-    // (first element with a order higher than me)
+    // find insertion point in sorted vector (first element with a order higher than me)
     const int myOrder = component->GetUpdateOrder();
     auto iter = mComponents.begin();
     for (; iter != mComponents.end(); ++iter)
@@ -71,8 +70,8 @@ void Actor::AddComponent(Component* component)
     mComponents.insert(iter, component);
 }
 
-void Actor::RemoveComponent(Component* component)
+void Actor::RemoveComponent(const Component* component)
 {
-    if (const auto iter = std::ranges::find(mComponents, component); iter != mComponents.end())
+    if (const auto iter = std::find(mComponents.begin(), mComponents.end(), component); iter != mComponents.end())
         mComponents.erase(iter);
 }

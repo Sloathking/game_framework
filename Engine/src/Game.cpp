@@ -6,9 +6,11 @@
 #include "../include/Actor.h"
 #include "../include/SpriteComponent.h"
 #include "../include/InputSystem.h"
-
 #include <random>
-#include <ranges>
+#include <algorithm>
+
+#include "../../Game/Dot.h"
+#include "../../Game/Ship.h"
 
 Game::Game() = default;
 
@@ -92,10 +94,10 @@ void Game::AddActor(Actor* actor)
 		mActors.emplace_back(actor);
 }
 
-void Game::RemoveActor(Actor* actor)
+void Game::RemoveActor(const Actor* actor)
 {
 	// is actor Pending?
-	auto iter = std::ranges::find(mPendingActors.begin(), mPendingActors.end(), actor);
+	auto iter = std::find(mPendingActors.begin(), mPendingActors.end(), actor);
 	if (iter != mPendingActors.end())
 	{
 		std::iter_swap(mPendingActors.end() - 1, iter);
@@ -103,7 +105,7 @@ void Game::RemoveActor(Actor* actor)
 	}
 
 	// is Actor Active?
-	iter = std::ranges::find(mActors.begin(), mActors.end(), actor);
+	iter = std::find(mActors.begin(), mActors.end(), actor);
 	if (iter != mActors.end())
 	{
 		std::iter_swap(mActors.end() - 1, iter);
@@ -122,10 +124,10 @@ void Game::AddSprite(SpriteComponent* sprite)
 	mSprites.insert(iter, sprite);
 }
 
-void Game::RemoveSprite(SpriteComponent* sprite)
+void Game::RemoveSprite(const SpriteComponent* sprite)
 {
-	const auto iter = std::ranges::find(mSprites.begin(), mSprites.end(), sprite);
-	mSprites.erase(iter);
+	if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
+		mSprites.erase(iter);
 }
 
 SDL_Texture* Game::GetTexture(const std::string& fileName)
@@ -199,9 +201,6 @@ void Game::ProcessInput()
 		SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
 	}
 
-	if (state.Controllers[0].GetButtonState(SDL_GAMEPAD_BUTTON_SOUTH) == EPressed)
-		SDL_Log("A Pressed");
-
 	mUpdatingActors = true;
 	for (const auto actor : mActors)
 		actor->ProcessInput(state);
@@ -248,30 +247,45 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput() const
 {
-	SDL_SetRenderDrawColor(mRenderer, 34, 139, 34, 255);
+	SDL_SetRenderDrawColor(mRenderer, 100, 100, 100, 255);
 	SDL_RenderClear(mRenderer);
+
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+	for (int x = 0; x <= 10000; x += 100)
+		SDL_RenderLine(mRenderer, x, -10000, x, 10000);
+	for (int y = 0; y <= 10000; y += 100)
+		SDL_RenderLine(mRenderer, -10000, y, 10000, y);
+
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+	constexpr SDL_FRect center{.x = -5, .y = -5, .w = 10, .h = 10};
+	SDL_RenderFillRect(mRenderer, &center);
 
 	for (const auto sprite : mSprites)
 		sprite->Draw(mRenderer, nullptr, -1, -1);
+
+	const Vector2 dotPos = mDot->GetPosition();
+	const Vector2 dotFrd = mDot->GetForward() * 50;
+	const SDL_FRect dotRect{.x = dotPos.x - 1, .y = dotPos.y - 1, .w = 2, .h = 2};
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+	SDL_RenderLine(mRenderer, dotPos.x, dotPos.y, dotPos.x + dotFrd.x, dotPos.y + dotFrd.y);
+	SDL_RenderFillRect(mRenderer, &dotRect);
 
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::LoadData()
 {
-
+	mDot = new Dot(this);
+	mDot->SetPosition(Vector2(100, 200));
 }
 
 void Game::UnloadData()
 {
 	// delete actors
 	while (!mActors.empty())
-	{
 		delete mActors.back();
-		mActors.pop_back();
-	}
 
 	// destroy textures
-	for (const auto& val : mTextures | std::views::values)
-		SDL_DestroyTexture(val);
+	for (const auto& i : mTextures)
+		SDL_DestroyTexture(i.second);
 }

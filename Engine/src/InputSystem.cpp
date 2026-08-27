@@ -3,10 +3,8 @@
 //
 
 #include "../include/InputSystem.h"
-
 #include "../include/Game.h"
-//#include <SDL3/SDL.h>
-#include <ranges>
+#include <algorithm>
 
 bool InputSystem::Initialize(Game* game)
 {
@@ -44,11 +42,15 @@ bool InputSystem::Initialize(Game* game)
     return true;
 }
 
-void InputSystem::Shutdown()
+void InputSystem::Shutdown() const
 {
     // clean up gamepads
     for (SDL_Gamepad* gamepad : mGamepads)
-        SDL_CloseGamepad(gamepad);
+        if (gamepad)
+        {
+            SDL_CloseGamepad(gamepad);
+            gamepad = nullptr;
+        }
 }
 
 void InputSystem::PrepareForUpdate()
@@ -61,7 +63,7 @@ void InputSystem::PrepareForUpdate()
     mState.Mouse.mScrollWheel = Vector2::Zero;
 
     // controllers
-    for (auto & Controller : mState.Controllers)
+    for (auto& Controller : mState.Controllers)
         memcpy(Controller.mPrevButtons, Controller.mCurrButtons, SDL_GAMEPAD_BUTTON_COUNT);
 }
 
@@ -81,6 +83,8 @@ void InputSystem::Update()
     // controllers
     for (int gamepad = 0; gamepad < mGamepads.size(); gamepad++)
     {
+        if (!mGamepads[gamepad]) continue;
+
         // update buttons
         for (int i = 0; i < SDL_GAMEPAD_BUTTON_COUNT; ++i)
             mState.Controllers[gamepad].mCurrButtons[i] = SDL_GetGamepadButton(mGamepads[gamepad], static_cast<SDL_GamepadButton>(i));
@@ -111,18 +115,19 @@ void InputSystem::ProcessEvent(const SDL_Event& event)
     case SDL_EVENT_GAMEPAD_REMOVED:
         {
             SDL_Gamepad* gamepad = SDL_GetGamepadFromID(event.gdevice.which);
-            const auto it = std::ranges::find(mGamepads.begin(), mGamepads.end(), gamepad);
+            const auto it = std::find(mGamepads.begin(), mGamepads.end(), gamepad);
             const int index = static_cast<int>(std::distance(mGamepads.begin(), it));
 
             mGamepads[index] = nullptr;
             mState.Controllers[index].mIsConnected = gamepad != nullptr;
             SDL_CloseGamepad(gamepad);
-            SDL_Log("Controller %i Removed", index);
+            SDL_Log("Controller %i Removed", index + 1);
             break;
         }
     case SDL_EVENT_GAMEPAD_ADDED:
         {
             SDL_Gamepad* gamepad = SDL_OpenGamepad(event.gdevice.which);
+            bool slotFound{false};
             for (int i = 0; i < mGamepads.size(); ++i)
             {
                 if (mGamepads[i] == nullptr)
@@ -131,10 +136,12 @@ void InputSystem::ProcessEvent(const SDL_Event& event)
                     mState.Controllers[i].mIsConnected = gamepad != nullptr;
                     memset(mState.Controllers[i].mCurrButtons, 0, SDL_GAMEPAD_BUTTON_COUNT);
                     memset(mState.Controllers[i].mPrevButtons, 0, SDL_GAMEPAD_BUTTON_COUNT);
-                    SDL_Log("Controller %i Added", i);
+                    slotFound = true;
+                    SDL_Log("Controller %i Added", i + 1);
                     break;
                 }
             }
+            if (!slotFound) SDL_CloseGamepad(gamepad);
             break;
         }
     default:
@@ -163,13 +170,10 @@ ButtonState InputSystem::CheckButtonState(const bool& prevFrame, const bool& cur
 
 float InputSystem::Filter1D(const int input) const
 {
-    float retVal = 0.0f;
-
-    // take abs value of input
-    int absValue = input > 0 ? input : -input;
+    float retVal{0.0f};
 
     // ignore input within dead zone
-    if (static_cast<float>(absValue) > deadZone)
+    if (const int absValue{input > 0 ? input : -input}; static_cast<float>(absValue) > deadZone)
     {
         // compute fraction value between dead zone and maxvalue
         retVal = (static_cast<float>(absValue) - deadZone) / (maxValue - deadZone);

@@ -37,7 +37,7 @@ private:
     const bool* mCurrState{};
 
     // state prev frame
-    Uint8 mPrevState[SDL_SCANCODE_COUNT]{};
+    bool mPrevState[SDL_SCANCODE_COUNT]{};
 
 };
 
@@ -113,7 +113,6 @@ struct InputState
 {
     KeyboardState Keyboard;
     MouseState Mouse;
-    ControllerState Controller;
     std::vector<ControllerState> Controllers{mMaxControllers};
 };
 
@@ -121,7 +120,7 @@ class InputSystem
 {
 public:
     bool Initialize(class Game* game);
-    void Shutdown();
+    void Shutdown() const;
 
     // called right BEFORE SDL_PollEvents loop
     void PrepareForUpdate();
@@ -133,7 +132,6 @@ public:
     void ProcessEvent(const SDL_Event& event);
 
     [[nodiscard]] const InputState& GetState() const { return mState; }
-    //[[nodiscard]] SDL_Gamepad* GetController() const { return mController; }
 
     void SetRelativeMouseMode(bool value);
 
@@ -149,7 +147,6 @@ private:
 
     Game* mGame{};
     InputState mState{};
-    //SDL_Gamepad* mController{};
     std::vector<SDL_Gamepad*> mGamepads{mMaxControllers};
 
 };

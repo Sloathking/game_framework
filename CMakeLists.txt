@@ -63,6 +63,10 @@ add_executable(${PROJECT_NAME} main.cpp
         Engine/include/PhysicsInputComponent.h
         Engine/src/InputSystem.cpp
         Engine/include/InputSystem.h
+        Game/Dot.cpp
+        Game/Dot.h
+        Engine/src/CameraComponent.cpp
+        Engine/include/CameraComponent.h
 )
 
 file(

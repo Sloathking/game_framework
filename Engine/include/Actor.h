@@ -49,7 +49,7 @@ public:
     [[nodiscard]] float GetRotation() const { return mRotation; }
     void SetRotation(const float rotation) { mRotation = rotation; }
 
-    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), -Math::Sin(mRotation)); }
+    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }
 
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }
@@ -58,16 +58,16 @@ public:
 
     // add/remove components
     void AddComponent(class Component* component);
-    void RemoveComponent(Component* component);
+    void RemoveComponent(const Component* component);
 
 private:
     // Actor's state
-    State mState;
+    State mState{EActive};
 
     // Transform
-    Vector2 mPosition;	// center position of Actor
-    float mScale;		// uniforms scale of actor
-    float mRotation;	// rotation angle (in radians)
+    Vector2 mPosition{Vector2::Zero};	// position of Actor
+    float mScale{1.0f};         		// uniforms scale of actor
+    float mRotation{0.0f};          	// rotation angle (in radians)
 
     // components held by actor
     std::vector<Component*> mComponents;

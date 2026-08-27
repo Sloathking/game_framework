@@ -20,13 +20,14 @@ public:
     void Shutdown();
 
     void AddActor(class Actor* actor);
-    void RemoveActor(Actor* actor);
+    void RemoveActor(const Actor* actor);
 
     void AddSprite(class SpriteComponent* sprite);
-    void RemoveSprite(SpriteComponent* sprite);
+    void RemoveSprite(const SpriteComponent* sprite);
 
     SDL_Texture* GetTexture(const std::string& fileName);
 
+    // This is used for Input System to have a ref to the window for RELATIVE mode
     SDL_Window* GetWindow () const { return mWindow; }
 
     // game functions
@@ -65,7 +66,10 @@ private:
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
 
-    // game-specific vectors
+    // camera stuff
+    class CameraComponent* mCurrCamera;
+    // game-specific stuff
+    class Dot* mDot;
 
 };
 
