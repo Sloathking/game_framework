@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "CameraComponent.h"
+
 class Game
 {
 public:
@@ -30,6 +32,10 @@ public:
     // This is used for Input System to have a ref to the window for RELATIVE mode
     SDL_Window* GetWindow () const { return mWindow; }
 
+    // camera stuff
+    void SetMainCamera(CameraComponent* camera) { mCamera = camera; }
+    Vector2 GetCurrCameraPos() const { return mCamera->GetPosition(); }
+
     // game functions
 
 private:
@@ -44,7 +50,7 @@ private:
     SDL_Window* mWindow{nullptr};
 
     // renderer created by SDL
-    SDL_Renderer* mRenderer{nullptr};
+    //SDL_Renderer* mRenderer{nullptr};
 
     // game should continue to run
     bool mIsRunning{true};
@@ -67,9 +73,12 @@ private:
     std::vector<SpriteComponent*> mSprites;
 
     // camera stuff
-    class CameraComponent* mCurrCamera;
+    Actor* mCamActor{};
+    CameraComponent* mCamera;
+
     // game-specific stuff
-    class Dot* mDot;
+    // class Dot* mDot;
+    // std::vector<class Asteroid*> mAsteroids;
 
 };
 

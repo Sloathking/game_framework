@@ -10,7 +10,7 @@
 #include <algorithm>
 
 #include "../../Game/Dot.h"
-#include "../../Game/Ship.h"
+#include "../../Game/Asteroid.h"
 
 Game::Game() = default;
 
@@ -27,8 +27,13 @@ bool Game::Initialize()
 	}
 	else
 	{
-		// create window with renderer
-		if (SDL_CreateWindowAndRenderer(windowTitle.c_str(),static_cast<int>(windowWidth), static_cast<int>(windowHeight), 0, &mWindow, &mRenderer) == false)
+		// create openGL window
+		mWindow = SDL_CreateWindow(
+			windowTitle.c_str(), static_cast<int>(windowWidth), static_cast<int>(windowHeight),
+			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+			);
+
+		if (!mWindow)
 		{
 			SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
 			success = false;
@@ -36,11 +41,11 @@ bool Game::Initialize()
 		else
 		{
 			// enable VSync
-			if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
-			{
-				SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
-				success = false;
-			}
+			// if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
+			// {
+			// 	SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
+			// 	success = false;
+			// }
 		}
 	}
 
@@ -77,8 +82,8 @@ void Game::Shutdown()
 	mInputSystem->Shutdown();
 	delete mInputSystem;
 
-	SDL_DestroyRenderer(mRenderer);
-	mRenderer = nullptr;
+	// SDL_DestroyRenderer(mRenderer);
+	// mRenderer = nullptr;
 
 	SDL_DestroyWindow(mWindow);
 	mWindow = nullptr;
@@ -147,11 +152,11 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 		}
 		else
 		{
-			if (tex = SDL_CreateTextureFromSurface(mRenderer, surface); tex == nullptr)
+			/*if (tex = SDL_CreateTextureFromSurface(mRenderer, surface); tex == nullptr)
 			{
 				SDL_Log("Failed to convert surface to texture: %s", filePath.c_str());
 				return nullptr;
-			}
+			}*/
 			SDL_DestroySurface(surface);
 		}
 		mTextures.emplace(fileName, tex);
@@ -174,6 +179,18 @@ void Game::ProcessInput()
 		{
 		case SDL_EVENT_QUIT:
 			mIsRunning = false;
+			break;
+		case SDL_EVENT_WINDOW_RESIZED:
+			{
+				int x, y;
+				if (!SDL_GetWindowSize(mWindow, &x, &y))
+				{
+					SDL_Log("SDL_EVENT_WINDOW_RESIZED - Error: %s", SDL_GetError());
+					mIsRunning = false;
+					break;
+				}
+				mCamera->SetWindowSize(Vector2(static_cast<float>(x), static_cast<float>(y)));
+			}
 			break;
 		case SDL_EVENT_MOUSE_WHEEL:
 		case SDL_EVENT_GAMEPAD_ADDED:
@@ -198,7 +215,7 @@ void Game::ProcessInput()
 	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F3) == EPressed)
 	{
 		vSyncEnabled = !vSyncEnabled;
-		SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
+		//SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
 	}
 
 	mUpdatingActors = true;
@@ -219,6 +236,7 @@ void Game::UpdateGame()
 
 	// update all Actors
 	mUpdatingActors = true;
+
 	for (const auto actor : mActors)
 		actor->Update(deltaTime);
 	mUpdatingActors = false;
@@ -243,40 +261,51 @@ void Game::UpdateGame()
 
 	if (logFPSandVSYNC)
 		SDL_Log("Delta Time: %f | FPS Capped: %c | VSync: %c", deltaTime, fpsCapEnabled ? 'T' : 'F', vSyncEnabled ? 'T' : 'F');
+
+}
+
+static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
+{
+	const Vector2 camPos = camera->GetPosition();
+	const Vector2 windowSize = camera->GetWindowSize();
+	if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
+		return true;
+	return false;
 }
 
 void Game::GenerateOutput() const
 {
-	SDL_SetRenderDrawColor(mRenderer, 100, 100, 100, 255);
+	/*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
 	SDL_RenderClear(mRenderer);
 
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	for (int x = 0; x <= 10000; x += 100)
-		SDL_RenderLine(mRenderer, x, -10000, x, 10000);
-	for (int y = 0; y <= 10000; y += 100)
-		SDL_RenderLine(mRenderer, -10000, y, 10000, y);
-
-	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-	constexpr SDL_FRect center{.x = -5, .y = -5, .w = 10, .h = 10};
-	SDL_RenderFillRect(mRenderer, &center);
+	Vector2 camPos = mCamera->GetPosition();
+	camPos.x = -camPos.x;
+	camPos.y = -camPos.y;
 
 	for (const auto sprite : mSprites)
-		sprite->Draw(mRenderer, nullptr, -1, -1);
+	{
+		if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
+			sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+	}
 
-	const Vector2 dotPos = mDot->GetPosition();
-	const Vector2 dotFrd = mDot->GetForward() * 50;
-	const SDL_FRect dotRect{.x = dotPos.x - 1, .y = dotPos.y - 1, .w = 2, .h = 2};
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderLine(mRenderer, dotPos.x, dotPos.y, dotPos.x + dotFrd.x, dotPos.y + dotFrd.y);
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+	const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
 	SDL_RenderFillRect(mRenderer, &dotRect);
 
-	SDL_RenderPresent(mRenderer);
+	SDL_RenderPresent(mRenderer);*/
+
 }
 
 void Game::LoadData()
 {
-	mDot = new Dot(this);
-	mDot->SetPosition(Vector2(100, 200));
+	// mDot = new Dot(this);
+	// mDot->SetPosition(Vector2(500, 500));
+	//
+	// for (int i = 0; i < 200; ++i)
+	// {
+	// 	auto* temp = new Asteroid(this);
+	// 	mAsteroids.emplace_back(temp);
+	// }
 }
 
 void Game::UnloadData()

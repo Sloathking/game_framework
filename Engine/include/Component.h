@@ -21,6 +21,8 @@ public:
 
     virtual void ProcessInput(const struct InputState& state) {}
 
+    [[nodiscard]] Actor* GetOwner() const { return mOwner; }
+
     [[nodiscard]] bool GetUpdateState() const { return mUpdate; }
     void SetUpdateState(const bool update) { mUpdate = update; }
 

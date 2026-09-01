@@ -13,7 +13,7 @@
 Asteroid::Asteroid(Game* game) : Actor(game)
 {
     // init to random position and rotation
-    const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(windowWidth, windowHeight));
+    const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(5120, 5120));
     SetPosition(randPos);
     SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
 

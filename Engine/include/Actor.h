@@ -57,6 +57,7 @@ public:
     [[nodiscard]] class Game* GetGame() const { return mGame; }
 
     // add/remove components
+
     void AddComponent(class Component* component);
     void RemoveComponent(const Component* component);
 

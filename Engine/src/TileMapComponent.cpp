@@ -20,7 +20,7 @@ void TileMapComponent::Update(const float deltaTime)
 
 }
 
-void TileMapComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const float width, const float height)
+void TileMapComponent::Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, const float width, const float height)
 {
     for (TileData& tile : mTiles)
     {

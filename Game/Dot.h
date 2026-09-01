@@ -12,9 +12,12 @@ class Dot : public Actor
 public:
     explicit Dot(Game* game);
 
+    void UpdateActor(float deltaTime) override;
+
     void ActorInput(const InputState& state) override;
 
 private:
+    class CameraComponent* mCameraComp;
 
 };
 

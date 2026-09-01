@@ -26,7 +26,7 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height)
+void BGSpriteComponent::Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, float width, float height)
 {
     for (auto& bg : mBGTextures)
     {

@@ -22,7 +22,7 @@ public:
     explicit TileMapComponent(Actor* owner, int drawOrder = 100);
 
     void Update(float deltaTime) override;
-    void Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height) override;
+    void Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, float width, float height) override;
 
     // function to load and read in a tile map CSV file.
     void ReadFile(const std::string& fileName);

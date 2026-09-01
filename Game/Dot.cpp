@@ -4,6 +4,7 @@
 
 #include "Dot.h"
 
+#include "../Engine/include/CameraComponent.h"
 #include "../Engine/include/Game.h"
 #include "../Engine/include/SpriteComponent.h"
 #include "../Engine/include/InputSystem.h"
@@ -15,6 +16,16 @@ Dot::Dot(Game* game) : Actor(game)
     sprite->SetAnchor(SpriteComponent::CenterCenter);
     sprite->SetCenter(SpriteComponent::CenterCenter);
     SetRotation(Math::ToRadians(270.0f));
+
+    mCameraComp = new CameraComponent(this);
+    game->SetMainCamera(mCameraComp);
+}
+
+void Dot::UpdateActor(float deltaTime)
+{
+    // const Vector2 camPos = mCameraComp->GetPosition();
+    // const Vector2 newPos{-camPos.x, -camPos.y};
+    // SetPosition(newPos);
 }
 
 void Dot::ActorInput(const InputState& state)

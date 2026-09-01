@@ -21,7 +21,7 @@ public:
     explicit SpriteComponent(Actor* owner, int drawOrder = 100);
     ~SpriteComponent() override;
 
-    virtual void Draw(SDL_Renderer* renderer, const SDL_FRect* clip, float width, float height);
+    virtual void Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, float width, float height);
 
     virtual void SetTexture(SDL_Texture* texture);
 
@@ -34,9 +34,8 @@ public:
 
     [[nodiscard]] int GetTextHeight() const { return mTexHeight; }
 
-     [[nodiscard]] Vector2 GetOffset() const { return Vector2(mXOffset, mYOffset);}
-    void SetOffset(const float x, const float y) { mXOffset = x; mYOffset = y; }
-    void SetOffset(const Vector2 vec) { mXOffset = vec.x; mYOffset = vec.y; }
+     [[nodiscard]] Vector2 GetOffset() const { return mOffset;}
+    void SetOffset(const Vector2 vec) { mOffset = vec; }
 
     double GetRotation() const { return mRotation; }
     void SetRotation(const float rotation) { mRotation = rotation; }
@@ -63,8 +62,7 @@ protected:
     int mTexWidth{ 0 };
     int mTexHeight{ 0 };
 
-    float mXOffset{ 0.0 };
-    float mYOffset{ 0.0 };
+    Vector2 mOffset{Vector2::Zero};
 
     float mRotation{ 0.0 };
 

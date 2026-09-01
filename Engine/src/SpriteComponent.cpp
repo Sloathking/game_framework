@@ -17,14 +17,14 @@ SpriteComponent::~SpriteComponent()
     mOwner->GetGame()->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer, const SDL_FRect* clip, const float width, const float height)
+void SpriteComponent::Draw(SDL_Renderer* renderer, const Vector2 offset, const SDL_FRect* clip, const float width, const float height)
 {
     if (mIsVisible)
     {
         //Set texture position
         SDL_FRect dstRect{
-            .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + mXOffset,
-            .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + mYOffset,
+            .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + offset.x,
+            .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + offset.y,
             .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
             .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
         };

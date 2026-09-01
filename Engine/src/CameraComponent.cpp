@@ -6,13 +6,23 @@
 
 #include "../include/Actor.h"
 
-CameraComponent::CameraComponent(Actor* owner, const int updateOrder, const float viewWidth, const float viewHeight) : Component(owner, updateOrder)
+CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {
-    const Vector2 ownerPos = owner->GetPosition();
-    mView = new SDL_FRect{.x = ownerPos.x, .y = ownerPos.y, .w = viewWidth, .h = viewHeight};
+
 }
 
-void CameraComponent::Update(float deltaTime)
+void CameraComponent::Update(const float deltaTime)
 {
-    mPosition = mOwner->GetPosition();
+    /*const Vector2 ownerPos = mOwner->GetPosition();
+    mView->x = ownerPos.x - mWindowSize.x * 0.5f;
+    mView->y = ownerPos.y - mWindowSize.y * 0.5f;*/
+}
+
+[[nodiscard]] Vector2 CameraComponent::GetPosition() const
+{
+    const Vector2 ownerPos = mOwner->GetPosition();
+    Vector2 pos;
+    pos.x = ownerPos.x - mWindowSize.x * 0.5f;
+    pos.y = ownerPos.y - mWindowSize.y * 0.5f;
+    return pos;
 }
