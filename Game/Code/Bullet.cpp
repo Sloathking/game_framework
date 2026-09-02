@@ -3,12 +3,12 @@
 //
 
 #include "Bullet.h"
-
-#include "../Engine/include/CircleComponent.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/MoveComponent.h"
-#include "../Engine/include/SpriteComponent.h"
 #include "Enemy.h"
+
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/CircleComponent.h"
+#include "../../Engine/include/MoveComponent.h"
+#include "../../Engine/include/SpriteComponent.h"
 
 Bullet::Bullet(Game* game) : Actor(game)
 {

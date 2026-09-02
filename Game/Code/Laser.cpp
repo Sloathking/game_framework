@@ -3,11 +3,11 @@
 //
 
 #include "Laser.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/CircleComponent.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/CircleComponent.h"
 #include "Asteroid.h"
-#include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/PhysicsMoveComponent.h"
+#include "../../Engine/include/SpriteComponent.h"
+#include "../../Engine/include/PhysicsMoveComponent.h"
 
 Laser::Laser(Game* game, const Vector2 dir) : Actor(game)
 {

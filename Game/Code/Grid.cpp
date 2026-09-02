@@ -6,9 +6,8 @@
 #include "Tile.h"
 #include "Tower.h"
 #include "Enemy.h"
-#include <algorithm>
 
-#include "SDL3/SDL_log.h"
+#include <algorithm>
 
 Grid::Grid(Game* game) : Actor(game)
 {

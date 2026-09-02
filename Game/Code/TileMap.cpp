@@ -4,8 +4,8 @@
 
 #include "TileMap.h"
 
-#include "../Engine/include/Game.h"
-#include "../Engine/include/TileMapComponent.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/TileMapComponent.h"
 
 TileMap::TileMap(Game* game) : Actor(game)
 {

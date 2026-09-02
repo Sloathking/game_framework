@@ -5,8 +5,7 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "../Engine/include/Actor.h"
-
+#include "../../Engine/include/Actor.h"
 
 class TileMap : public Actor
 {
@@ -19,6 +18,5 @@ private:
     TileMapComponent* mFarthestTileMap;
 
 };
-
 
 #endif //TILEMAP_H

@@ -3,9 +3,9 @@
 //
 
 #include "Skeleton.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/AnimSpriteComponent.h"
-#include "../Engine/include/Constants.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/AnimSpriteComponent.h"
+#include "../../Engine/include/Constants.h"
 
 Skeleton::Skeleton(Game* game) : Actor(game)
 {

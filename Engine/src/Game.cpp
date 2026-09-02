@@ -1,16 +1,17 @@
 //
 // Created by sloath on 06-Aug-26.
 //
+
+
 #include "../include/Game.h"
 #include "../include/Constants.h"
 #include "../include/Actor.h"
 #include "../include/SpriteComponent.h"
 #include "../include/InputSystem.h"
+#include "../include/CameraComponent.h"
+#include <SDL3/SDL_gpu.h>
 #include <random>
 #include <algorithm>
-
-#include "../../Game/Dot.h"
-#include "../../Game/Asteroid.h"
 
 Game::Game() = default;
 
@@ -27,25 +28,35 @@ bool Game::Initialize()
 	}
 	else
 	{
-		// create openGL window
-		mWindow = SDL_CreateWindow(
-			windowTitle.c_str(), static_cast<int>(windowWidth), static_cast<int>(windowHeight),
-			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
-			);
-
-		if (!mWindow)
+		// create GPUDevice
+		mDevice = SDL_CreateGPUDevice(
+			SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+			true,nullptr);
+		if (mDevice == nullptr)
 		{
-			SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
+			SDL_Log("Unable to create GPU device!");
 			success = false;
 		}
 		else
 		{
-			// enable VSync
-			// if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
-			// {
-			// 	SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
-			// 	success = false;
-			// }
+			mWindow = SDL_CreateWindow(
+				windowTitle.c_str(),
+				static_cast<int>(windowWidth), static_cast<int>(windowHeight),
+				SDL_WINDOW_RESIZABLE);
+
+			if (!mWindow)
+			{
+				SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
+				success = false;
+			}
+			else
+			{
+				if (!SDL_ClaimWindowForGPUDevice(mDevice, mWindow))
+				{
+					SDL_Log("Unable to claim Window for Device");
+					success = false;
+				}
+			}
 		}
 	}
 
@@ -84,6 +95,9 @@ void Game::Shutdown()
 
 	// SDL_DestroyRenderer(mRenderer);
 	// mRenderer = nullptr;
+
+	SDL_DestroyGPUDevice(mDevice);
+	mDevice = nullptr;
 
 	SDL_DestroyWindow(mWindow);
 	mWindow = nullptr;
@@ -273,8 +287,36 @@ static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
 	return false;
 }
 
-void Game::GenerateOutput() const
+void Game::GenerateOutput()
 {
+	SDL_GPUCommandBuffer* cmdBfr = SDL_AcquireGPUCommandBuffer(mDevice);
+	if (!cmdBfr)
+	{
+		SDL_Log("AcquireGPUCommandBuffer failed - Error: %s", SDL_GetError());
+		mIsRunning = false;
+	}
+
+	SDL_GPUTexture* swapchainTex;
+	if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdBfr, mWindow, &swapchainTex, nullptr, nullptr))
+	{
+		SDL_Log("WaitAndAcquireGPUSwapchainTexture failed - Error: %s", SDL_GetError());
+		mIsRunning = false;
+	}
+
+	if (swapchainTex)
+	{
+		SDL_GPUColorTargetInfo colorTarInfo = {.texture = nullptr};
+		colorTarInfo.texture = swapchainTex;
+		colorTarInfo.clear_color = (SDL_FColor){.r = 0.3f, .g = 0.6f, .b = 0.5f, .a = 1.0f};
+		colorTarInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+		colorTarInfo.store_op = SDL_GPU_STOREOP_STORE;
+		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBfr, &colorTarInfo, 1, nullptr);
+		SDL_EndGPURenderPass(renderPass);
+	}
+
+	SDL_SubmitGPUCommandBuffer(cmdBfr);
+
+#pragma region Old Render Code
 	/*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
 	SDL_RenderClear(mRenderer);
 
@@ -293,7 +335,7 @@ void Game::GenerateOutput() const
 	SDL_RenderFillRect(mRenderer, &dotRect);
 
 	SDL_RenderPresent(mRenderer);*/
-
+#pragma endregion
 }
 
 void Game::LoadData()

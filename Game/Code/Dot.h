@@ -5,7 +5,7 @@
 #ifndef DOT_H
 #define DOT_H
 
-#include "../Engine/include/Actor.h"
+#include "../../Engine/include/Actor.h"
 
 class Dot : public Actor
 {

@@ -3,12 +3,12 @@
 //
 
 #include "Tower.h"
-
-#include "../Engine/include/Game.h"
-#include "../Engine/include/MoveComponent.h"
-#include "../Engine/include/SpriteComponent.h"
 #include "Enemy.h"
 #include "Bullet.h"
+
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/MoveComponent.h"
+#include "../../Engine/include/SpriteComponent.h"
 
 Tower::Tower(Game* game) : Actor(game)
 {

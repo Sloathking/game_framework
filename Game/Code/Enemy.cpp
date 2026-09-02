@@ -6,10 +6,11 @@
 
 #include "Grid.h"
 #include "Tile.h"
-#include "../Engine/include/CircleComponent.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/NavComponent.h"
-#include "../Engine/include/SpriteComponent.h"
+
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/CircleComponent.h"
+#include "../../Engine/include/NavComponent.h"
+#include "../../Engine/include/SpriteComponent.h"
 
 Enemy::Enemy(Game* game) : Actor(game)
 {

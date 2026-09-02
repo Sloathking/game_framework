@@ -5,8 +5,7 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "../Engine/include/Actor.h"
-#include "SDL3/SDL_events.h"
+#include "../../Engine/include/Actor.h"
 
 class Ship : public Actor
 {

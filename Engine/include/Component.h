@@ -5,8 +5,6 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <SDL3/SDL_events.h>
-
 class Component
 {
 public:

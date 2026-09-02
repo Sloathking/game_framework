@@ -3,8 +3,8 @@
 //
 
 #include "Tile.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/SpriteComponent.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/SpriteComponent.h"
 
 Tile::Tile(Game* game) : Actor(game)
 {

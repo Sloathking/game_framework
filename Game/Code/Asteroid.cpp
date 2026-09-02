@@ -3,12 +3,12 @@
 //
 
 #include "Asteroid.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/Constants.h"
-#include "../Engine/include/Random.h"
-#include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/PhysicsMoveComponent.h"
-#include "../Engine/include/CircleComponent.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Constants.h"
+#include "../../Engine/include/Random.h"
+#include "../../Engine/include/SpriteComponent.h"
+#include "../../Engine/include/PhysicsMoveComponent.h"
+#include "../../Engine/include/CircleComponent.h"
 
 Asteroid::Asteroid(Game* game) : Actor(game)
 {

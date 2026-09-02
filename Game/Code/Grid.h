@@ -5,7 +5,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "../Engine/include/Actor.h"
+#include "../../Engine/include/Actor.h"
 #include <vector>
 
 class Grid : public Actor
@@ -45,6 +45,5 @@ private:
     const float EnemyTime{1.5f};
 
 };
-
 
 #endif //GRID_H

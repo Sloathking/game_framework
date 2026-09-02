@@ -6,6 +6,7 @@
 #define INPUTCOMPONENT_H
 
 #include "MoveComponent.h"
+#include <SDL3/SDL_scancode.h>
 
 class InputComponent : public MoveComponent
 {

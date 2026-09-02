@@ -6,6 +6,7 @@
 #define PHYSICSINPUTCOMPONENT_H
 
 #include "PhysicsMoveComponent.h"
+#include <SDL3/SDL_scancode.h>
 
 class PhysicsInputComponent : public PhysicsMoveComponent
 {

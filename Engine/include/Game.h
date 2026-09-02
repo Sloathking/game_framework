@@ -10,8 +10,6 @@
 #include <unordered_map>
 #include <string>
 
-#include "CameraComponent.h"
-
 class Game
 {
 public:
@@ -33,8 +31,8 @@ public:
     SDL_Window* GetWindow () const { return mWindow; }
 
     // camera stuff
-    void SetMainCamera(CameraComponent* camera) { mCamera = camera; }
-    Vector2 GetCurrCameraPos() const { return mCamera->GetPosition(); }
+    void SetMainCamera(class CameraComponent* camera) { mCamera = camera; }
+    //Vector2 GetCurrCameraPos() const { return mCamera->GetPosition(); }
 
     // game functions
 
@@ -42,15 +40,15 @@ private:
     // helper functions for the game loop
     void ProcessInput();
     void UpdateGame();
-    void GenerateOutput() const;
+    void GenerateOutput();
     void LoadData();
     void UnloadData();
 
     // window created by SDL
     SDL_Window* mWindow{nullptr};
 
-    // renderer created by SDL
-    //SDL_Renderer* mRenderer{nullptr};
+    // sdl gpu device
+    SDL_GPUDevice* mDevice{nullptr};
 
     // game should continue to run
     bool mIsRunning{true};

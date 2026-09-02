@@ -5,7 +5,7 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
-#include "../Engine/include/Actor.h"
+#include "../../Engine/include/Actor.h"
 
 
 class Asteroid : public Actor

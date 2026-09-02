@@ -4,10 +4,10 @@
 
 #include "Dot.h"
 
-#include "../Engine/include/CameraComponent.h"
-#include "../Engine/include/Game.h"
-#include "../Engine/include/SpriteComponent.h"
-#include "../Engine/include/InputSystem.h"
+#include "../../Engine/include/CameraComponent.h"
+#include "../../Engine/include/Game.h"
+#include "../../Engine/include/SpriteComponent.h"
+#include "../../Engine/include/InputSystem.h"
 
 Dot::Dot(Game* game) : Actor(game)
 {
