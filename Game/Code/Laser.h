@@ -10,7 +10,7 @@
 class Laser : public Actor
 {
 public:
-    explicit Laser(Game* game, Vector2 dir);
+    explicit Laser(Engine* game, Vector2 dir);
 
     void UpdateActor(float deltaTime) override;
 

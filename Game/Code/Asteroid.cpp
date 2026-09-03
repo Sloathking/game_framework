@@ -3,14 +3,14 @@
 //
 
 #include "Asteroid.h"
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/Constants.h"
 #include "../../Engine/include/Random.h"
 #include "../../Engine/include/SpriteComponent.h"
 #include "../../Engine/include/PhysicsMoveComponent.h"
 #include "../../Engine/include/CircleComponent.h"
 
-Asteroid::Asteroid(Game* game) : Actor(game)
+Asteroid::Asteroid(Engine* game) : Actor(game)
 {
     // init to random position and rotation
     const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(5120, 5120));

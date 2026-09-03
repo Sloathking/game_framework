@@ -5,7 +5,7 @@
 #ifndef TILEMAPCOMPONENT_H
 #define TILEMAPCOMPONENT_H
 
-#include "../include/SpriteComponent.h"
+#include "SpriteComponent.h"
 #include <string>
 #include <vector>
 
@@ -44,7 +44,6 @@ public:
 
 private:
     std::vector<TileData> mTiles;
-    //std::vector<SpriteComponent*> mSprites;
 
     int mSpriteRows{0};
     int mSpriteCols{0};
@@ -53,7 +52,5 @@ private:
     float mTileHeight{0.0};
 
 };
-/* CSV file that contains tile sprite data gets read in, contains single digit that is (x + y)
- *
- */
+
 #endif //TILEMAPCOMPONENT_H

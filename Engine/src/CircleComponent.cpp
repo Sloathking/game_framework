@@ -2,8 +2,8 @@
 // Created by sloath on 18-Aug-26.
 //
 
-#include "../include/CircleComponent.h"
-#include "../include/Actor.h"
+#include "include/CircleComponent.h"
+#include "include/Actor.h"
 
 CircleComponent::CircleComponent(Actor* owner) : Component(owner)
 {

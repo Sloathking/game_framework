@@ -11,7 +11,7 @@
 class Asteroid : public Actor
 {
 public:
-    explicit Asteroid(Game* game);
+    explicit Asteroid(Engine* game);
     ~Asteroid() override;
 
     [[nodiscard]] class CircleComponent* GetCircle() const { return mCircleComp; }

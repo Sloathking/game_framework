@@ -2,10 +2,9 @@
 // Created by sloath on 19-Aug-26.
 //
 
-#include "../include/AIComponent.h"
-
-#include "../include/AIState.h"
-#include "SDL3/SDL_log.h"
+#include "include/AIComponent.h"
+#include "include/AIState.h"
+#include <SDL3/SDL_log.h>
 
 AIComponent::AIComponent(Actor* owner) : Component(owner)
 {

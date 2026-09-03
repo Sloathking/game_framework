@@ -6,8 +6,6 @@
 #define MOVECOMPONENT_H
 
 #include "Component.h"
-#include "Math.h"
-
 
 class MoveComponent : public Component
 {

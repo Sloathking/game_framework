@@ -6,7 +6,6 @@
 #define AICOMPONENT_H
 
 #include "Component.h"
-
 #include <string>
 #include <unordered_map>
 

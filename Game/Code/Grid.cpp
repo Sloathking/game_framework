@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-Grid::Grid(Game* game) : Actor(game)
+Grid::Grid(Engine* game) : Actor(game)
 {
     // size tiles correctly
     mTiles.resize(NumRows);

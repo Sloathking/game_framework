@@ -2,13 +2,9 @@
 // Created by sloath on 12-Aug-26.
 //
 
-#include "../include/TileMapComponent.h"
-
-#include <iostream>
-#include <charconv>
-
-#include "../include/CSVUTils.h"
-#include "../include/Actor.h"
+#include "include/TileMapComponent.h"
+#include "include/CSVUTils.h"
+#include "include/Actor.h"
 
 TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder)
 {

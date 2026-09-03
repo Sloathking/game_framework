@@ -2,10 +2,9 @@
 // Created by sloath on 21-Aug-26.
 //
 
-#include "../include/PhysicsInputComponent.h"
-
-#include "../include/Actor.h"
-#include "../include/InputSystem.h"
+#include "include/PhysicsInputComponent.h"
+#include "include/Actor.h"
+#include "include/InputSystem.h"
 
 PhysicsInputComponent::PhysicsInputComponent(Actor* mOwner, const int updateOrder) : PhysicsMoveComponent(mOwner, updateOrder)
 {

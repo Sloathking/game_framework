@@ -10,7 +10,7 @@
 class Ship : public Actor
 {
 public:
-    explicit Ship(Game* game);
+    explicit Ship(Engine* game);
 
     void UpdateActor(float deltaTime) override;
     void ActorInput(const InputState& state) override;

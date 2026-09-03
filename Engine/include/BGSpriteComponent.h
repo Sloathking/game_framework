@@ -5,14 +5,14 @@
 #ifndef BGSPRITECOMPONENT_H
 #define BGSPRITECOMPONENT_H
 
-#include "../include/SpriteComponent.h"
-#include "../include/Math.h"
+#include "SpriteComponent.h"
+#include "Math.h"
 #include <vector>
 
 class BGSpriteComponent : public SpriteComponent
 {
 public:
-    BGSpriteComponent(class Actor* owner, int drawOrder = 10);
+    explicit BGSpriteComponent(class Actor* owner, int drawOrder = 10);
 
     // update draw override
     void Update(float deltaTime) override;

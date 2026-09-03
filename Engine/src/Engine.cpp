@@ -2,21 +2,22 @@
 // Created by sloath on 06-Aug-26.
 //
 
-
-#include "../include/Game.h"
-#include "../include/Constants.h"
-#include "../include/Actor.h"
-#include "../include/SpriteComponent.h"
-#include "../include/InputSystem.h"
-#include "../include/CameraComponent.h"
+#include "include/Engine.h"
+#include "include/Constants.h"
+#include "include/Actor.h"
+#include "include/SpriteComponent.h"
+#include "include/InputSystem.h"
+//#include "include/CameraComponent.h"
 #include <SDL3/SDL_gpu.h>
 #include <random>
 #include <algorithm>
 
-Game::Game() = default;
+Engine::Engine() = default;
+
+Engine::~Engine() = default;
 
 // initialize the game
-bool Game::Initialize()
+bool Engine::Initialize()
 {
 	bool success{ true };
 
@@ -75,7 +76,7 @@ bool Game::Initialize()
 }
 
 // run the game loop until the game is over
-void Game::RunLoop()
+void Engine::RunLoop()
 {
 	while (mIsRunning)
 	{
@@ -86,7 +87,7 @@ void Game::RunLoop()
 }
 
 // shutdown the game
-void Game::Shutdown()
+void Engine::Shutdown()
 {
 	UnloadData();
 
@@ -105,7 +106,7 @@ void Game::Shutdown()
 	SDL_Quit();
 }
 
-void Game::AddActor(Actor* actor)
+void Engine::AddActor(Actor* actor)
 {
 	if (mUpdatingActors)
 		mPendingActors.emplace_back(actor);
@@ -113,7 +114,7 @@ void Game::AddActor(Actor* actor)
 		mActors.emplace_back(actor);
 }
 
-void Game::RemoveActor(const Actor* actor)
+void Engine::RemoveActor(const Actor* actor)
 {
 	// is actor Pending?
 	auto iter = std::find(mPendingActors.begin(), mPendingActors.end(), actor);
@@ -132,7 +133,7 @@ void Game::RemoveActor(const Actor* actor)
 	}
 }
 
-void Game::AddSprite(SpriteComponent* sprite)
+void Engine::AddSprite(SpriteComponent* sprite)
 {
 	// find insertion point in sorted vector (first element with drawOrder higher)
 	const int drawOrder = sprite->GetDrawOder();
@@ -143,13 +144,86 @@ void Game::AddSprite(SpriteComponent* sprite)
 	mSprites.insert(iter, sprite);
 }
 
-void Game::RemoveSprite(const SpriteComponent* sprite)
+void Engine::RemoveSprite(const SpriteComponent* sprite)
 {
 	if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
 		mSprites.erase(iter);
 }
 
-SDL_Texture* Game::GetTexture(const std::string& fileName)
+SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
+		const Uint32 samplerCount, const Uint32 storageTextureCount,
+		const Uint32 storageBufferCount, const Uint32 uniformBufferCount)
+{
+	SDL_GPUShaderStage stage;
+	if (SDL_strstr(shaderFileName.c_str(), ".vert"))
+		stage = SDL_GPU_SHADERSTAGE_VERTEX;
+	else if (SDL_strstr(shaderFileName.c_str(), "frag"))
+		stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
+	else
+	{
+		SDL_Log("Invalid shader stage!");
+		return nullptr;
+	}
+
+	char fullPath[256];
+	const std::string filePath = "../../Game/" + shaderFileName;
+	const SDL_GPUShaderFormat backendFormats = SDL_GetGPUShaderFormats(mDevice);
+	SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
+	const char* entryPoint;
+	if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
+	{
+		SDL_snprintf(fullPath, sizeof(fullPath), "%s.spv", filePath.c_str());
+		format = SDL_GPU_SHADERFORMAT_SPIRV;
+		entryPoint = "main";
+	}
+	else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL)
+	{
+		SDL_snprintf(fullPath, sizeof(fullPath), "%s.msl", filePath.c_str());
+		format = SDL_GPU_SHADERFORMAT_MSL;
+		entryPoint = "main0";
+	}
+	else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL)
+	{
+		SDL_snprintf(fullPath, sizeof(fullPath), "%s.dxil", filePath.c_str());
+		format = SDL_GPU_SHADERFORMAT_DXIL;
+		entryPoint = "main";
+	}
+	else
+	{
+		SDL_Log("Unrecognized backend shader format!");
+		return nullptr;
+	}
+	size_t codeSize;
+	void* code = SDL_LoadFile(fullPath, &codeSize);
+	if (!code)
+	{
+		SDL_Log("Failed to load shader from disc! %s", fullPath);
+		return nullptr;
+	}
+	const SDL_GPUShaderCreateInfo shaderInfo = {
+		.code_size = codeSize,
+		.code = static_cast<const Uint8*>(code),
+		.entrypoint = entryPoint,
+		.format = format,
+		.stage = stage,
+		.num_samplers = samplerCount,
+		.num_storage_textures = storageTextureCount,
+		.num_storage_buffers = storageBufferCount,
+		.num_uniform_buffers = uniformBufferCount,
+	};
+	SDL_GPUShader* shader = SDL_CreateGPUShader(mDevice, &shaderInfo);
+	if (!shader)
+	{
+		SDL_Log("Failed to create shader!");
+		SDL_free(code);
+		return nullptr;
+	}
+	SDL_free(code);
+	mShaders.emplace(shaderFileName, shader);
+	return shader;
+}
+
+SDL_Texture* Engine::GetTexture(const std::string& fileName)
 {
 	SDL_Texture* tex{ nullptr };
 	const std::string filePath = "../../Game/" + fileName;
@@ -179,7 +253,7 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 	return tex;
 }
 
-void Game::ProcessInput()
+void Engine::ProcessInput()
 {
 	mInputSystem->PrepareForUpdate();
 
@@ -196,14 +270,14 @@ void Game::ProcessInput()
 			break;
 		case SDL_EVENT_WINDOW_RESIZED:
 			{
-				int x, y;
-				if (!SDL_GetWindowSize(mWindow, &x, &y))
-				{
-					SDL_Log("SDL_EVENT_WINDOW_RESIZED - Error: %s", SDL_GetError());
-					mIsRunning = false;
-					break;
-				}
-				mCamera->SetWindowSize(Vector2(static_cast<float>(x), static_cast<float>(y)));
+				// int x, y;
+				// if (!SDL_GetWindowSize(mWindow, &x, &y))
+				// {
+				// 	SDL_Log("SDL_EVENT_WINDOW_RESIZED - Error: %s", SDL_GetError());
+				// 	mIsRunning = false;
+				// 	break;
+				// }
+				// mCamera->SetWindowSize(Vector2(static_cast<float>(x), static_cast<float>(y)));
 			}
 			break;
 		case SDL_EVENT_MOUSE_WHEEL:
@@ -238,7 +312,7 @@ void Game::ProcessInput()
 	mUpdatingActors = false;
 }
 
-void Game::UpdateGame()
+void Engine::UpdateGame()
 {
 	// if time remaining in frame
 	while (fpsCapEnabled and SDL_GetTicksNS() < mTicksCount + 16000000) {}
@@ -278,16 +352,16 @@ void Game::UpdateGame()
 
 }
 
-static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
-{
-	const Vector2 camPos = camera->GetPosition();
-	const Vector2 windowSize = camera->GetWindowSize();
-	if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
-		return true;
-	return false;
-}
+// static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
+// {
+// 	const Vector2 camPos = camera->GetPosition();
+// 	const Vector2 windowSize = camera->GetWindowSize();
+// 	if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
+// 		return true;
+// 	return false;
+// }
 
-void Game::GenerateOutput()
+void Engine::GenerateOutput()
 {
 	SDL_GPUCommandBuffer* cmdBfr = SDL_AcquireGPUCommandBuffer(mDevice);
 	if (!cmdBfr)
@@ -307,7 +381,7 @@ void Game::GenerateOutput()
 	{
 		SDL_GPUColorTargetInfo colorTarInfo = {.texture = nullptr};
 		colorTarInfo.texture = swapchainTex;
-		colorTarInfo.clear_color = (SDL_FColor){.r = 0.3f, .g = 0.6f, .b = 0.5f, .a = 1.0f};
+		colorTarInfo.clear_color = (SDL_FColor){.r = 0.f, .g = 0.f, .b = 0.f, .a = 1.0f};
 		colorTarInfo.load_op = SDL_GPU_LOADOP_CLEAR;
 		colorTarInfo.store_op = SDL_GPU_STOREOP_STORE;
 		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBfr, &colorTarInfo, 1, nullptr);
@@ -338,25 +412,3 @@ void Game::GenerateOutput()
 #pragma endregion
 }
 
-void Game::LoadData()
-{
-	// mDot = new Dot(this);
-	// mDot->SetPosition(Vector2(500, 500));
-	//
-	// for (int i = 0; i < 200; ++i)
-	// {
-	// 	auto* temp = new Asteroid(this);
-	// 	mAsteroids.emplace_back(temp);
-	// }
-}
-
-void Game::UnloadData()
-{
-	// delete actors
-	while (!mActors.empty())
-		delete mActors.back();
-
-	// destroy textures
-	for (const auto& i : mTextures)
-		SDL_DestroyTexture(i.second);
-}

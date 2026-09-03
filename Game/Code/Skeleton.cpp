@@ -3,11 +3,11 @@
 //
 
 #include "Skeleton.h"
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/AnimSpriteComponent.h"
 #include "../../Engine/include/Constants.h"
 
-Skeleton::Skeleton(Game* game) : Actor(game)
+Skeleton::Skeleton(Engine* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);

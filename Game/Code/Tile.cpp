@@ -3,10 +3,10 @@
 //
 
 #include "Tile.h"
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/SpriteComponent.h"
 
-Tile::Tile(Game* game) : Actor(game)
+Tile::Tile(Engine* game) : Actor(game)
 {
     mSpriteComp = new SpriteComponent(this);
     mSpriteComp->SetAnchor(SpriteComponent::CenterCenter);

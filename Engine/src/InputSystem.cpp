@@ -2,11 +2,11 @@
 // Created by sloath on 24-Aug-26.
 //
 
-#include "../include/InputSystem.h"
-#include "../include/Game.h"
+#include "include/InputSystem.h"
+#include "include/Engine.h"
 #include <algorithm>
 
-bool InputSystem::Initialize(Game* game)
+bool InputSystem::Initialize(Engine* game)
 {
     // keyboard
     mState.Keyboard.mCurrState = SDL_GetKeyboardState(nullptr);

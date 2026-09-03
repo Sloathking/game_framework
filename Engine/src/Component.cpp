@@ -1,8 +1,9 @@
 //
 // Created by sloath on 06-Aug-26.
 //
-#include "../include/Component.h"
-#include "../include/Actor.h"
+
+#include "include/Component.h"
+#include "include/Actor.h"
 
 Component::Component(Actor* owner, const int updateOrder) : mOwner{ owner }, mUpdateOrder{ updateOrder }
 {

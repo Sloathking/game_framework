@@ -10,7 +10,7 @@
 class TileMap : public Actor
 {
 public:
-    explicit TileMap(Game* game);
+    explicit TileMap(Engine* game);
 
 private:
     class TileMapComponent* mClosestTileMap;

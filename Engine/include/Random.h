@@ -13,9 +13,8 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
-#include <random>
 #include "Math.h"
-
+#include <random>
 
 class Random
 {

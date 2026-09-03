@@ -3,13 +3,13 @@
 //
 
 #include "Laser.h"
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/CircleComponent.h"
 #include "Asteroid.h"
 #include "../../Engine/include/SpriteComponent.h"
 #include "../../Engine/include/PhysicsMoveComponent.h"
 
-Laser::Laser(Game* game, const Vector2 dir) : Actor(game)
+Laser::Laser(Engine* game, const Vector2 dir) : Actor(game)
 {
     // create sprite comp
     auto* spriteComp = new SpriteComponent(this);

@@ -10,7 +10,7 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "../include/Random.h"
+#include "include/Random.h"
 
 void Random::Init()
 {

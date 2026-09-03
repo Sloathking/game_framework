@@ -2,10 +2,9 @@
 // Created by sloath on 21-Aug-26.
 //
 
-#include "../include/PhysicsMoveComponent.h"
-
-#include "../include/Actor.h"
-#include "../include/Math.h"
+#include "include/PhysicsMoveComponent.h"
+#include "include/Actor.h"
+#include "include/Math.h"
 
 PhysicsMoveComponent::PhysicsMoveComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {

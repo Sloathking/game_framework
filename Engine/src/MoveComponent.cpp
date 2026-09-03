@@ -2,10 +2,9 @@
 // Created by sloath on 17-Aug-26.
 //
 
-#include "../include/MoveComponent.h"
-
-#include "../include/Actor.h"
-#include "../include/Math.h"
+#include "include/MoveComponent.h"
+#include "include/Actor.h"
+#include "include/Math.h"
 
 MoveComponent::MoveComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {

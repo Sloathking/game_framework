@@ -2,9 +2,8 @@
 // Created by sloath on 20-Aug-26.
 //
 
-#include "../include/NavComponent.h"
-
-#include "../include/Actor.h"
+#include "include/NavComponent.h"
+#include "include/Actor.h"
 #include "../../Game/Code/Tile.h"
 
 NavComponent::NavComponent(Actor* owner, const int updateOrder) : MoveComponent(owner, updateOrder)

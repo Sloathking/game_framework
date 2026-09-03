@@ -2,12 +2,12 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#include "../include/Actor.h"
-#include "../include/Game.h"
-#include "../include/Component.h"
+#include "include/Actor.h"
+#include "include/Engine.h"
+#include "include/Component.h"
 #include <algorithm>
 
-Actor::Actor(Game* game) : mGame{ game }
+Actor::Actor(Engine* game) : mGame{ game }
 {
     mGame->AddActor(this);
 }

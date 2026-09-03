@@ -5,9 +5,8 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#include <vector>
 #include "Math.h"
-#include <SDL3/SDL_events.h>
+#include <vector>
 
 class Actor
 {
@@ -21,7 +20,7 @@ public:
     };
 
     // constructor/destructor
-    explicit Actor(class Game* game);
+    explicit Actor(class Engine* game);
     virtual ~Actor();
 
     // update function called from Game (not overridable)
@@ -54,7 +53,7 @@ public:
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }
 
-    [[nodiscard]] class Game* GetGame() const { return mGame; }
+    [[nodiscard]] Engine* GetGame() const { return mGame; }
 
     // add/remove components
 
@@ -72,7 +71,7 @@ private:
 
     // components held by actor
     std::vector<Component*> mComponents;
-    Game* mGame;
+    Engine* mGame;
 
     // forward vector
     Vector2 mForward{Vector2(0,0)};

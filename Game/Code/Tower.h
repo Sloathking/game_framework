@@ -10,7 +10,7 @@
 class Tower : public Actor
 {
 public:
-    explicit Tower(Game* game);
+    explicit Tower(Engine* game);
     void UpdateActor(float deltaTime) override;
 
 private:

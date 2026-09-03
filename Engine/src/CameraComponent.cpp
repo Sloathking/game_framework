@@ -2,9 +2,8 @@
 // Created by sloath on 27-Aug-26.
 //
 
-#include "../include/CameraComponent.h"
-
-#include "../include/Actor.h"
+#include "include/CameraComponent.h"
+#include "include/Actor.h"
 
 CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {

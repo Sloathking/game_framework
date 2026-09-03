@@ -7,7 +7,6 @@
 
 #include "SpriteComponent.h"
 #include <vector>
-#include <string>
 #include <unordered_map>
 
 class AnimSpriteComponent : public SpriteComponent
@@ -47,7 +46,7 @@ private:
     void SetAnimTextures(const std::vector<SDL_Texture*>& textures);
 
     // map to hold animations
-    std::unordered_map<int, std::pair<LoopingType, std::vector<SDL_Texture*>>> animations{};
+    std::unordered_map<int, std::pair<LoopingType, std::vector<SDL_Texture*>>> mAnimations{};
 
     // all textures in the anim
     std::vector<SDL_Texture*> mAnimTextures;

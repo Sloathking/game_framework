@@ -11,7 +11,7 @@
 class Grid : public Actor
 {
 public:
-    explicit Grid(Game* game);
+    explicit Grid(Engine* game);
 
     void ProcessClick(int x, int y);
 

@@ -19,7 +19,7 @@ public:
         EBase
     };
 
-    explicit Tile(Game* game);
+    explicit Tile(Engine* game);
 
     [[nodiscard]] TileState GetTileState() const { return mTileState; }
     void SetTileState(TileState state);

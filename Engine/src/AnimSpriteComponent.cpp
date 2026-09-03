@@ -1,8 +1,8 @@
 //
 // Created by sloath on 06-Aug-26.
 //
-#include "../include/AnimSpriteComponent.h"
-#include <utility>
+
+#include "include/AnimSpriteComponent.h"
 
 AnimSpriteComponent::AnimSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mCurrFrame{ 0.0f }, mAnimFPS{ 24.0f }
 {
@@ -22,14 +22,14 @@ void AnimSpriteComponent::Update(const float deltaTime)
             mCurrFrame += mAnimFPS * deltaTime;
 
             // if playing looping animation
-            if (animations[mCurrAnim].first == LOOP)
+            if (mAnimations[mCurrAnim].first == LOOP)
             {
                 // wrap curr frame if needed
                 while (mCurrFrame >= mAnimTextures.size())
                     mCurrFrame -= mAnimTextures.size();
             }
             // if playing non-looping animation
-            else if (animations[mCurrAnim].first == NO_LOOP)
+            else if (mAnimations[mCurrAnim].first == NO_LOOP)
             {
                 if (mCurrFrame >= mAnimTextures.size())
                 {
@@ -58,14 +58,14 @@ void AnimSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textu
 // add animation to animation map, but DOES NOT update existing animations
 void AnimSpriteComponent::AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures)
 {
-    if (animations.contains(num)) return;
-    animations[num] = {toLoop, textures};
+    if (mAnimations.contains(num)) return;
+    mAnimations[num] = {toLoop, textures};
 }
 
 // if able to update an animation in Animations returns TRUE, else FALSE
 void AnimSpriteComponent::UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures)
 {
-    animations[num] = {toLoop, textures};
+    mAnimations[num] = {toLoop, textures};
 }
 
 // play animation in Animations
@@ -73,5 +73,5 @@ void AnimSpriteComponent::PlayAnimation(const int& num)
 {
     mCurrAnim = num;
     mAnimate = true;
-    SetAnimTextures(animations[num].second);
+    SetAnimTextures(mAnimations[num].second);
 }

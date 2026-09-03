@@ -6,11 +6,11 @@
 #include "Enemy.h"
 #include "Bullet.h"
 
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/MoveComponent.h"
 #include "../../Engine/include/SpriteComponent.h"
 
-Tower::Tower(Game* game) : Actor(game)
+Tower::Tower(Engine* game) : Actor(game)
 {
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(GetGame()->GetTexture("Assets/Tower.png"));

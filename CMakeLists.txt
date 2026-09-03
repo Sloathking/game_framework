@@ -1,20 +1,15 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.20)
 
 # set the output for built objects this makes sure the dynamic library goes into build dir
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # prevent installing to system dirs
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE INTERNAL "")
+#set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE INTERNAL "")
 
 # declare the project
 project(game_framework)
-
-# define main
-add_executable(${PROJECT_NAME} main.cpp)
-
-# set c++ version
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+set(CMAKE_CXX_STANDARD 20)
 
 # Add CPM for package management
 file(
@@ -37,7 +32,7 @@ set(SDLTTF_VENDORED ON)
 CPMAddPackage("gh:libsdl-org/SDL_ttf#a1ce367")
 list(APPEND LIBS SDL3_ttf::SDL3_ttf)
 
-## SDL_mixer, disable formats we don't use to make the build faster and smaller, some don't work on all platforms
+## SDL_mixer
 set(SDLMIXER_MIDI_NATIVE OFF)
 set(SDLMIXER_GME OFF)
 set(SDLMIXER_WAVPACK OFF)
@@ -53,19 +48,32 @@ list(APPEND LIBS SDL3_mixer::SDL3_mixer)
 
 # SDL_image
 set(SDLIMAGE_VENDORED ON)
-set(SDLIMAGE_AVIF OFF)	# disable formats we don't use to make the build faster and smaller.
+set(SDLIMAGE_AVIF OFF)
 set(SDLIMAGE_BMP OFF)
 set(SDLIMAGE_JPG OFF)
 set(SDLIMAGE_WEBP OFF)
-set(SDLIMAGE_PNG_LIBPNG OFF)    # SDL3 includes built-in support for loading PNGs. If you need more than what that supports, enable this option.
+set(SDLIMAGE_PNG_LIBPNG OFF)
 CPMAddPackage("gh:libsdl-org/SDL_image#bec9134")
 list(APPEND LIBS SDL3_image::SDL3_image)
 
+#CPMAddPackage("KhronosGroup/SPIRV-Cross#a9d9b31")
+#list(APPEND LIBS SPIRV-cross)
+
+# SDL_shadercross
+#set(SDLSHADERCROSS_STATIC ON)
+#set(SDLSHADERCROSS_SHARED OFF)
+#set(SDLSHADERCROSS_CLI OFF)
+#set(SDLSHADERCROSS_VENDORED ON)
+#CPMAddPackage("gh:libsdl-org/SDL_shadercross#1ff05be")
+#list(APPEND LIBS SDL3_shadercross::SDL3_shadercross)
+
+# define main
+add_executable(${PROJECT_NAME} main.cpp)
+
+#link CPM libs
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
 # add Engine and Game dirs, so I don't have to make this CMAKE giant
 add_subdirectory(Engine)
-#target_link_libraries(${PROJECT_NAME} PRIVATE Engine)
-
 add_subdirectory(Game)
-#target_link_libraries(${PROJECT_NAME} PRIVATE Game)
+target_link_libraries(${PROJECT_NAME} PRIVATE Game)

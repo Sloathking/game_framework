@@ -1,9 +1,9 @@
 //
 // Created by sloath on 06-Aug-26.
 //
-#include "../include/BGSpriteComponent.h"
-#include "../include/Actor.h"
-#include "../include/Game.h"
+
+#include "include/BGSpriteComponent.h"
+#include "include/Actor.h"
 
 BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mScrollSpeed{0.0f}
 {

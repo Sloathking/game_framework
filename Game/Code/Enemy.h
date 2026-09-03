@@ -10,7 +10,7 @@
 class Enemy : public Actor
 {
 public:
-    explicit Enemy(Game* game);
+    explicit Enemy(Engine* game);
     ~Enemy() override;
 
     void UpdateActor(float deltaTime) override;

@@ -5,7 +5,6 @@
 #ifndef AISTATE_H
 #define AISTATE_H
 
-
 class AIState
 {
 public:

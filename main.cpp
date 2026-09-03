@@ -1,6 +1,5 @@
 #include <iostream>
-#include <SDL3/SDL.h>
-#include "Engine/include/Game.h"
+#include <Game.h>
 
 int main()
 {

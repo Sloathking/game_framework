@@ -9,7 +9,6 @@
 #include <SDL3/SDL_keyboard.h>
 #include <SDL3/SDL_events.h>
 #include <vector>
-#include <map>
 
 static constexpr int mMaxControllers = 4;
 
@@ -119,7 +118,7 @@ struct InputState
 class InputSystem
 {
 public:
-    bool Initialize(class Game* game);
+    bool Initialize(class Engine* game);
     void Shutdown() const;
 
     // called right BEFORE SDL_PollEvents loop
@@ -145,7 +144,7 @@ private:
     const float deadZone2D{8000.0f};
     const float maxValue{30000.0f};
 
-    Game* mGame{};
+    Engine* mGame{};
     InputState mState{};
     std::vector<SDL_Gamepad*> mGamepads{mMaxControllers};
 

@@ -4,10 +4,10 @@
 
 #include "TileMap.h"
 
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/TileMapComponent.h"
 
-TileMap::TileMap(Game* game) : Actor(game)
+TileMap::TileMap(Engine* game) : Actor(game)
 {
     mClosestTileMap = new TileMapComponent(this, 30);
     mClosestTileMap->SetTexture(game->GetTexture("Assets/Tiles.png"));

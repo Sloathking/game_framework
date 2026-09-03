@@ -5,12 +5,12 @@
 #include "Bullet.h"
 #include "Enemy.h"
 
-#include "../../Engine/include/Game.h"
+#include "../../Engine/include/Engine.h"
 #include "../../Engine/include/CircleComponent.h"
 #include "../../Engine/include/MoveComponent.h"
 #include "../../Engine/include/SpriteComponent.h"
 
-Bullet::Bullet(Game* game) : Actor(game)
+Bullet::Bullet(Engine* game) : Actor(game)
 {
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(GetGame()->GetTexture("Assets/Projectile.png"));

@@ -2,18 +2,19 @@
 // Created by sloath on 06-Aug-26.
 //
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include <SDL3/SDL.h>
 #include <vector>
 #include <unordered_map>
 #include <string>
 
-class Game
+class Engine
 {
 public:
-    Game();
+    Engine();
+    virtual ~Engine();
 
     bool Initialize();
     void RunLoop();
@@ -25,24 +26,21 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(const SpriteComponent* sprite);
 
+    SDL_GPUShader* GetShader(const std::string& shaderFileName,
+        Uint32 samplerCount, Uint32 storageTextureCount, Uint32 storageBufferCount, Uint32 uniformBufferCount);
+
+
     SDL_Texture* GetTexture(const std::string& fileName);
 
     // This is used for Input System to have a ref to the window for RELATIVE mode
     SDL_Window* GetWindow () const { return mWindow; }
 
     // camera stuff
-    void SetMainCamera(class CameraComponent* camera) { mCamera = camera; }
-    //Vector2 GetCurrCameraPos() const { return mCamera->GetPosition(); }
+    //void SetMainCamera(class CameraComponent* camera) { mCamera = camera; }
 
-    // game functions
-
-private:
-    // helper functions for the game loop
-    void ProcessInput();
-    void UpdateGame();
-    void GenerateOutput();
-    void LoadData();
-    void UnloadData();
+protected:
+    virtual void LoadData() = 0;
+    virtual void UnloadData() = 0;
 
     // window created by SDL
     SDL_Window* mWindow{nullptr};
@@ -64,6 +62,9 @@ private:
     std::vector<Actor*> mPendingActors;
     bool mUpdatingActors{false};
 
+    // map of loaded shaders
+    std::unordered_map<std::string, SDL_GPUShader*> mShaders;
+
     // map of loaded textures
     std::unordered_map<std::string, SDL_Texture*> mTextures;
 
@@ -71,13 +72,15 @@ private:
     std::vector<SpriteComponent*> mSprites;
 
     // camera stuff
-    Actor* mCamActor{};
-    CameraComponent* mCamera;
+    // Actor* mCamActor{};
+    // CameraComponent* mCamera;
 
-    // game-specific stuff
-    // class Dot* mDot;
-    // std::vector<class Asteroid*> mAsteroids;
+private:
+    // helper functions for the game loop
+    void ProcessInput();
+    void UpdateGame();
+    void GenerateOutput();
 
 };
 
-#endif //GAME_H
+#endif //ENGINE_H

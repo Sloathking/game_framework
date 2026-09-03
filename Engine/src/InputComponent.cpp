@@ -2,8 +2,8 @@
 // Created by sloath on 17-Aug-26.
 //
 
-#include "../include/InputComponent.h"
-#include "../include/InputSystem.h"
+#include "include/InputComponent.h"
+#include "include/InputSystem.h"
 
 InputComponent::InputComponent(Actor* mOwner, const int updateOrder) : MoveComponent(mOwner, updateOrder)
 {

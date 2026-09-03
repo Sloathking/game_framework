@@ -10,7 +10,7 @@
 class Bullet : public Actor
 {
 public:
-    explicit Bullet(Game* game);
+    explicit Bullet(Engine* game);
     void UpdateActor(float deltaTime) override;
 
 private:

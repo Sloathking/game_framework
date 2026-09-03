@@ -6,9 +6,9 @@
 #define SPRITECOMPONENT_H
 
 #include "Component.h"
+#include "Math.h"
 #include <SDL3_image/SDL_image.h>
 #include <unordered_map>
-#include "../../Engine/include/Math.h"
 
 class SpriteComponent : public Component
 {
