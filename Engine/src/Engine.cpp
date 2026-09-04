@@ -31,7 +31,7 @@ bool Engine::Initialize()
 	{
 		// create GPUDevice
 		mDevice = SDL_CreateGPUDevice(
-			SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+			SDL_GPU_SHADERFORMAT_SPIRV,// | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
 			true,nullptr);
 		if (mDevice == nullptr)
 		{
@@ -97,6 +97,9 @@ void Engine::Shutdown()
 	// SDL_DestroyRenderer(mRenderer);
 	// mRenderer = nullptr;
 
+	SDL_ReleaseGPUGraphicsPipeline(mDevice, mPipeline);
+	mPipeline = nullptr;
+
 	SDL_DestroyGPUDevice(mDevice);
 	mDevice = nullptr;
 
@@ -157,7 +160,7 @@ SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
 	SDL_GPUShaderStage stage;
 	if (SDL_strstr(shaderFileName.c_str(), ".vert"))
 		stage = SDL_GPU_SHADERSTAGE_VERTEX;
-	else if (SDL_strstr(shaderFileName.c_str(), "frag"))
+	else if (SDL_strstr(shaderFileName.c_str(), ".frag"))
 		stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
 	else
 	{
@@ -165,12 +168,11 @@ SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
 		return nullptr;
 	}
 
-	char fullPath[256];
+	//char fullPath[256];
 	const std::string filePath = "../../Game/" + shaderFileName;
-	const SDL_GPUShaderFormat backendFormats = SDL_GetGPUShaderFormats(mDevice);
-	SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
-	const char* entryPoint;
-	if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
+	constexpr SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_SPIRV;
+	constexpr auto entryPoint = "main";
+	/*if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
 	{
 		SDL_snprintf(fullPath, sizeof(fullPath), "%s.spv", filePath.c_str());
 		format = SDL_GPU_SHADERFORMAT_SPIRV;
@@ -192,12 +194,13 @@ SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
 	{
 		SDL_Log("Unrecognized backend shader format!");
 		return nullptr;
-	}
+	}*/
+
 	size_t codeSize;
-	void* code = SDL_LoadFile(fullPath, &codeSize);
+	void* code = SDL_LoadFile(filePath.c_str(), &codeSize);
 	if (!code)
 	{
-		SDL_Log("Failed to load shader from disc! %s", fullPath);
+		SDL_Log("Failed to load shader from disc! %s", filePath.c_str());
 		return nullptr;
 	}
 	const SDL_GPUShaderCreateInfo shaderInfo = {
@@ -219,7 +222,7 @@ SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
 		return nullptr;
 	}
 	SDL_free(code);
-	mShaders.emplace(shaderFileName, shader);
+	//mShaders.emplace(shaderFileName, shader);
 	return shader;
 }
 
@@ -368,6 +371,7 @@ void Engine::GenerateOutput()
 	{
 		SDL_Log("AcquireGPUCommandBuffer failed - Error: %s", SDL_GetError());
 		mIsRunning = false;
+		return;
 	}
 
 	SDL_GPUTexture* swapchainTex;
@@ -375,16 +379,22 @@ void Engine::GenerateOutput()
 	{
 		SDL_Log("WaitAndAcquireGPUSwapchainTexture failed - Error: %s", SDL_GetError());
 		mIsRunning = false;
+		return;
 	}
 
 	if (swapchainTex)
 	{
-		SDL_GPUColorTargetInfo colorTarInfo = {.texture = nullptr};
-		colorTarInfo.texture = swapchainTex;
-		colorTarInfo.clear_color = (SDL_FColor){.r = 0.f, .g = 0.f, .b = 0.f, .a = 1.0f};
-		colorTarInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-		colorTarInfo.store_op = SDL_GPU_STOREOP_STORE;
-		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBfr, &colorTarInfo, 1, nullptr);
+		constexpr SDL_FColor clearColor{.r = 0.0f, .g = 0.0f, .b = 0.0f, .a = 1.0f};
+		SDL_GPUColorTargetInfo targetInfo = { .texture = nullptr };
+		targetInfo.texture = swapchainTex;
+		targetInfo.clear_color = clearColor;
+		targetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+		targetInfo.store_op = SDL_GPU_STOREOP_STORE;
+
+		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBfr, &targetInfo, 1, nullptr);
+		SDL_BindGPUGraphicsPipeline(renderPass, mPipeline);
+		SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
+
 		SDL_EndGPURenderPass(renderPass);
 	}
 
@@ -411,4 +421,3 @@ void Engine::GenerateOutput()
 	SDL_RenderPresent(mRenderer);*/
 #pragma endregion
 }
-

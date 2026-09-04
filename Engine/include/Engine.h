@@ -33,7 +33,7 @@ public:
     SDL_Texture* GetTexture(const std::string& fileName);
 
     // This is used for Input System to have a ref to the window for RELATIVE mode
-    SDL_Window* GetWindow () const { return mWindow; }
+    [[nodiscard]] SDL_Window* GetWindow () const { return mWindow; }
 
     // camera stuff
     //void SetMainCamera(class CameraComponent* camera) { mCamera = camera; }
@@ -47,6 +47,7 @@ protected:
 
     // sdl gpu device
     SDL_GPUDevice* mDevice{nullptr};
+    SDL_GPUGraphicsPipeline* mPipeline{nullptr};
 
     // game should continue to run
     bool mIsRunning{true};
@@ -61,6 +62,10 @@ protected:
     std::vector<Actor*> mActors;
     std::vector<Actor*> mPendingActors;
     bool mUpdatingActors{false};
+
+    // shaders
+    SDL_GPUShader* vertShader{};
+    SDL_GPUShader* fragShader{};
 
     // map of loaded shaders
     std::unordered_map<std::string, SDL_GPUShader*> mShaders;
