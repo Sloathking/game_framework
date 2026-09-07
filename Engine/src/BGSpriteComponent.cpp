@@ -26,17 +26,17 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, float width, float height)
+void BGSpriteComponent::Draw(Shader* shader)
 {
-    for (auto& bg : mBGTextures)
-    {
-        SDL_FRect dstRect;
-        dstRect.w = mScreenSize.x;
-        dstRect.h = mScreenSize.y;
-        dstRect.x = mOwner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
-        dstRect.y = mOwner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
-        SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
-    }
+    // for (auto& bg : mBGTextures)
+    // {
+    //     SDL_FRect dstRect;
+    //     dstRect.w = mScreenSize.x;
+    //     dstRect.h = mScreenSize.y;
+    //     dstRect.x = mOwner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
+    //     dstRect.y = mOwner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
+    //     SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
+    // }
 }
 
 // set the texture used for the background

@@ -3,12 +3,13 @@
 //
 
 #include "include/Engine.h"
+#include <GL/glew.h>
 #include "include/Constants.h"
+#include "include/InputSystem.h"
 #include "include/Actor.h"
 #include "include/SpriteComponent.h"
-#include "include/InputSystem.h"
-//#include "include/CameraComponent.h"
-#include <SDL3/SDL_gpu.h>
+#include "include/VertexArray.h"
+#include "include/Shader.h"
 #include <random>
 #include <algorithm>
 
@@ -29,33 +30,53 @@ bool Engine::Initialize()
 	}
 	else
 	{
-		// create GPUDevice
-		mDevice = SDL_CreateGPUDevice(
-			SDL_GPU_SHADERFORMAT_SPIRV,// | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-			true,nullptr);
-		if (mDevice == nullptr)
+		// set OpenGL attributes
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		/*-----------------*/
+		// request a color buffer with 8-bits per RGBA channel
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		// enable double buffering
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+
+		mWindow = SDL_CreateWindow(
+			windowTitle.c_str(),
+			static_cast<int>(windowWidth), static_cast<int>(windowHeight),
+			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+
+		if (!mWindow)
 		{
-			SDL_Log("Unable to create GPU device!");
+			SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
 			success = false;
 		}
 		else
 		{
-			mWindow = SDL_CreateWindow(
-				windowTitle.c_str(),
-				static_cast<int>(windowWidth), static_cast<int>(windowHeight),
-				SDL_WINDOW_RESIZABLE);
-
-			if (!mWindow)
+			// create context
+			mContext = SDL_GL_CreateContext(mWindow);
+			if (!mContext)
 			{
-				SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
+				SDL_Log("Unable to create OpenGL context! SDL Error: %s", SDL_GetError());
 				success = false;
 			}
 			else
 			{
-				if (!SDL_ClaimWindowForGPUDevice(mDevice, mWindow))
+				// init GLEW
+				glewExperimental = GL_TRUE;
+				if (glewInit() != GLEW_OK)
 				{
-					SDL_Log("Unable to claim Window for Device");
+					SDL_Log("Error initializing GLEW!");
 					success = false;
+				}
+				else
+				{
+					// use vsync
+					if (!SDL_GL_SetSwapInterval(1))
+						SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 				}
 			}
 		}
@@ -67,6 +88,14 @@ bool Engine::Initialize()
 		SDL_Log("Failed to initialize InputSystem");
 		success = false;
 	}
+
+	if (!LoadShaders("Basic.vert","Basic.frag"))
+	{
+		SDL_Log("Failed to load shaders!");
+		success = false;
+	}
+
+	CreateSpriteVerts();
 
 	LoadData();
 
@@ -94,14 +123,7 @@ void Engine::Shutdown()
 	mInputSystem->Shutdown();
 	delete mInputSystem;
 
-	// SDL_DestroyRenderer(mRenderer);
-	// mRenderer = nullptr;
-
-	SDL_ReleaseGPUGraphicsPipeline(mDevice, mPipeline);
-	mPipeline = nullptr;
-
-	SDL_DestroyGPUDevice(mDevice);
-	mDevice = nullptr;
+	SDL_GL_DestroyContext(mContext);
 
 	SDL_DestroyWindow(mWindow);
 	mWindow = nullptr;
@@ -153,79 +175,6 @@ void Engine::RemoveSprite(const SpriteComponent* sprite)
 		mSprites.erase(iter);
 }
 
-SDL_GPUShader* Engine::GetShader(const std::string& shaderFileName,
-		const Uint32 samplerCount, const Uint32 storageTextureCount,
-		const Uint32 storageBufferCount, const Uint32 uniformBufferCount)
-{
-	SDL_GPUShaderStage stage;
-	if (SDL_strstr(shaderFileName.c_str(), ".vert"))
-		stage = SDL_GPU_SHADERSTAGE_VERTEX;
-	else if (SDL_strstr(shaderFileName.c_str(), ".frag"))
-		stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
-	else
-	{
-		SDL_Log("Invalid shader stage!");
-		return nullptr;
-	}
-
-	//char fullPath[256];
-	const std::string filePath = "../../Game/" + shaderFileName;
-	constexpr SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_SPIRV;
-	constexpr auto entryPoint = "main";
-	/*if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
-	{
-		SDL_snprintf(fullPath, sizeof(fullPath), "%s.spv", filePath.c_str());
-		format = SDL_GPU_SHADERFORMAT_SPIRV;
-		entryPoint = "main";
-	}
-	else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL)
-	{
-		SDL_snprintf(fullPath, sizeof(fullPath), "%s.msl", filePath.c_str());
-		format = SDL_GPU_SHADERFORMAT_MSL;
-		entryPoint = "main0";
-	}
-	else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL)
-	{
-		SDL_snprintf(fullPath, sizeof(fullPath), "%s.dxil", filePath.c_str());
-		format = SDL_GPU_SHADERFORMAT_DXIL;
-		entryPoint = "main";
-	}
-	else
-	{
-		SDL_Log("Unrecognized backend shader format!");
-		return nullptr;
-	}*/
-
-	size_t codeSize;
-	void* code = SDL_LoadFile(filePath.c_str(), &codeSize);
-	if (!code)
-	{
-		SDL_Log("Failed to load shader from disc! %s", filePath.c_str());
-		return nullptr;
-	}
-	const SDL_GPUShaderCreateInfo shaderInfo = {
-		.code_size = codeSize,
-		.code = static_cast<const Uint8*>(code),
-		.entrypoint = entryPoint,
-		.format = format,
-		.stage = stage,
-		.num_samplers = samplerCount,
-		.num_storage_textures = storageTextureCount,
-		.num_storage_buffers = storageBufferCount,
-		.num_uniform_buffers = uniformBufferCount,
-	};
-	SDL_GPUShader* shader = SDL_CreateGPUShader(mDevice, &shaderInfo);
-	if (!shader)
-	{
-		SDL_Log("Failed to create shader!");
-		SDL_free(code);
-		return nullptr;
-	}
-	SDL_free(code);
-	//mShaders.emplace(shaderFileName, shader);
-	return shader;
-}
-
 SDL_Texture* Engine::GetTexture(const std::string& fileName)
 {
 	SDL_Texture* tex{ nullptr };
@@ -254,6 +203,46 @@ SDL_Texture* Engine::GetTexture(const std::string& fileName)
 	}
 
 	return tex;
+}
+
+SDL_Surface* Engine::LoadImage(const std::string& fileName, const int numChannels)
+{
+	const std::string fullPath = "../../Game/" + fileName;
+	SDL_PixelFormat format;
+	SDL_Surface* res = SDL_LoadBMP(fullPath.c_str());
+	if (!res)
+	{
+		SDL_Log("Failed to load BMP: %s", SDL_GetError());
+		return nullptr;
+	}
+
+	if (numChannels == 4)
+	{
+		format = SDL_PIXELFORMAT_ABGR8888;
+	}
+	else
+	{
+		SDL_assert(!"Unexpected numChannels");
+		SDL_DestroySurface(res);
+		return nullptr;
+	}
+	if (res->format != format)
+	{
+		SDL_Surface *next = SDL_ConvertSurface(res, format);
+		SDL_DestroySurface(res);
+		res = next;
+	}
+
+	return res;
+}
+
+bool Engine::LoadShaders(const std::string& vertName, const std::string& fragName)
+{
+	mSpriteShader = new Shader();
+	if (mSpriteShader->Load(vertName, fragName))
+		return false;
+	mSpriteShader->SetActive();
+	return true;
 }
 
 void Engine::ProcessInput()
@@ -315,6 +304,23 @@ void Engine::ProcessInput()
 	mUpdatingActors = false;
 }
 
+void Engine::CreateSpriteVerts()
+{
+	static float vertexBuffer[] = {
+		-0.5f,  0.5f,   0.0f,	0.0f,	0.0f,
+		0.5f,   0.5f,   0.0f,	1.0f,	0.0f,
+		0.5f,   -0.5f,  0.0f,	1.0f,	1.0f,
+		-0.5f,  -0.5f,  0.0f,	0.0f,	1.0f
+	};
+
+	static unsigned int indexBuffer[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	mSpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
+}
+
 void Engine::UpdateGame()
 {
 	// if time remaining in frame
@@ -366,39 +372,24 @@ void Engine::UpdateGame()
 
 void Engine::GenerateOutput()
 {
-	SDL_GPUCommandBuffer* cmdBfr = SDL_AcquireGPUCommandBuffer(mDevice);
-	if (!cmdBfr)
-	{
-		SDL_Log("AcquireGPUCommandBuffer failed - Error: %s", SDL_GetError());
-		mIsRunning = false;
-		return;
-	}
+	// start of OpenGL stuff
 
-	SDL_GPUTexture* swapchainTex;
-	if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdBfr, mWindow, &swapchainTex, nullptr, nullptr))
-	{
-		SDL_Log("WaitAndAcquireGPUSwapchainTexture failed - Error: %s", SDL_GetError());
-		mIsRunning = false;
-		return;
-	}
+	// set the clear color to gray
+	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	// clear the color buffer
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	if (swapchainTex)
-	{
-		constexpr SDL_FColor clearColor{.r = 0.0f, .g = 0.0f, .b = 0.0f, .a = 1.0f};
-		SDL_GPUColorTargetInfo targetInfo = { .texture = nullptr };
-		targetInfo.texture = swapchainTex;
-		targetInfo.clear_color = clearColor;
-		targetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-		targetInfo.store_op = SDL_GPU_STOREOP_STORE;
+	// TODO: draw scene
+	// Set sprite shader and vertex array objs active
+	mSpriteShader->SetActive();
+	mSpriteVerts->SetActive();
 
-		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBfr, &targetInfo, 1, nullptr);
-		SDL_BindGPUGraphicsPipeline(renderPass, mPipeline);
-		SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
+	// draw all sprites
+	for (auto sprite : mSprites)
+		sprite->Draw(mSpriteShader);
 
-		SDL_EndGPURenderPass(renderPass);
-	}
-
-	SDL_SubmitGPUCommandBuffer(cmdBfr);
+	//swap buffers,
+	SDL_GL_SwapWindow(mWindow);
 
 #pragma region Old Render Code
 	/*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);

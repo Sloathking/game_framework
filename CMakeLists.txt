@@ -6,7 +6,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # prevent installing to system dirs
-#set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE INTERNAL "")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE INTERNAL "")
 
 # declare the project
 project(game_framework)
@@ -27,6 +27,14 @@ set(LIBS)
 # SDL
 CPMAddPackage("gh:libsdl-org/SDL#147a8ee")
 list(APPEND LIBS SDL3::SDL3)
+
+# OpenGL
+find_package(OpenGL)
+list(APPEND LIBS OpenGL::GL)
+
+# GLEW
+CPMAddPackage("gh:Perlmint/glew-cmake#fb33749")
+list(APPEND LIBS libglew_static)
 
 # SDL_tff
 set(SDLTTF_VENDORED ON)
@@ -57,26 +65,6 @@ set(SDLIMAGE_VENDORED ON)
 CPMAddPackage("gh:libsdl-org/SDL_image#bec9134")
 list(APPEND LIBS SDL3_image::SDL3_image)
 
-# DirectXShaderCompiler
-#CPMAddPackage(
-#        NAME DirectXShaderCompiler
-#        VERSION 1.10.2605.37
-#        URL "https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.10.2605.37/dxc_2026_08_11.zip"
-#        URL_HASH SHA256=18da85ccac4d1736209bad960f0a124928a5c5a6046882e331c605d66744a889
-#        DOWNLOAD_ONLY TRUE
-#)
-
-# SDL_shadercross
-#set(DirectXShaderCompiler_ROOT "${PROJECT_SOURCE_DIR}/external/dxc")
-#set(SDLSHADERCROSS_STATIC OFF)
-#set(SDLSHADERCROSS_SHARED ON)
-#set(SDLSHADERCROSS_CLI OFF)
-#set(SDLSHADERCROSS_INSTALL_RUNTIME ON)
-#set(DirectXShaderCompiler_ROOT "${DirectXShaderCompiler_SOURCE_DIR}"
-#set(SDLSHADERCROSS_VENDORED ON)
-#CPMAddPackage("gh:libsdl-org/SDL_shadercross#e55cf5e")
-#list(APPEND LIBS SDL3_shadercross::SDL3_shadercross)
-
 # define main
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -86,4 +74,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 # add Engine and Game dirs, so I don't have to make this CMAKE giant
 add_subdirectory(Engine)
 add_subdirectory(Game)
-target_link_libraries(${PROJECT_NAME} PRIVATE Game)
+target_link_libraries(${PROJECT_NAME} PRIVATE Engine Game)

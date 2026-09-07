@@ -1,6 +1,6 @@
 add_library(Engine)
 
-target_sources( Engine PRIVATE
+target_sources(Engine PRIVATE
         src/Engine.cpp
         include/Engine.h
         include/Constants.h
@@ -41,6 +41,10 @@ target_sources( Engine PRIVATE
         include/InputSystem.h
         src/CameraComponent.cpp
         include/CameraComponent.h
+        src/VertexArray.cpp
+        include/VertexArray.h
+        src/Shader.cpp
+        include/Shader.h
 )
 
 target_include_directories(Engine

@@ -3,6 +3,7 @@
 //
 
 #include "include/SpriteComponent.h"
+#include "include/Shader.h"
 #include "include/Actor.h"
 #include "include/Engine.h"
 
@@ -16,34 +17,24 @@ SpriteComponent::~SpriteComponent()
     mOwner->GetGame()->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer, const Vector2 offset, const SDL_FRect* clip, const float width, const float height)
+void SpriteComponent::Draw(Shader* shader)
 {
     if (mIsVisible)
     {
-        //Set texture position
-        SDL_FRect dstRect{
-            .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + offset.x,
-            .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + offset.y,
-            .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
-            .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
-        };
-
-        //Default to clip dimensions if clip is given
-        if( clip != nullptr )
-        {
-            dstRect.w = clip->w;
-            dstRect.h = clip->h;
-        }
-
-        //Resize if new dimensions are given
-        if( width > 0 ) dstRect.w = width;
-        if( height > 0 ) dstRect.h = height;
-
-        // calc rotation point
-        const SDL_FPoint* center = GetCenter(dstRect);
-
-        //Render texture
-        SDL_RenderTextureRotated(renderer, mTexture, clip, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), center, spriteFlipMode);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        // //Set texture position
+        // SDL_FRect dstRect{
+        //     .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + offset.x,
+        //     .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + offset.y,
+        //     .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
+        //     .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
+        // };
+        //
+        // // calc rotation point
+        // const SDL_FPoint* center = GetCenter(dstRect);
+        //
+        // //Render texture
+        // SDL_RenderTextureRotated(renderer, mTexture, nullptr, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), center, spriteFlipMode);
     }
 }
 

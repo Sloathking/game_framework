@@ -26,28 +26,27 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(const SpriteComponent* sprite);
 
-    SDL_GPUShader* GetShader(const std::string& shaderFileName,
-        Uint32 samplerCount, Uint32 storageTextureCount, Uint32 storageBufferCount, Uint32 uniformBufferCount);
-
-
     SDL_Texture* GetTexture(const std::string& fileName);
+
+    static SDL_Surface* LoadImage(const std::string& fileName, int numChannels);
+
+    bool LoadShaders(const std::string& vertName, const std::string& fragName);
 
     // This is used for Input System to have a ref to the window for RELATIVE mode
     [[nodiscard]] SDL_Window* GetWindow () const { return mWindow; }
 
-    // camera stuff
-    //void SetMainCamera(class CameraComponent* camera) { mCamera = camera; }
-
 protected:
+    virtual void ProcessInput();
+
     virtual void LoadData() = 0;
     virtual void UnloadData() = 0;
+    void CreateSpriteVerts();
 
     // window created by SDL
     SDL_Window* mWindow{nullptr};
 
-    // sdl gpu device
-    SDL_GPUDevice* mDevice{nullptr};
-    SDL_GPUGraphicsPipeline* mPipeline{nullptr};
+    // OpenGL context
+    SDL_GLContext mContext{nullptr};
 
     // game should continue to run
     bool mIsRunning{true};
@@ -63,28 +62,20 @@ protected:
     std::vector<Actor*> mPendingActors;
     bool mUpdatingActors{false};
 
-    // shaders
-    SDL_GPUShader* vertShader{};
-    SDL_GPUShader* fragShader{};
-
-    // map of loaded shaders
-    std::unordered_map<std::string, SDL_GPUShader*> mShaders;
-
     // map of loaded textures
     std::unordered_map<std::string, SDL_Texture*> mTextures;
 
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;
+    class VertexArray* mSpriteVerts{};
 
-    // camera stuff
-    // Actor* mCamActor{};
-    // CameraComponent* mCamera;
 
 private:
     // helper functions for the game loop
-    void ProcessInput();
     void UpdateGame();
     void GenerateOutput();
+
+    class Shader* mSpriteShader;
 
 };
 

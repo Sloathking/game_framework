@@ -21,7 +21,7 @@ public:
     explicit SpriteComponent(Actor* owner, int drawOrder = 100);
     ~SpriteComponent() override;
 
-    virtual void Draw(SDL_Renderer* renderer, Vector2 offset, const SDL_FRect* clip, float width, float height);
+    virtual void Draw(class Shader* shader);
 
     virtual void SetTexture(SDL_Texture* texture);
 
