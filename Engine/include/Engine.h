@@ -26,7 +26,7 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(const SpriteComponent* sprite);
 
-    SDL_Texture* GetTexture(const std::string& fileName);
+    class Texture* GetTexture(const std::string& fileName);
 
     static SDL_Surface* LoadImage(const std::string& fileName, int numChannels);
 
@@ -63,7 +63,7 @@ protected:
     bool mUpdatingActors{false};
 
     // map of loaded textures
-    std::unordered_map<std::string, SDL_Texture*> mTextures;
+    std::unordered_map<std::string, Texture*> mTextures;
 
     // all the drawn sprite components
     std::vector<SpriteComponent*> mSprites;

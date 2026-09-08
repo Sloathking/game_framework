@@ -3,9 +3,10 @@
 //
 
 #include "include/SpriteComponent.h"
-#include "include/Shader.h"
-#include "include/Actor.h"
 #include "include/Engine.h"
+#include "include/Actor.h"
+#include "include/Shader.h"
+#include "include/Texture.h"
 
 SpriteComponent::SpriteComponent(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
@@ -21,28 +22,24 @@ void SpriteComponent::Draw(Shader* shader)
 {
     if (mIsVisible)
     {
+        // scale the quad by the width/height of texture
+        const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
+        //const Matrix4 scaleMat = Matrix4::CreateScale(100.0f, 100.0f, 1.0f);
+        const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
+
+        // set world transform
+        shader->SetMatrixUniform("uWorldTransform", world);
+
+        mTexture->SetActive();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        // //Set texture position
-        // SDL_FRect dstRect{
-        //     .x = mOwner->GetPosition().x + anchorOffsets[mAnchor].x + offset.x,
-        //     .y = mOwner->GetPosition().y + anchorOffsets[mAnchor].y + offset.y,
-        //     .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
-        //     .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
-        // };
-        //
-        // // calc rotation point
-        // const SDL_FPoint* center = GetCenter(dstRect);
-        //
-        // //Render texture
-        // SDL_RenderTextureRotated(renderer, mTexture, nullptr, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), center, spriteFlipMode);
     }
 }
 
-void SpriteComponent::SetTexture(SDL_Texture* texture)
+void SpriteComponent::SetTexture(Texture* texture)
 {
     mTexture = texture;
-    mTexWidth = texture->w;
-    mTexHeight = texture->h;
+    mTexWidth = texture->GetWidth();
+    mTexHeight = texture->GetHeight();
 
     anchorOffsets = {
         { TopLeft, Vector2(0,0) },{ TopCenter, Vector2(-(mTexWidth * 0.5f),0) }, { TopRight, Vector2(-mTexWidth,0) },

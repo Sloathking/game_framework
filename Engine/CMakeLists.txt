@@ -1,4 +1,6 @@
-add_library(Engine)
+add_library(Engine
+        src/Texture.cpp
+        include/Texture.h)
 
 target_sources(Engine PRIVATE
         src/Engine.cpp

@@ -13,7 +13,7 @@ public:
     ~VertexArray();
 
     // Activate this vertex array (so we cand raw it)
-    void SetActive();
+    void SetActive() const;
 
     [[nodiscard]] unsigned int GetNumIndices() const { return mNumIndices; }
     [[nodiscard]] unsigned int GetNumVerts() const { return mNumVerts; }

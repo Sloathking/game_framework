@@ -5,7 +5,10 @@
 #include "Game.h"
 #include <Engine/include/Actor.h>
 #include <Engine/include/InputSystem.h>
-#include <Engine/include/VertexArray.h>
+#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/Random.h>
+
+#include "Engine/include/Texture.h"
 
 
 Game::Game() = default;
@@ -28,7 +31,18 @@ void Game::ProcessInput()
 
 void Game::LoadData()
 {
+    for (int i = 0; i < 20; ++i)
+    {
+        auto tempAct = new Actor(this);
 
+        tempAct->SetPosition(Random::GetVector(-1 * mWorldSize * 0.5 ,mWorldSize * 0.5));
+        auto* sprite = new SpriteComponent(tempAct);
+        auto* tex = new Texture();
+        tex->Load("Assets/Asteroid.png");
+        sprite->SetTexture(tex);
+
+        mSpriteActors.emplace_back(tempAct);
+    }
 }
 
 void Game::UnloadData()
@@ -39,5 +53,5 @@ void Game::UnloadData()
 
     // destroy textures
     for (const auto& i : mTextures)
-        SDL_DestroyTexture(i.second);
+        i.second->Unload();
 }

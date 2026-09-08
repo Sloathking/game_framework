@@ -11,7 +11,7 @@ Skeleton::Skeleton(Engine* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
-    std::vector<SDL_Texture*> anims{};
+    std::vector<Texture*> anims{};
 
     anims.clear();
     anims.emplace_back(game->GetTexture("Assets/Character01.png"));

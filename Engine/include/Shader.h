@@ -18,6 +18,9 @@ public:
     bool Load(const std::string& vertName, const std::string& fragName);
     void Unload();
 
+    //
+    void SetMatrixUniform(const std::string& name, const class Matrix4& matrix);
+
     // set this as the active shader program
     void SetActive();
 

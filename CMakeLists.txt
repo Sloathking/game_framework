@@ -21,6 +21,10 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+# stb_image
+include_directories(libs/stb_image)
+link_directories(libs/stb_image)
+
 # create list to iterate over
 set(LIBS)
 

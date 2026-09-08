@@ -26,6 +26,9 @@ public:
     // update function called from Game (not overridable)
     void Update(float deltaTime);
 
+    // Updates World Scale, Rotation, and Location
+    void ComputeWorldTransform();
+
     // updates all the components attached to the actor (not overridable)
     void UpdateComponents(float deltaTime) const;
 
@@ -39,14 +42,16 @@ public:
     virtual void ActorInput(const InputState& state);
 
     // getters/setters
+    [[nodiscard]] Matrix4 GetWorldTransform() const { return mWorldTransform; }
+
     [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
-    void SetPosition(const Vector2& pos) { mPosition = pos; }
+    void SetPosition(const Vector2& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
 
     [[nodiscard]] float GetScale() const { return mScale; }
-    void SetScale(const float scale) { mScale = scale; }
+    void SetScale(const float scale) { mScale = scale; mRecomputeWorldTransform = true; }
 
     [[nodiscard]] float GetRotation() const { return mRotation; }
-    void SetRotation(const float rotation) { mRotation = rotation; }
+    void SetRotation(const float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
 
     [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }
 
@@ -63,6 +68,11 @@ public:
 private:
     // Actor's state
     State mState{EActive};
+
+    // new transform
+    Matrix4 mWorldTransform{Matrix4::Identity};
+    bool mRecomputeWorldTransform;
+
 
     // Transform
     Vector2 mPosition{Vector2::Zero};	// position of Actor

@@ -20,10 +20,10 @@ public:
     void Update(float deltaTime) override;
 
     // add animation to Animations
-    void AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures);
+    void AddAnimation(const int& num, LoopingType toLoop, const std::vector<Texture*>& textures);
 
     // update an animation in Animations
-    void UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures);
+    void UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<Texture*>& textures);
 
     // play animation in Animations
     void PlayAnimation(const int& num);
@@ -43,13 +43,13 @@ public:
 
 private:
     // set textures used for anim
-    void SetAnimTextures(const std::vector<SDL_Texture*>& textures);
+    void SetAnimTextures(const std::vector<Texture*>& textures);
 
     // map to hold animations
-    std::unordered_map<int, std::pair<LoopingType, std::vector<SDL_Texture*>>> mAnimations{};
+    std::unordered_map<int, std::pair<LoopingType, std::vector<Texture*>>> mAnimations{};
 
     // all textures in the anim
-    std::vector<SDL_Texture*> mAnimTextures;
+    std::vector<Texture*> mAnimTextures;
 
     // current animation
     int mCurrAnim{};

@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "include/Math.h"
+
 Shader::Shader() = default;
 
 Shader::~Shader() = default;
@@ -108,4 +110,13 @@ void Shader::Unload()
     glDeleteProgram(mShaderProgram);
     glDeleteShader(mVertexShader);
     glDeleteShader(mFragShader);
+}
+
+void Shader::SetMatrixUniform(const std::string& name, const Matrix4& matrix)
+{
+    // find the uniform by this name
+    GLint loc = glGetUniformLocation(mShaderProgram, name.c_str());
+
+    // send the matrix data to the uniform
+    glUniformMatrix4fv(loc, 1, GL_TRUE, matrix.GetAsFloatPtr());
 }

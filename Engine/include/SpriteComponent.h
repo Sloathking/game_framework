@@ -23,7 +23,7 @@ public:
 
     virtual void Draw(class Shader* shader);
 
-    virtual void SetTexture(SDL_Texture* texture);
+    virtual void SetTexture(class Texture* texture);
 
     [[nodiscard]] bool GetVisibility() const { return mIsVisible; }
     void SetVisibility(const bool visible) { mIsVisible = visible; }
@@ -57,7 +57,7 @@ protected:
     std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
     std::unordered_map<AnchorPoint, Vector2> rotOffsets{};
 
-    SDL_Texture* mTexture{ nullptr };
+    Texture* mTexture{ nullptr };
     int mDrawOrder;
     int mTexWidth{ 0 };
     int mTexHeight{ 0 };

@@ -6,6 +6,8 @@
 #define GAME_H
 
 #include <Engine/include/Engine.h>
+#include <Engine/include/Math.h>
+#include <Engine/include/Constants.h>
 
 typedef struct PositionTextureVertex
 {
@@ -27,6 +29,10 @@ protected:
     void UnloadData() override;
 
 private:
+    std::vector<Actor*> mSpriteActors;
+
+    //TODO: Update sizes for moving Camera
+    Vector2 mWorldSize{1920, 1080};
 
 };
 

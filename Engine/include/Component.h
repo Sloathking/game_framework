@@ -17,6 +17,8 @@ public:
     // update this component by delta time
     virtual void Update(float deltaTime);
 
+    virtual void OnUpdateWorldTransform() {}
+
     virtual void ProcessInput(const struct InputState& state) {}
 
     [[nodiscard]] Actor* GetOwner() const { return mOwner; }

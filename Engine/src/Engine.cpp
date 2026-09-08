@@ -10,6 +10,7 @@
 #include "include/SpriteComponent.h"
 #include "include/VertexArray.h"
 #include "include/Shader.h"
+#include "include/Texture.h"
 #include <random>
 #include <algorithm>
 
@@ -89,7 +90,7 @@ bool Engine::Initialize()
 		success = false;
 	}
 
-	if (!LoadShaders("Basic.vert","Basic.frag"))
+	if (!LoadShaders("Transform.vert","Basic.frag"))
 	{
 		SDL_Log("Failed to load shaders!");
 		success = false;
@@ -175,31 +176,26 @@ void Engine::RemoveSprite(const SpriteComponent* sprite)
 		mSprites.erase(iter);
 }
 
-SDL_Texture* Engine::GetTexture(const std::string& fileName)
+Texture* Engine::GetTexture(const std::string& fileName)
 {
-	SDL_Texture* tex{ nullptr };
+	Texture* tex{ nullptr };
 	const std::string filePath = "../../Game/" + fileName;
 
 	// is texture already in map
 	if (const auto iter = mTextures.find(fileName); iter != mTextures.end()) tex = iter->second;
 	else
 	{
+		tex = new Texture();
 		// load from file
-		if (SDL_Surface* surface = IMG_Load(filePath.c_str()); surface == nullptr)
+		if (tex->Load(fileName))
 		{
-			SDL_Log("Failed to load texture: %s", filePath.c_str());
-			return nullptr;
+			mTextures.emplace(fileName, tex);
 		}
 		else
 		{
-			/*if (tex = SDL_CreateTextureFromSurface(mRenderer, surface); tex == nullptr)
-			{
-				SDL_Log("Failed to convert surface to texture: %s", filePath.c_str());
-				return nullptr;
-			}*/
-			SDL_DestroySurface(surface);
+			delete tex;
+			tex = nullptr;
 		}
-		mTextures.emplace(fileName, tex);
 	}
 
 	return tex;
@@ -238,10 +234,12 @@ SDL_Surface* Engine::LoadImage(const std::string& fileName, const int numChannel
 
 bool Engine::LoadShaders(const std::string& vertName, const std::string& fragName)
 {
+	const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920.0f, 1080.0f);
 	mSpriteShader = new Shader();
-	if (mSpriteShader->Load(vertName, fragName))
+	if (!mSpriteShader->Load(vertName, fragName))
 		return false;
 	mSpriteShader->SetActive();
+	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 	return true;
 }
 
@@ -295,7 +293,8 @@ void Engine::ProcessInput()
 	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F3) == EPressed)
 	{
 		vSyncEnabled = !vSyncEnabled;
-		//SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED);
+		if (!SDL_GL_SetSwapInterval(vSyncEnabled))
+			SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
 	}
 
 	mUpdatingActors = true;
@@ -310,7 +309,7 @@ void Engine::CreateSpriteVerts()
 		-0.5f,  0.5f,   0.0f,	0.0f,	0.0f,
 		0.5f,   0.5f,   0.0f,	1.0f,	0.0f,
 		0.5f,   -0.5f,  0.0f,	1.0f,	1.0f,
-		-0.5f,  -0.5f,  0.0f,	0.0f,	1.0f
+		-0.5f,  -0.5f,  0.0f,	0.0f,	1.0f,
 	};
 
 	static unsigned int indexBuffer[] = {
@@ -340,7 +339,10 @@ void Engine::UpdateGame()
 
 	// move any pending Actors to mActors
 	for (auto pending : mPendingActors)
+	{
+		pending->ComputeWorldTransform();
 		mActors.emplace_back(pending);
+	}
 	mPendingActors.clear();
 
 	// add any dead Actors to a temp vector
@@ -385,7 +387,7 @@ void Engine::GenerateOutput()
 	mSpriteVerts->SetActive();
 
 	// draw all sprites
-	for (auto sprite : mSprites)
+	for (const auto sprite : mSprites)
 		sprite->Draw(mSpriteShader);
 
 	//swap buffers,
