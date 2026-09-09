@@ -3,13 +3,12 @@
 //
 
 #include "Dot.h"
+#include <Engine/include/CameraComponent.h>
+#include <Engine/include/Engine.h>
+#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/InputSystem.h>
 
-#include "../../Engine/include/CameraComponent.h"
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/SpriteComponent.h"
-#include "../../Engine/include/InputSystem.h"
-
-Dot::Dot(Engine* game) : Actor(game)
+Dot::Dot(Engine* game) : Actor2D(game)
 {
     auto* sprite = new SpriteComponent(this);
     sprite->SetTexture(game->GetTexture("Assets/Projectile.png"));

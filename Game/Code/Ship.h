@@ -5,9 +5,9 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "../../Engine/include/Actor.h"
+#include <Engine/include/Actor2D.h>
 
-class Ship : public Actor
+class Ship : public Actor2D
 {
 public:
     explicit Ship(Engine* game);

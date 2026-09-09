@@ -3,9 +3,9 @@
 //
 
 #include "include/CameraComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
+CameraComponent::CameraComponent(Actor2D* owner, const int updateOrder) : Component(owner, updateOrder)
 {
 
 }

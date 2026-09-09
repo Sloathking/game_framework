@@ -5,12 +5,13 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "../../Engine/include/Actor.h"
+#include <Engine/include/Actor2D.h>
 
-class TileMap : public Actor
+class TileMap : public Actor2D
 {
 public:
     explicit TileMap(Engine* game);
+    void UpdateActor(float deltaTime) override;
 
 private:
     class TileMapComponent* mClosestTileMap;

@@ -4,7 +4,7 @@
 
 #include "include/AnimSpriteComponent.h"
 
-AnimSpriteComponent::AnimSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mCurrFrame{ 0.0f }, mAnimFPS{ 24.0f }
+AnimSpriteComponent::AnimSpriteComponent(Actor2D* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mCurrFrame{ 0.0f }, mAnimFPS{ 24.0f }
 {
 
 }

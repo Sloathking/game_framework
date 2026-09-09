@@ -2,16 +2,21 @@
 // Created by sloath on 21-Aug-26.
 //
 
-#include "Tile.h"
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/SpriteComponent.h"
+#include "include/Tile.h"
+#include "include/Engine.h"
+#include "include/SpriteComponent.h"
 
-Tile::Tile(Engine* game) : Actor(game)
+Tile::Tile(Engine* game) : Actor2D(game)
 {
     mSpriteComp = new SpriteComponent(this);
     mSpriteComp->SetAnchor(SpriteComponent::CenterCenter);
     mSpriteComp->SetCenter(SpriteComponent::CenterCenter);
     UpdateTexture();
+}
+
+void Tile::UpdateActor(float deltaTime)
+{
+
 }
 
 void Tile::SetTileState(TileState state)

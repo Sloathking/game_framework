@@ -1,6 +1,4 @@
-add_library(Engine
-        src/Texture.cpp
-        include/Texture.h)
+add_library(Engine)
 
 target_sources(Engine PRIVATE
         src/Engine.cpp
@@ -8,6 +6,8 @@ target_sources(Engine PRIVATE
         include/Constants.h
         src/Actor.cpp
         include/Actor.h
+        src/Actor2D.cpp
+        include/Actor2D.h
         src/Component.cpp
         include/Component.h
         src/SpriteComponent.cpp
@@ -18,6 +18,8 @@ target_sources(Engine PRIVATE
         include/AnimSpriteComponent.h
         src/BGSpriteComponent.cpp
         include/BGSpriteComponent.h
+        src/Tile.cpp
+        include/Tile.h
         src/TileMapComponent.cpp
         include/TileMapComponent.h
         include/CSVUtils.h
@@ -47,6 +49,8 @@ target_sources(Engine PRIVATE
         include/VertexArray.h
         src/Shader.cpp
         include/Shader.h
+        src/Texture.cpp
+        include/Texture.h
 )
 
 target_include_directories(Engine

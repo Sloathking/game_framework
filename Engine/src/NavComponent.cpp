@@ -3,10 +3,10 @@
 //
 
 #include "include/NavComponent.h"
-#include "include/Actor.h"
-#include "../../Game/Code/Tile.h"
+#include "include/Actor2D.h"
+#include "include/Tile.h"
 
-NavComponent::NavComponent(Actor* owner, const int updateOrder) : MoveComponent(owner, updateOrder)
+NavComponent::NavComponent(Actor2D* owner, const int updateOrder) : MoveComponent(owner, updateOrder)
 {
 
 }
@@ -36,7 +36,7 @@ void NavComponent::TurnTo(const Vector2& pos) const
 {
     // vector from me to pos
     const Vector2 dir = pos - mOwner->GetPosition();
-    // new angle is just atan2 of this dir vector (negate y because +y down)
-    const float angle = Math::Atan2(-dir.y, dir.x);
+    // new angle is just atan2 of this dir vector
+    const float angle = Math::Atan2(dir.y, dir.x);
     mOwner->SetRotation(angle);
 }

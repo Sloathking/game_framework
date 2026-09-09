@@ -5,9 +5,9 @@
 #ifndef DOT_H
 #define DOT_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 
-class Dot : public Actor
+class Dot : public Actor2D
 {
 public:
     explicit Dot(Engine* game);

@@ -4,9 +4,9 @@
 
 #include "include/TileMapComponent.h"
 #include "include/CSVUTils.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder)
+TileMapComponent::TileMapComponent(Actor2D* owner, const int drawOrder) : SpriteComponent(owner, drawOrder)
 {
 
 }

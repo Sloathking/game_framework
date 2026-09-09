@@ -5,9 +5,9 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "../../Engine/include/Actor.h"
+#include "Actor2D.h"
 
-class Tile : public Actor
+class Tile : public Actor2D
 {
 public:
     friend class Grid;
@@ -20,6 +20,8 @@ public:
     };
 
     explicit Tile(Engine* game);
+
+    void UpdateActor(float deltaTime) override;
 
     [[nodiscard]] TileState GetTileState() const { return mTileState; }
     void SetTileState(TileState state);

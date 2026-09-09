@@ -3,18 +3,16 @@
 //
 
 #include "Ship.h"
-
 #include "Asteroid.h"
 #include "Laser.h"
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/Constants.h"
-#include "../../Engine/include/SpriteComponent.h"
-#include "../../Engine/include/InputSystem.h"
-#include "../../Engine/include/PhysicsInputComponent.h"
-#include "../../Engine/include/CircleComponent.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/Constants.h>
+#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/InputSystem.h>
+#include <Engine/include/PhysicsInputComponent.h>
+#include <Engine/include/CircleComponent.h>
 
-
-Ship::Ship(Engine* game) : Actor(game)
+Ship::Ship(Engine* game) : Actor2D(game)
 {
     mShipSprite = new SpriteComponent(this);
     mShipSprite->SetTexture(game->GetTexture("Assets/Ship.png"));

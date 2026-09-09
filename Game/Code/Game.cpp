@@ -3,7 +3,7 @@
 //
 
 #include "Game.h"
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/SpriteComponent.h>
 #include <Engine/include/Random.h>
@@ -33,7 +33,7 @@ void Game::LoadData()
 {
     for (int i = 0; i < 20; ++i)
     {
-        auto tempAct = new Actor(this);
+        auto tempAct = new Actor2D(this);
 
         tempAct->SetPosition(Random::GetVector(-1 * mWorldSize * 0.5 ,mWorldSize * 0.5));
         auto* sprite = new SpriteComponent(tempAct);

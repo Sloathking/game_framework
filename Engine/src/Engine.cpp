@@ -90,7 +90,7 @@ bool Engine::Initialize()
 		success = false;
 	}
 
-	if (!LoadShaders("Transform.vert","Basic.frag"))
+	if (!LoadShaders("Sprite.vert","Sprite.frag"))
 	{
 		SDL_Log("Failed to load shaders!");
 		success = false;
@@ -360,7 +360,6 @@ void Engine::UpdateGame()
 
 	if (logFPSandVSYNC)
 		SDL_Log("Delta Time: %f | FPS Capped: %c | VSync: %c", deltaTime, fpsCapEnabled ? 'T' : 'F', vSyncEnabled ? 'T' : 'F');
-
 }
 
 // static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
@@ -377,7 +376,7 @@ void Engine::GenerateOutput()
 	// start of OpenGL stuff
 
 	// set the clear color to gray
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	// clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -385,6 +384,9 @@ void Engine::GenerateOutput()
 	// Set sprite shader and vertex array objs active
 	mSpriteShader->SetActive();
 	mSpriteVerts->SetActive();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// draw all sprites
 	for (const auto sprite : mSprites)

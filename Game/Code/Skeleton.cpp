@@ -3,11 +3,11 @@
 //
 
 #include "Skeleton.h"
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/AnimSpriteComponent.h"
-#include "../../Engine/include/Constants.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/AnimSpriteComponent.h>
+#include <Engine/include/Constants.h>
 
-Skeleton::Skeleton(Engine* game) : Actor(game)
+Skeleton::Skeleton(Engine* game) : Actor2D(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
@@ -41,7 +41,7 @@ Skeleton::Skeleton(Engine* game) : Actor(game)
 
 void Skeleton::UpdateActor(const float deltaTime)
 {
-    Actor::UpdateActor(deltaTime);
+    Actor2D::UpdateActor(deltaTime);
 }
 
 void Skeleton::ActorInput(const InputState& state)

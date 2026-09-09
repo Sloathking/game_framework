@@ -4,15 +4,13 @@
 
 #include "Enemy.h"
 
-#include "Grid.h"
-#include "Tile.h"
+#include <Engine/include/Tile.h>
+#include <Engine/include/Engine.h>
+#include <Engine/include/CircleComponent.h>
+#include <Engine/include/NavComponent.h>
+#include <Engine/include/SpriteComponent.h>
 
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/CircleComponent.h"
-#include "../../Engine/include/NavComponent.h"
-#include "../../Engine/include/SpriteComponent.h"
-
-Enemy::Enemy(Engine* game) : Actor(game)
+Enemy::Enemy(Engine* game) : Actor2D(game)
 {
     //game->GetEnemies().emplace_back(this);
 
@@ -42,7 +40,7 @@ Enemy::~Enemy()
 
 void Enemy::UpdateActor(const float deltaTime)
 {
-    Actor::UpdateActor(deltaTime);
+    Actor2D::UpdateActor(deltaTime);
 
     // am i near the end tile?
     // Vector2 diff = GetPosition() - GetGame()->GetGrid()->GetEndTile()->GetPosition();

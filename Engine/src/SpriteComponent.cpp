@@ -4,11 +4,11 @@
 
 #include "include/SpriteComponent.h"
 #include "include/Engine.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 
-SpriteComponent::SpriteComponent(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
+SpriteComponent::SpriteComponent(Actor2D* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
     mOwner->GetGame()->AddSprite(this);
 }

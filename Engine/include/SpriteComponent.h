@@ -18,7 +18,7 @@ public:
     // symbolic constant
     static constexpr float kOriginalSize = -1.0f;
 
-    explicit SpriteComponent(Actor* owner, int drawOrder = 100);
+    explicit SpriteComponent(Actor2D* owner, int drawOrder = 100);
     ~SpriteComponent() override;
 
     virtual void Draw(class Shader* shader);

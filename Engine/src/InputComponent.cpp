@@ -5,7 +5,7 @@
 #include "include/InputComponent.h"
 #include "include/InputSystem.h"
 
-InputComponent::InputComponent(Actor* mOwner, const int updateOrder) : MoveComponent(mOwner, updateOrder)
+InputComponent::InputComponent(Actor2D* mOwner, const int updateOrder) : MoveComponent(mOwner, updateOrder)
 {
 
 }

@@ -11,7 +11,7 @@
 class PhysicsInputComponent : public PhysicsMoveComponent
 {
 public:
-    explicit PhysicsInputComponent(Actor* mOwner, int updateOrder = 10);
+    explicit PhysicsInputComponent(Actor2D* mOwner, int updateOrder = 10);
 
     void ProcessInput(const InputState& state) override;
 

@@ -3,11 +3,10 @@
 //
 
 #include "TileMap.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/TileMapComponent.h>
 
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/TileMapComponent.h"
-
-TileMap::TileMap(Engine* game) : Actor(game)
+TileMap::TileMap(Engine* game) : Actor2D(game)
 {
     mClosestTileMap = new TileMapComponent(this, 30);
     mClosestTileMap->SetTexture(game->GetTexture("Assets/Tiles.png"));
@@ -32,4 +31,9 @@ TileMap::TileMap(Engine* game) : Actor(game)
 
     fileName = "../../Game/Assets/MapLayer3.csv";
     mFarthestTileMap->ReadFile(fileName);
+}
+
+void TileMap::UpdateActor(float deltaTime)
+{
+
 }

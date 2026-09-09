@@ -24,16 +24,16 @@ public:
     virtual ~Actor();
 
     // update function called from Game (not overridable)
-    void Update(float deltaTime);
+    virtual void Update(float deltaTime) = 0;
 
-    // Updates World Scale, Rotation, and Location
-    void ComputeWorldTransform();
+    // // Updates World Scale, Rotation, and Location
+    virtual void ComputeWorldTransform() = 0;
 
     // updates all the components attached to the actor (not overridable)
     void UpdateComponents(float deltaTime) const;
 
     // any Actor-specific update code (overridable)
-    virtual void UpdateActor(float deltaTime);
+    // virtual void UpdateActor(float deltaTime);
 
     // called from game, passes event to comps
     void ProcessInput(const struct InputState& state);
@@ -42,18 +42,18 @@ public:
     virtual void ActorInput(const InputState& state);
 
     // getters/setters
-    [[nodiscard]] Matrix4 GetWorldTransform() const { return mWorldTransform; }
+    // [[nodiscard]] Matrix4 GetWorldTransform() const { return mWorldTransform; }
+
+    [[nodiscard]] float GetScale() const { return mScale; }
+    virtual void SetScale(const float scale) { mScale = scale; }
+
+    /*[[nodiscard]] float GetRotation() const { return mRotation; }
+    void SetRotation(const float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
 
     [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
     void SetPosition(const Vector2& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
 
-    [[nodiscard]] float GetScale() const { return mScale; }
-    void SetScale(const float scale) { mScale = scale; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] float GetRotation() const { return mRotation; }
-    void SetRotation(const float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }
+    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }*/
 
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }
@@ -61,29 +61,21 @@ public:
     [[nodiscard]] Engine* GetGame() const { return mGame; }
 
     // add/remove components
-
     void AddComponent(class Component* component);
     void RemoveComponent(const Component* component);
 
-private:
+protected:
     // Actor's state
     State mState{EActive};
-
-    // new transform
-    Matrix4 mWorldTransform{Matrix4::Identity};
-    bool mRecomputeWorldTransform;
-
-
-    // Transform
-    Vector2 mPosition{Vector2::Zero};	// position of Actor
-    float mScale{1.0f};         		// uniforms scale of actor
-    float mRotation{0.0f};          	// rotation angle (in radians)
 
     // components held by actor
     std::vector<Component*> mComponents;
     Engine* mGame;
 
-    // forward vector
-    Vector2 mForward{Vector2(0,0)};
+    // Transform
+    float mScale{1.0f};         		// uniforms scale of actor
+
+private:
+
 };
 #endif //ACTOR_H

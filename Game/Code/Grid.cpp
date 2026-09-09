@@ -3,13 +3,13 @@
 //
 
 #include "Grid.h"
-#include "Tile.h"
 #include "Tower.h"
 #include "Enemy.h"
+#include <Engine/include/Tile.h>
 
 #include <algorithm>
 
-Grid::Grid(Engine* game) : Actor(game)
+Grid::Grid(Engine* game) : Actor2D(game)
 {
     // size tiles correctly
     mTiles.resize(NumRows);
@@ -168,7 +168,7 @@ Tile* Grid::GetEndTile() const
 
 void Grid::UpdateActor(const float deltaTime)
 {
-    Actor::UpdateActor(deltaTime);
+    Actor2D::UpdateActor(deltaTime);
 
     // is it time to spawn a new enemy?
     mNextEnemyTimer -= deltaTime;
@@ -179,7 +179,7 @@ void Grid::UpdateActor(const float deltaTime)
     }
 }
 
-std::vector<Vector2> Grid::GetTilePositions()
+std::vector<Vector2> Grid::GetTilePositions() const
 {
     std::vector<Vector2> gridPos;
     for (int i = 0; i < mTiles.size(); ++i)

@@ -5,13 +5,15 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "../../Engine/include/Actor.h"
+#include <Engine/include/Actor2D.h>
 #include <vector>
 
-class Grid : public Actor
+class Grid : public Actor2D
 {
 public:
     explicit Grid(Engine* game);
+
+    void UpdateActor(float deltaTime) override;
 
     void ProcessClick(int x, int y);
 
@@ -22,9 +24,8 @@ public:
     [[nodiscard]] Tile* GetStartTile() const;
     [[nodiscard]] Tile* GetEndTile() const;
 
-    void UpdateActor(float deltaTime) override;
 
-    std::vector<Vector2> GetTilePositions();
+    [[nodiscard]] std::vector<Vector2> GetTilePositions() const;
 
 private:
     void SelectTile(size_t row, size_t col);

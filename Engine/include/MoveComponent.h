@@ -10,7 +10,7 @@
 class MoveComponent : public Component
 {
 public:
-    explicit MoveComponent(Actor* owner, int updateOrder = 10);
+    explicit MoveComponent(Actor2D* owner, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 

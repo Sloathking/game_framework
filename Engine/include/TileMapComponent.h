@@ -19,7 +19,7 @@ struct TileData
 class TileMapComponent : public SpriteComponent
 {
 public:
-    explicit TileMapComponent(Actor* owner, int drawOrder = 100);
+    explicit TileMapComponent(Actor2D* owner, int drawOrder = 100);
 
     void Update(float deltaTime) override;
     void Draw(Shader* shader) override;

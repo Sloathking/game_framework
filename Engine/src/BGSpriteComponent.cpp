@@ -3,9 +3,9 @@
 //
 
 #include "include/BGSpriteComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mScrollSpeed{0.0f}
+BGSpriteComponent::BGSpriteComponent(Actor2D* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mScrollSpeed{0.0f}
 {
 
 }

@@ -20,31 +20,20 @@ Actor::~Actor()
         delete mComponents.back();
 }
 
-// update function called from Game (not overridable)
-void Actor::Update(const float deltaTime)
-{
-    if (mState == EActive)
-    {
-        ComputeWorldTransform();
-
-        UpdateComponents(deltaTime);
-        UpdateActor(deltaTime);
-
-        ComputeWorldTransform();
-    }
-}
+// // update function called from Game (not overridable)
+// void Actor::Update(const float deltaTime)
+// {
+//     if (mState == EActive)
+//     {
+//
+//     }
+// }
 
 // updates all the components attached to the actor (not overridable)
 void Actor::UpdateComponents(const float deltaTime) const
 {
     for (const auto comp : mComponents)
         comp->Update(deltaTime);
-}
-
-// any Actor-specific update code (overridable)
-void Actor::UpdateActor(const float deltaTime)
-{
-
 }
 
 void Actor::ProcessInput(const InputState& state)
@@ -78,19 +67,4 @@ void Actor::RemoveComponent(const Component* component)
 {
     if (const auto iter = std::find(mComponents.begin(), mComponents.end(), component); iter != mComponents.end())
         mComponents.erase(iter);
-}
-
-void Actor::ComputeWorldTransform()
-{
-    if (mRecomputeWorldTransform)
-    {
-        mRecomputeWorldTransform = false;
-        // scale, rotation, transform
-        mWorldTransform = Matrix4::CreateScale(mScale);
-        mWorldTransform *= Matrix4::CreateRotationZ(mRotation);
-        mWorldTransform *= Matrix4::CreateTranslation(Vector3(mPosition.x, mPosition.y, 0.0f));
-
-        for (const auto comp : mComponents)
-            comp->OnUpdateWorldTransform();
-    }
 }

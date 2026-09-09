@@ -3,10 +3,10 @@
 //
 
 #include "include/PhysicsMoveComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 #include "include/Math.h"
 
-PhysicsMoveComponent::PhysicsMoveComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
+PhysicsMoveComponent::PhysicsMoveComponent(Actor2D* owner, const int updateOrder) : Component(owner, updateOrder)
 {
 
 }

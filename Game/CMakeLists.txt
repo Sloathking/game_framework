@@ -13,8 +13,6 @@ target_sources( Game PRIVATE
         Code/Asteroid.h
         Code/Laser.cpp
         Code/Laser.h
-        Code/Tile.cpp
-        Code/Tile.h
         Code/Grid.cpp
         Code/Grid.h
         Code/Tower.cpp

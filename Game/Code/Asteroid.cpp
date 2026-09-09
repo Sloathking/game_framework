@@ -3,14 +3,14 @@
 //
 
 #include "Asteroid.h"
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/Constants.h"
-#include "../../Engine/include/Random.h"
-#include "../../Engine/include/SpriteComponent.h"
-#include "../../Engine/include/PhysicsMoveComponent.h"
-#include "../../Engine/include/CircleComponent.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/Constants.h>
+#include <Engine/include/Random.h>
+#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/PhysicsMoveComponent.h>
+#include <Engine/include/CircleComponent.h>
 
-Asteroid::Asteroid(Engine* game) : Actor(game)
+Asteroid::Asteroid(Engine* game) : Actor2D(game)
 {
     // init to random position and rotation
     const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(5120, 5120));
@@ -33,3 +33,8 @@ Asteroid::Asteroid(Engine* game) : Actor(game)
 }
 
 Asteroid::~Asteroid() = default;
+
+void Asteroid::UpdateActor(float deltaTime)
+{
+
+}

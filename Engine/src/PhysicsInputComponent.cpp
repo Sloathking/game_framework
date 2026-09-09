@@ -3,10 +3,10 @@
 //
 
 #include "include/PhysicsInputComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 #include "include/InputSystem.h"
 
-PhysicsInputComponent::PhysicsInputComponent(Actor* mOwner, const int updateOrder) : PhysicsMoveComponent(mOwner, updateOrder)
+PhysicsInputComponent::PhysicsInputComponent(Actor2D* mOwner, const int updateOrder) : PhysicsMoveComponent(mOwner, updateOrder)
 {
 
 }

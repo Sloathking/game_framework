@@ -3,9 +3,9 @@
 //
 
 #include "include/CircleComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-CircleComponent::CircleComponent(Actor* owner) : Component(owner)
+CircleComponent::CircleComponent(Actor2D* owner) : Component(owner)
 {
 
 }

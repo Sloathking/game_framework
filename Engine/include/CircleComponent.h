@@ -11,7 +11,7 @@
 class CircleComponent : public Component
 {
 public:
-    explicit CircleComponent(Actor* owner);
+    explicit CircleComponent(Actor2D* owner);
 
     [[nodiscard]] float GetRadius() const { return mRadius; }
     void SetRadius(const float radius) { mRadius = radius; }

@@ -11,7 +11,7 @@
 class InputComponent : public MoveComponent
 {
 public:
-    explicit InputComponent(Actor* mOwner, int updateOrder = 10);
+    explicit InputComponent(Actor2D* mOwner, int updateOrder = 10);
 
     void ProcessInput(const InputState& state) override;
 

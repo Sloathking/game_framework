@@ -4,13 +4,12 @@
 
 #include "Bullet.h"
 #include "Enemy.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/CircleComponent.h>
+#include <Engine/include/MoveComponent.h>
+#include <Engine/include/SpriteComponent.h>
 
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/CircleComponent.h"
-#include "../../Engine/include/MoveComponent.h"
-#include "../../Engine/include/SpriteComponent.h"
-
-Bullet::Bullet(Engine* game) : Actor(game)
+Bullet::Bullet(Engine* game) : Actor2D(game)
 {
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(GetGame()->GetTexture("Assets/Projectile.png"));
@@ -28,7 +27,7 @@ Bullet::Bullet(Engine* game) : Actor(game)
 
 void Bullet::UpdateActor(const float deltaTime)
 {
-    Actor::UpdateActor(deltaTime);
+    Actor2D::UpdateActor(deltaTime);
 
     /*
     // check for collision vs enemies

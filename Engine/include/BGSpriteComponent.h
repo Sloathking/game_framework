@@ -12,7 +12,7 @@
 class BGSpriteComponent : public SpriteComponent
 {
 public:
-    explicit BGSpriteComponent(class Actor* owner, int drawOrder = 10);
+    explicit BGSpriteComponent(Actor2D* owner, int drawOrder = 10);
 
     // update draw override
     void Update(float deltaTime) override;
