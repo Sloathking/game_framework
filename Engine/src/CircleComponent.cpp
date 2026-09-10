@@ -12,7 +12,7 @@ CircleComponent::CircleComponent(Actor2D* owner) : Component(owner)
 
 const Vector2& CircleComponent::GetCenter() const
 {
-    return mOwner->GetPosition();
+    return dynamic_cast<Actor2D*>(mOwner)->GetPosition();
 }
 
 bool Intersect(const CircleComponent& a, const CircleComponent& b)

@@ -14,7 +14,7 @@ PhysicsMoveComponent::PhysicsMoveComponent(Actor2D* owner, const int updateOrder
 void PhysicsMoveComponent::Update(const float deltaTime)
 {
     // physics based movement
-    Vector2 newPos = mOwner->GetPosition();
+    Vector2 newPos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
     Vector2 accel;
     // (semi-implicit) Euler Integration
     accel.x = mSumOfForces.x / mMass;
@@ -25,16 +25,16 @@ void PhysicsMoveComponent::Update(const float deltaTime)
 
     // update position
     newPos += mVelocity * deltaTime;
-    mOwner->SetPosition(newPos);
+    dynamic_cast<Actor2D*>(mOwner)->SetPosition(newPos);
 
     mSumOfForces = Vector2::Zero;
 
     // physics and non-physics
     if (!Math::NearZero(mAngularSpeed))
     {
-        float rot = mOwner->GetRotation();
+        float rot = dynamic_cast<Actor2D*>(mOwner)->GetRotation();
         rot += mAngularSpeed * deltaTime;
-        mOwner->SetRotation(rot);
+        dynamic_cast<Actor2D*>(mOwner)->SetRotation(rot);
     }
 }
 

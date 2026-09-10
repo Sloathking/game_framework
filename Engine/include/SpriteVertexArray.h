@@ -2,15 +2,14 @@
 // Created by sloath on 07-Sep-26.
 //
 
-#ifndef VERTEXARRAY_H
-#define VERTEXARRAY_H
+#ifndef SPRITEVERTEXARRAY_H
+#define SPRITEVERTEXARRAY_H
 
-
-class VertexArray
+class SpriteVertexArray
 {
 public:
-    VertexArray(const float* verts, unsigned int numVerts, const unsigned int* indices, unsigned int numIndices);
-    ~VertexArray();
+    SpriteVertexArray(const float* verts, unsigned int numVerts, const unsigned int* indices, unsigned int numIndices);
+    ~SpriteVertexArray();
 
     // Activate this vertex array (so we cand raw it)
     void SetActive() const;
@@ -26,14 +25,13 @@ private:
     unsigned int mNumIndices;
 
     // OpenGL ID of vertex buffer
-    unsigned int mVertexBuffer{};
+    unsigned int mVertexBuffer;
 
     // OpenGL ID of index buffer
-    unsigned int mIndexBuffer{};
+    unsigned int mIndexBuffer;
 
     // OpenGL ID of vertex array object
-    unsigned int mVertexArray{};
+    unsigned int mVertexArray;
 };
 
-
-#endif //VERTEXARRAY_H
+#endif //SPRITEVERTEXARRAY_H

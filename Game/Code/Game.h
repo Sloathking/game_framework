@@ -34,7 +34,7 @@ private:
     //TODO: Update sizes for moving Camera
     Vector2 mWorldSize{1920, 1080};
 
+    class Mesh* mMesh{};
 };
-
 
 #endif //GAME_H

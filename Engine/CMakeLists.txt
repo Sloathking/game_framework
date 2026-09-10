@@ -8,6 +8,8 @@ target_sources(Engine PRIVATE
         include/Actor.h
         src/Actor2D.cpp
         include/Actor2D.h
+        src/Actor3D.cpp
+        include/Actor3D.h
         src/Component.cpp
         include/Component.h
         src/SpriteComponent.cpp
@@ -45,12 +47,18 @@ target_sources(Engine PRIVATE
         include/InputSystem.h
         src/CameraComponent.cpp
         include/CameraComponent.h
-        src/VertexArray.cpp
-        include/VertexArray.h
+        src/SpriteVertexArray.cpp
+        include/SpriteVertexArray.h
         src/Shader.cpp
         include/Shader.h
         src/Texture.cpp
         include/Texture.h
+        src/MoveComponent3D.cpp
+        include/MoveComponent3D.h
+        src/VertexArray.cpp
+        include/VertexArray.h
+        src/Mesh.cpp
+        include/Mesh.h
 )
 
 target_include_directories(Engine

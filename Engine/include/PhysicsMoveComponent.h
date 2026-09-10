@@ -11,7 +11,7 @@
 class PhysicsMoveComponent : public Component
 {
 public:
-    explicit PhysicsMoveComponent(Actor2D* owner, int updateOrder = 10);
+    explicit PhysicsMoveComponent(class Actor2D* owner, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 

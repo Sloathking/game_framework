@@ -3,9 +3,9 @@
 //
 
 #include "include/Component.h"
-#include "include/Actor2D.h"
+#include "include/Actor.h"
 
-Component::Component(Actor2D* owner, const int updateOrder) : mOwner{ owner }, mUpdateOrder{ updateOrder }
+Component::Component(Actor* owner, const int updateOrder) : mOwner{ owner }, mUpdateOrder{ updateOrder }
 {
     mOwner->AddComponent(this);
 }

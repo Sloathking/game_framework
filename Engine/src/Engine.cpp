@@ -8,9 +8,11 @@
 #include "include/InputSystem.h"
 #include "include/Actor.h"
 #include "include/SpriteComponent.h"
+#include "include/SpriteVertexArray.h"
 #include "include/VertexArray.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
+#include "include/Mesh.h"
 #include <random>
 #include <algorithm>
 
@@ -179,12 +181,12 @@ void Engine::RemoveSprite(const SpriteComponent* sprite)
 Texture* Engine::GetTexture(const std::string& fileName)
 {
 	Texture* tex{ nullptr };
-	const std::string filePath = "../../Game/" + fileName;
 
 	// is texture already in map
 	if (const auto iter = mTextures.find(fileName); iter != mTextures.end()) tex = iter->second;
 	else
 	{
+		// const std::string filePath = "../../Game/" + fileName;
 		tex = new Texture();
 		// load from file
 		if (tex->Load(fileName))
@@ -197,8 +199,27 @@ Texture* Engine::GetTexture(const std::string& fileName)
 			tex = nullptr;
 		}
 	}
-
 	return tex;
+}
+
+Mesh* Engine::GetMesh(const std::string& fileName)
+{
+	Mesh* mesh{nullptr};
+
+	if (const auto iter = mMeshes.find(fileName); iter != mMeshes.end()) mesh = iter->second;
+	else
+	{
+		mesh = new Mesh();
+		if (mesh->Load(fileName, this))
+			mMeshes.emplace(fileName, mesh);
+		else
+		{
+			delete mesh;
+			return nullptr;
+		}
+	}
+
+	return mesh;
 }
 
 SDL_Surface* Engine::LoadImage(const std::string& fileName, const int numChannels)
@@ -306,10 +327,10 @@ void Engine::ProcessInput()
 void Engine::CreateSpriteVerts()
 {
 	static float vertexBuffer[] = {
-		-0.5f,  0.5f,   0.0f,	0.0f,	0.0f,
-		0.5f,   0.5f,   0.0f,	1.0f,	0.0f,
-		0.5f,   -0.5f,  0.0f,	1.0f,	1.0f,
-		-0.5f,  -0.5f,  0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f,   0.0f,	0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
+		0.5f,   0.5f,   0.0f,	0.0f,	0.0f,	0.0f,	1.0f,	0.0f,
+		0.5f,   -0.5f,  0.0f,	0.0f,	0.0f,	0.0f,	1.0f,	1.0f,
+		-0.5f,  -0.5f,  0.0f,	0.0f,	0.0f,	0.0f,	0.0f,	1.0f
 	};
 
 	static unsigned int indexBuffer[] = {
@@ -376,7 +397,7 @@ void Engine::GenerateOutput()
 	// start of OpenGL stuff
 
 	// set the clear color to gray
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.50f, 0.50f, 0.50f, 1.0f);
 	// clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 

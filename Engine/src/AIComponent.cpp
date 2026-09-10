@@ -6,7 +6,7 @@
 #include "include/AIState.h"
 #include <SDL3/SDL_log.h>
 
-AIComponent::AIComponent(Actor2D* owner) : Component(owner)
+AIComponent::AIComponent(Actor* owner) : Component(owner)
 {
 
 }

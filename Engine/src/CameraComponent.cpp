@@ -19,7 +19,7 @@ void CameraComponent::Update(const float deltaTime)
 
 [[nodiscard]] Vector2 CameraComponent::GetPosition() const
 {
-    const Vector2 ownerPos = mOwner->GetPosition();
+    const Vector2 ownerPos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
     Vector2 pos;
     pos.x = ownerPos.x - mWindowSize.x * 0.5f;
     pos.y = ownerPos.y - mWindowSize.y * 0.5f;

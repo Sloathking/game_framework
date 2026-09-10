@@ -12,7 +12,7 @@
 class AIComponent : public Component
 {
 public:
-    explicit AIComponent(Actor2D* owner);
+    explicit AIComponent(Actor* owner);
 
     void Update(float deltaTime) override;
     void ChangeState(const std::string& name);

@@ -9,7 +9,7 @@ class Component
 {
 public:
     // constructor (the lower the update order, the earlier the component updates)
-    explicit Component(class Actor2D* owner, int updateOrder = 100);
+    explicit Component(class Actor* owner, int updateOrder = 100);
 
     // destructor
     virtual ~Component();
@@ -21,7 +21,7 @@ public:
 
     virtual void ProcessInput(const struct InputState& state) {}
 
-    [[nodiscard]] Actor2D* GetOwner() const { return mOwner; }
+    [[nodiscard]] Actor* GetOwner() const { return mOwner; }
 
     [[nodiscard]] bool GetUpdateState() const { return mUpdate; }
     void SetUpdateState(const bool update) { mUpdate = update; }
@@ -30,7 +30,7 @@ public:
 
 protected:
     // owning Actor
-    Actor2D* mOwner;
+    Actor* mOwner;
 
     // update order of component
     int mUpdateOrder;

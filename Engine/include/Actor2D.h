@@ -6,6 +6,7 @@
 #define ACTOR2D_H
 
 #include "Actor.h"
+#include "Math.h"
 
 class Actor2D : public Actor
 {
@@ -44,9 +45,6 @@ private:
 
     float mRotation{0.0f};          	// rotation angle (in radians)
     Vector2 mPosition{Vector2::Zero};	// position of Actor
-
-    Vector2 mForward{Vector2(0,0)};
 };
-
 
 #endif //ACTOR2D_H

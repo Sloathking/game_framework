@@ -5,7 +5,6 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#include "Math.h"
 #include <vector>
 
 class Actor
@@ -32,9 +31,6 @@ public:
     // updates all the components attached to the actor (not overridable)
     void UpdateComponents(float deltaTime) const;
 
-    // any Actor-specific update code (overridable)
-    // virtual void UpdateActor(float deltaTime);
-
     // called from game, passes event to comps
     void ProcessInput(const struct InputState& state);
 
@@ -42,18 +38,8 @@ public:
     virtual void ActorInput(const InputState& state);
 
     // getters/setters
-    // [[nodiscard]] Matrix4 GetWorldTransform() const { return mWorldTransform; }
-
     [[nodiscard]] float GetScale() const { return mScale; }
     virtual void SetScale(const float scale) { mScale = scale; }
-
-    /*[[nodiscard]] float GetRotation() const { return mRotation; }
-    void SetRotation(const float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
-    void SetPosition(const Vector2& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }*/
 
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }

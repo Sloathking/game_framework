@@ -28,6 +28,8 @@ public:
 
     class Texture* GetTexture(const std::string& fileName);
 
+    class Mesh* GetMesh(const std::string& fileName);
+
     static SDL_Surface* LoadImage(const std::string& fileName, int numChannels);
 
     bool LoadShaders(const std::string& vertName, const std::string& fragName);
@@ -61,6 +63,9 @@ protected:
     std::vector<Actor*> mActors;
     std::vector<Actor*> mPendingActors;
     bool mUpdatingActors{false};
+
+    // map of loaded meshes
+    std::unordered_map<std::string, Mesh*> mMeshes;
 
     // map of loaded textures
     std::unordered_map<std::string, Texture*> mTextures;

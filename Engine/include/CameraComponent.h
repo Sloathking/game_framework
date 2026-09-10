@@ -12,7 +12,7 @@
 class CameraComponent : public Component
 {
 public:
-    explicit CameraComponent(Actor2D* owner, int updateOrder = 100);
+    explicit CameraComponent(class Actor2D* owner, int updateOrder = 100);
 
     void Update(float deltaTime) override;
 

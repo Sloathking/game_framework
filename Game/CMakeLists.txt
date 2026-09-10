@@ -1,6 +1,6 @@
 add_library(Game)
 
-target_sources( Game PRIVATE
+target_sources(Game PRIVATE
         Code/Game.cpp
         Code/Game.h
         Code/Ship.cpp
@@ -25,8 +25,8 @@ target_sources( Game PRIVATE
         Code/Dot.h
 )
 
-target_include_directories(Game PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Code)
+target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(Game PRIVATE ${LIBS})
 
-target_link_libraries(Game PUBLIC Engine)
+target_link_libraries(Game PRIVATE Engine)

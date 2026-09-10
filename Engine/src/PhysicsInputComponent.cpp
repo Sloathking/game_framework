@@ -16,8 +16,8 @@ void PhysicsInputComponent::ProcessInput(const InputState& state)
     if (mUpdate)
     {
         // calc forward speed for MoveComponent
-        if (state.Keyboard.GetKeyState(mForwardKey) == EHeld) AddForce(mOwner->GetForward() * 10000);
-        if (state.Keyboard.GetKeyState(mBackKey) == EHeld) AddForce(mOwner->GetForward() * -10000);
+        if (state.Keyboard.GetKeyState(mForwardKey) == EHeld) AddForce(dynamic_cast<Actor2D*>(mOwner)->GetForward() * 10000);
+        if (state.Keyboard.GetKeyState(mBackKey) == EHeld) AddForce(dynamic_cast<Actor2D*>(mOwner)->GetForward() * -10000);
         //SetForwardSpeed(forwardSpeed);
 
         // calc angular speed for MoveComponent
