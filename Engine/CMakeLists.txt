@@ -3,6 +3,8 @@ add_library(Engine)
 target_sources(Engine PRIVATE
         src/Engine.cpp
         include/Engine.h
+        src/Renderer.cpp
+        include/Renderer.h
         include/Constants.h
         src/Actor.cpp
         include/Actor.h
@@ -59,6 +61,8 @@ target_sources(Engine PRIVATE
         include/VertexArray.h
         src/Mesh.cpp
         include/Mesh.h
+        src/MeshComponent.cpp
+        include/MeshComponent.h
 )
 
 target_include_directories(Engine

@@ -3,17 +3,10 @@
 //
 
 #include "include/Engine.h"
-#include <GL/glew.h>
+#include "include/Renderer.h"
 #include "include/Constants.h"
 #include "include/InputSystem.h"
 #include "include/Actor.h"
-#include "include/SpriteComponent.h"
-#include "include/SpriteVertexArray.h"
-#include "include/VertexArray.h"
-#include "include/Shader.h"
-#include "include/Texture.h"
-#include "include/Mesh.h"
-#include <random>
 #include <algorithm>
 
 Engine::Engine() = default;
@@ -33,76 +26,29 @@ bool Engine::Initialize()
 	}
 	else
 	{
-		// set OpenGL attributes
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		/*-----------------*/
-		// request a color buffer with 8-bits per RGBA channel
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-		// enable double buffering
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
-		mWindow = SDL_CreateWindow(
-			windowTitle.c_str(),
-			static_cast<int>(windowWidth), static_cast<int>(windowHeight),
-			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-
-		if (!mWindow)
+		mRenderer = new Renderer(this);
+		if (!mRenderer->Initialize(windowWidth, windowHeight))
 		{
-			SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
+			SDL_Log("Unable to init Renderer");
+			delete mRenderer;
+			mRenderer = nullptr;
 			success = false;
 		}
 		else
 		{
-			// create context
-			mContext = SDL_GL_CreateContext(mWindow);
-			if (!mContext)
+			mInputSystem = new InputSystem();
+			if (!mInputSystem->Initialize(this))
 			{
-				SDL_Log("Unable to create OpenGL context! SDL Error: %s", SDL_GetError());
+				SDL_Log("Failed to initialize InputSystem");
 				success = false;
 			}
 			else
 			{
-				// init GLEW
-				glewExperimental = GL_TRUE;
-				if (glewInit() != GLEW_OK)
-				{
-					SDL_Log("Error initializing GLEW!");
-					success = false;
-				}
-				else
-				{
-					// use vsync
-					if (!SDL_GL_SetSwapInterval(1))
-						SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
-				}
+				LoadData();
+				mTicksCount = SDL_GetTicksNS();
 			}
 		}
 	}
-
-	mInputSystem = new InputSystem();
-	if (!mInputSystem->Initialize(this))
-	{
-		SDL_Log("Failed to initialize InputSystem");
-		success = false;
-	}
-
-	if (!LoadShaders("Sprite.vert","Sprite.frag"))
-	{
-		SDL_Log("Failed to load shaders!");
-		success = false;
-	}
-
-	CreateSpriteVerts();
-
-	LoadData();
-
-	mTicksCount = SDL_GetTicksNS();
 
 	return success;
 }
@@ -123,13 +69,11 @@ void Engine::Shutdown()
 {
 	UnloadData();
 
+	mRenderer->Shutdown();
+	mRenderer = nullptr;
+
 	mInputSystem->Shutdown();
 	delete mInputSystem;
-
-	SDL_GL_DestroyContext(mContext);
-
-	SDL_DestroyWindow(mWindow);
-	mWindow = nullptr;
 
 	SDL_Quit();
 }
@@ -159,109 +103,6 @@ void Engine::RemoveActor(const Actor* actor)
 		std::iter_swap(mActors.end() - 1, iter);
 		mActors.pop_back();
 	}
-}
-
-void Engine::AddSprite(SpriteComponent* sprite)
-{
-	// find insertion point in sorted vector (first element with drawOrder higher)
-	const int drawOrder = sprite->GetDrawOder();
-	auto iter = mSprites.begin();
-	for (; iter != mSprites.end(); ++iter)
-		if (drawOrder < (*iter)->GetDrawOder())
-			break;
-	mSprites.insert(iter, sprite);
-}
-
-void Engine::RemoveSprite(const SpriteComponent* sprite)
-{
-	if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
-		mSprites.erase(iter);
-}
-
-Texture* Engine::GetTexture(const std::string& fileName)
-{
-	Texture* tex{ nullptr };
-
-	// is texture already in map
-	if (const auto iter = mTextures.find(fileName); iter != mTextures.end()) tex = iter->second;
-	else
-	{
-		// const std::string filePath = "../../Game/" + fileName;
-		tex = new Texture();
-		// load from file
-		if (tex->Load(fileName))
-		{
-			mTextures.emplace(fileName, tex);
-		}
-		else
-		{
-			delete tex;
-			tex = nullptr;
-		}
-	}
-	return tex;
-}
-
-Mesh* Engine::GetMesh(const std::string& fileName)
-{
-	Mesh* mesh{nullptr};
-
-	if (const auto iter = mMeshes.find(fileName); iter != mMeshes.end()) mesh = iter->second;
-	else
-	{
-		mesh = new Mesh();
-		if (mesh->Load(fileName, this))
-			mMeshes.emplace(fileName, mesh);
-		else
-		{
-			delete mesh;
-			return nullptr;
-		}
-	}
-
-	return mesh;
-}
-
-SDL_Surface* Engine::LoadImage(const std::string& fileName, const int numChannels)
-{
-	const std::string fullPath = "../../Game/" + fileName;
-	SDL_PixelFormat format;
-	SDL_Surface* res = SDL_LoadBMP(fullPath.c_str());
-	if (!res)
-	{
-		SDL_Log("Failed to load BMP: %s", SDL_GetError());
-		return nullptr;
-	}
-
-	if (numChannels == 4)
-	{
-		format = SDL_PIXELFORMAT_ABGR8888;
-	}
-	else
-	{
-		SDL_assert(!"Unexpected numChannels");
-		SDL_DestroySurface(res);
-		return nullptr;
-	}
-	if (res->format != format)
-	{
-		SDL_Surface *next = SDL_ConvertSurface(res, format);
-		SDL_DestroySurface(res);
-		res = next;
-	}
-
-	return res;
-}
-
-bool Engine::LoadShaders(const std::string& vertName, const std::string& fragName)
-{
-	const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920.0f, 1080.0f);
-	mSpriteShader = new Shader();
-	if (!mSpriteShader->Load(vertName, fragName))
-		return false;
-	mSpriteShader->SetActive();
-	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
-	return true;
 }
 
 void Engine::ProcessInput()
@@ -324,23 +165,6 @@ void Engine::ProcessInput()
 	mUpdatingActors = false;
 }
 
-void Engine::CreateSpriteVerts()
-{
-	static float vertexBuffer[] = {
-		-0.5f,  0.5f,   0.0f,	0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
-		0.5f,   0.5f,   0.0f,	0.0f,	0.0f,	0.0f,	1.0f,	0.0f,
-		0.5f,   -0.5f,  0.0f,	0.0f,	0.0f,	0.0f,	1.0f,	1.0f,
-		-0.5f,  -0.5f,  0.0f,	0.0f,	0.0f,	0.0f,	0.0f,	1.0f
-	};
-
-	static unsigned int indexBuffer[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	mSpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
-}
-
 void Engine::UpdateGame()
 {
 	// if time remaining in frame
@@ -383,38 +207,9 @@ void Engine::UpdateGame()
 		SDL_Log("Delta Time: %f | FPS Capped: %c | VSync: %c", deltaTime, fpsCapEnabled ? 'T' : 'F', vSyncEnabled ? 'T' : 'F');
 }
 
-// static bool IsInCamera(const Vector2 spritePos, const CameraComponent* camera)
-// {
-// 	const Vector2 camPos = camera->GetPosition();
-// 	const Vector2 windowSize = camera->GetWindowSize();
-// 	if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
-// 		return true;
-// 	return false;
-// }
-
 void Engine::GenerateOutput()
 {
-	// start of OpenGL stuff
-
-	// set the clear color to gray
-	glClearColor(0.50f, 0.50f, 0.50f, 1.0f);
-	// clear the color buffer
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	// TODO: draw scene
-	// Set sprite shader and vertex array objs active
-	mSpriteShader->SetActive();
-	mSpriteVerts->SetActive();
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// draw all sprites
-	for (const auto sprite : mSprites)
-		sprite->Draw(mSpriteShader);
-
-	//swap buffers,
-	SDL_GL_SwapWindow(mWindow);
+	mRenderer->Draw();
 
 #pragma region Old Render Code
 	/*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);

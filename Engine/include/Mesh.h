@@ -14,13 +14,13 @@ public:
     Mesh();
     ~Mesh();
 
-    bool Load(const std::string& fileName, class Engine* game);
+    bool Load(const std::string& fileName, class Renderer* renderer);
     void Unload();
 
     // getters
     [[nodiscard]] class VertexArray* GetVertexArray() const { return mVertexAray; }
 
-    class Texture* GetTexture(size_t index) const;
+    [[nodiscard]] class Texture* GetTexture(size_t index) const;
 
     [[nodiscard]] const std::string& GetShaderName() const { return mShaderName; }
 

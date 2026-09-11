@@ -2,15 +2,14 @@
 // Created by sloath on 10-Sep-26.
 //
 
-#include "include/Engine.h"
-#include "include/Math.h"
 #include "include/Mesh.h"
+#include "include/Renderer.h"
+#include "include/Math.h"
 #include "include/Texture.h"
 #include "include/VertexArray.h"
 #include <SDL3/SDL_log.h>
 #include <fstream>
 #include <libs/json.hpp>
-#include <iostream>
 
 using json = nlohmann::json;
 
@@ -18,7 +17,7 @@ Mesh::Mesh() = default;
 
 Mesh::~Mesh() = default;
 
-bool Mesh::Load(const std::string& fileName, Engine* game)
+bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 {
     std::ifstream file("../../Game/" + fileName);
     if (!file.is_open())
@@ -43,7 +42,7 @@ bool Mesh::Load(const std::string& fileName, Engine* game)
     for (const auto& texture : meshData["textures"])
     {
         auto texName = texture.get<std::string>();
-        auto* tex = game->GetTexture(texture);
+        auto* tex = renderer->GetTexture(texture);
         if (!tex)
         {
             SDL_Log("Unable to Get Mesh Texture: %s", texName.c_str());
@@ -75,8 +74,8 @@ bool Mesh::Load(const std::string& fileName, Engine* game)
         for (unsigned int& index : vec)
             meshIndices.emplace_back(index);
 
-    mVertexAray = new VertexArray(meshVerts.data(), meshVerts.size(),
-        meshIndices.data(), meshData["indices"].size());
+    mVertexAray = new VertexArray(meshVerts.data(), jsonVertices.size(),
+        meshIndices.data(), meshIndices.size());
 
     return true;
 }

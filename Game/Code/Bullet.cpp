@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include <Engine/include/Engine.h>
+#include <Engine/include/Renderer.h>
 #include <Engine/include/CircleComponent.h>
 #include <Engine/include/MoveComponent.h>
 #include <Engine/include/SpriteComponent.h>
@@ -12,7 +13,7 @@
 Bullet::Bullet(Engine* game) : Actor2D(game)
 {
     auto* spriteComp = new SpriteComponent(this);
-    spriteComp->SetTexture(GetGame()->GetTexture("Assets/Projectile.png"));
+    spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
     spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 

@@ -4,6 +4,7 @@
 
 #include "include/InputSystem.h"
 #include "include/Engine.h"
+#include "include/Renderer.h"
 #include <algorithm>
 
 bool InputSystem::Initialize(Engine* game)
@@ -151,7 +152,7 @@ void InputSystem::ProcessEvent(const SDL_Event& event)
 
 void InputSystem::SetRelativeMouseMode(const bool value)
 {
-    SDL_SetWindowRelativeMouseMode(mGame->GetWindow(), value);
+    SDL_SetWindowRelativeMouseMode(mGame->GetRenderer()->GetWindow(), value);
     mState.Mouse.mIsRelative = value;
 }
 

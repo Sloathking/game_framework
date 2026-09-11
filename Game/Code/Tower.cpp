@@ -4,16 +4,15 @@
 
 #include "Tower.h"
 #include "Enemy.h"
-#include "Bullet.h"
-
-#include "../../Engine/include/Engine.h"
-#include "../../Engine/include/MoveComponent.h"
-#include "../../Engine/include/SpriteComponent.h"
+#include <Engine/include/Engine.h>
+#include <Engine/include/Renderer.h>
+#include <Engine/include/MoveComponent.h>
+#include <Engine/include/SpriteComponent.h>
 
 Tower::Tower(Engine* game) : Actor2D(game)
 {
     auto* spriteComp = new SpriteComponent(this);
-    spriteComp->SetTexture(GetGame()->GetTexture("Assets/Tower.png"));
+    spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Tower.png"));
     spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 

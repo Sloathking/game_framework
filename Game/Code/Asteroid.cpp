@@ -4,7 +4,7 @@
 
 #include "Asteroid.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/Constants.h>
+#include <Engine/include/Renderer.h>
 #include <Engine/include/Random.h>
 #include <Engine/include/SpriteComponent.h>
 #include <Engine/include/PhysicsMoveComponent.h>
@@ -19,7 +19,7 @@ Asteroid::Asteroid(Engine* game) : Actor2D(game)
 
     // create sprit comp and set texture
     auto* spriteComp = new SpriteComponent(this);
-    spriteComp->SetTexture(game->GetTexture(("Assets/Asteroid.png")));
+    spriteComp->SetTexture(game->GetRenderer()->GetTexture(("Assets/Asteroid.png")));
     spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 

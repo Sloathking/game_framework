@@ -4,18 +4,19 @@
 
 #include "include/SpriteComponent.h"
 #include "include/Engine.h"
+#include "include/Renderer.h"
 #include "include/Actor2D.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 
 SpriteComponent::SpriteComponent(Actor2D* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
-    mOwner->GetGame()->AddSprite(this);
+    mOwner->GetGame()->GetRenderer()->AddSprite(this);
 }
 
 SpriteComponent::~SpriteComponent()
 {
-    mOwner->GetGame()->RemoveSprite(this);
+    mOwner->GetGame()->GetRenderer()->RemoveSprite(this);
 }
 
 void SpriteComponent::Draw(Shader* shader)

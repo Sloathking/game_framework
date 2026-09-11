@@ -5,6 +5,8 @@
 #include "include/Tile.h"
 #include "include/Engine.h"
 #include "include/SpriteComponent.h"
+#include "include/Renderer.h"
+#include <string>
 
 Tile::Tile(Engine* game) : Actor2D(game)
 {
@@ -56,5 +58,5 @@ void Tile::UpdateTexture() const
             text = "Assets/TileBrown.png";
         break;
     }
-    mSpriteComp->SetTexture(GetGame()->GetTexture(text));
+    mSpriteComp->SetTexture(GetGame()->GetRenderer()->GetTexture(text));
 }

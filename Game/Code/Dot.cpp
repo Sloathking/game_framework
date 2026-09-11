@@ -3,15 +3,16 @@
 //
 
 #include "Dot.h"
-#include <Engine/include/CameraComponent.h>
 #include <Engine/include/Engine.h>
+#include <Engine/include/Renderer.h>
+#include <Engine/include/CameraComponent.h>
 #include <Engine/include/SpriteComponent.h>
 #include <Engine/include/InputSystem.h>
 
 Dot::Dot(Engine* game) : Actor2D(game)
 {
     auto* sprite = new SpriteComponent(this);
-    sprite->SetTexture(game->GetTexture("Assets/Projectile.png"));
+    sprite->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
     sprite->SetAnchor(SpriteComponent::CenterCenter);
     sprite->SetCenter(SpriteComponent::CenterCenter);
     SetRotation(Math::ToRadians(270.0f));

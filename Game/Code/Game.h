@@ -35,6 +35,10 @@ private:
     Vector2 mWorldSize{1920, 1080};
 
     class Mesh* mMesh{};
+    class Actor3D* mCamActor;
+
+    Actor3D* mSphere;
+    Actor3D* mCube;
 };
 
 #endif //GAME_H
