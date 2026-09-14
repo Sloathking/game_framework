@@ -3,10 +3,10 @@
 //
 
 #include "include/MoveComponent.h"
-#include "include/Actor2D.h"
+#include "include/Actor.h"
 #include "include/Math.h"
 
-MoveComponent::MoveComponent(Actor2D* owner, const int updateOrder) : Component(owner, updateOrder)
+MoveComponent::MoveComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {
 
 }
@@ -16,15 +16,17 @@ void MoveComponent::Update(const float deltaTime)
     // physics and non-physics
     if (!Math::NearZero(mAngularSpeed))
     {
-        float rot = dynamic_cast<Actor2D*>(mOwner)->GetRotation();
-        rot += mAngularSpeed * deltaTime;
-        dynamic_cast<Actor2D*>(mOwner)->SetRotation(rot);
+        Quaternion rot = mOwner->GetRotation();
+        const float angle = mAngularSpeed * deltaTime;
+        const Quaternion inc(Vector3::UnitZ, angle);
+        rot = Quaternion::Concatenate(rot, inc);
+        mOwner->SetRotation(rot);
     }
 
     if (!Math::NearZero(mForwardSpeed))
     {
-        Vector2 pos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
-        pos += dynamic_cast<Actor2D*>(mOwner)->GetForward() * mForwardSpeed * deltaTime;
-        dynamic_cast<Actor2D*>(mOwner)->SetPosition(pos);
+        Vector3 pos = mOwner->GetPosition();
+        pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+        mOwner->SetPosition(pos);
     }
 }

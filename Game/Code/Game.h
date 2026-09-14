@@ -7,13 +7,6 @@
 
 #include <Engine/include/Engine.h>
 #include <Engine/include/Math.h>
-#include <Engine/include/Constants.h>
-
-typedef struct PositionTextureVertex
-{
-    float x, y, z;
-    float u, v;
-} PositionTextureVertex;
 
 class Game : public Engine
 {
@@ -34,11 +27,10 @@ private:
     //TODO: Update sizes for moving Camera
     Vector2 mWorldSize{1920, 1080};
 
-    class Mesh* mMesh{};
-    class Actor3D* mCamActor;
+    class CameraActor* mCamActor{};
 
-    Actor3D* mSphere;
-    Actor3D* mCube;
+    Actor* mSphere{};
+    Actor* mCube{};
 };
 
 #endif //GAME_H

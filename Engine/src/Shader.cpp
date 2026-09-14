@@ -112,11 +112,20 @@ void Shader::Unload()
     glDeleteShader(mFragShader);
 }
 
-void Shader::SetMatrixUniform(const std::string& name, const Matrix4& matrix)
+void Shader::SetMatrixUniform(const std::string& name, const Matrix4& matrix) const
 {
-    // find the uniform by this name
-    GLint loc = glGetUniformLocation(mShaderProgram, name.c_str());
-
-    // send the matrix data to the uniform
+    const GLint loc = glGetUniformLocation(mShaderProgram, name.c_str());
     glUniformMatrix4fv(loc, 1, GL_TRUE, matrix.GetAsFloatPtr());
+}
+
+void Shader::SetVectorUniform(const std::string& name, const Vector3& vec) const
+{
+    const GLint loc = glGetUniformLocation(mShaderProgram, name.c_str());
+    glUniform3fv(loc, 1, vec.GetAsFloatPtr());
+}
+
+void Shader::SetFloatUniform(const std::string& name, const float& val) const
+{
+    const GLint loc = glGetUniformLocation(mShaderProgram, name.c_str());
+    glUniform1f(loc, val);
 }

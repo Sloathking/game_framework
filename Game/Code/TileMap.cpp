@@ -7,7 +7,7 @@
 #include <Engine/include/Renderer.h>
 #include <Engine/include/TileMapComponent.h>
 
-TileMap::TileMap(Engine* game) : Actor2D(game)
+TileMap::TileMap(Engine* game) : Actor(game)
 {
     mClosestTileMap = new TileMapComponent(this, 30);
     mClosestTileMap->SetTexture(game->GetRenderer()->GetTexture("Assets/Tiles.png"));

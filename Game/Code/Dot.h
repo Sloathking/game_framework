@@ -5,9 +5,9 @@
 #ifndef DOT_H
 #define DOT_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class Dot : public Actor2D
+class Dot : public Actor
 {
 public:
     explicit Dot(Engine* game);
@@ -17,7 +17,6 @@ public:
     void ActorInput(const InputState& state) override;
 
 private:
-    class CameraComponent* mCameraComp;
 
 };
 

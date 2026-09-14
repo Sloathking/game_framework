@@ -3,9 +3,9 @@
 //
 
 #include "include/CameraComponent.h"
-#include "include/Actor2D.h"
+#include "include/Actor.h"
 
-CameraComponent::CameraComponent(Actor2D* owner, const int updateOrder) : Component(owner, updateOrder)
+CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {
 
 }
@@ -19,7 +19,7 @@ void CameraComponent::Update(const float deltaTime)
 
 [[nodiscard]] Vector2 CameraComponent::GetPosition() const
 {
-    const Vector2 ownerPos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+    const Vector3 ownerPos = mOwner->GetPosition();
     Vector2 pos;
     pos.x = ownerPos.x - mWindowSize.x * 0.5f;
     pos.y = ownerPos.y - mWindowSize.y * 0.5f;

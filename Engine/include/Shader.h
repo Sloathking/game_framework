@@ -18,8 +18,10 @@ public:
     bool Load(const std::string& vertName, const std::string& fragName);
     void Unload();
 
-    //
-    void SetMatrixUniform(const std::string& name, const class Matrix4& matrix);
+    // set value on a Uniform inside a vert / frag
+    void SetMatrixUniform(const std::string& name, const class Matrix4& matrix) const;
+    void SetVectorUniform(const std::string& name, const class Vector3& vec) const;
+    void SetFloatUniform(const std::string& name, const float& val) const;
 
     // set this as the active shader program
     void SetActive();
@@ -31,7 +33,7 @@ private:
     // tests whether shader compiled successfully
     static bool IsCompiled(GLuint shader);
 
-    // tests whether vert/fram progs link
+    // tests whether vert/frag programs link
     bool IsValidProgram();
 
     // store the shader obj ID
@@ -39,6 +41,5 @@ private:
     GLuint mFragShader{0};
     GLuint mShaderProgram{0};
 };
-
 
 #endif //SHADER_H

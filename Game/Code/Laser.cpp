@@ -8,18 +8,17 @@
 #include <Engine/include/Renderer.h>
 #include <Engine/include/CircleComponent.h>
 #include <Engine/include/SpriteComponent.h>
-#include <Engine/include/PhysicsMoveComponent.h>
 
-Laser::Laser(Engine* game, const Vector2 dir) : Actor2D(game)
+Laser::Laser(Engine* game, const Vector2 dir) : Actor(game)
 {
     // create sprite comp
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Laser2.png"));
 
     // create move comp
-    auto* moveComp = new PhysicsMoveComponent(this);
-    moveComp->SetMass(0.1f);
-    moveComp->AddForce(dir * 6000);
+    // auto* moveComp = new PhysicsMoveComponent(this);
+    // moveComp->SetMass(0.1f);
+    // moveComp->AddForce(dir * 6000);
 
     mCircleComp = new CircleComponent(this);
     mCircleComp->SetRadius(11.0f);

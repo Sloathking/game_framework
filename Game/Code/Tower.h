@@ -5,9 +5,9 @@
 #ifndef TOWER_H
 #define TOWER_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class Tower : public Actor2D
+class Tower : public Actor
 {
 public:
     explicit Tower(Engine* game);

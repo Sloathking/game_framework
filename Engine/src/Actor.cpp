@@ -20,20 +20,29 @@ Actor::~Actor()
         delete mComponents.back();
 }
 
-// // update function called from Game (not overridable)
-// void Actor::Update(const float deltaTime)
-// {
-//     if (mState == EActive)
-//     {
-//
-//     }
-// }
+void Actor::Update(const float deltaTime)
+{
+    if (mState == EActive)
+    {
+        ComputeWorldTransform();
 
-// updates all the components attached to the actor (not overridable)
+        UpdateComponents(deltaTime);
+        UpdateActor(deltaTime);
+
+        ComputeWorldTransform();
+    }
+}
+
+
 void Actor::UpdateComponents(const float deltaTime) const
 {
     for (const auto comp : mComponents)
         comp->Update(deltaTime);
+}
+
+void Actor::UpdateActor(float deltaTime)
+{
+
 }
 
 void Actor::ProcessInput(const InputState& state)
@@ -67,4 +76,19 @@ void Actor::RemoveComponent(const Component* component)
 {
     if (const auto iter = std::find(mComponents.begin(), mComponents.end(), component); iter != mComponents.end())
         mComponents.erase(iter);
+}
+
+void Actor::ComputeWorldTransform()
+{
+    if (mRecomputeWorldTransform)
+    {
+        mRecomputeWorldTransform = false;
+        // scale, rotate, translate
+        mWorldTransform = Matrix4::CreateScale(mScale);
+        mWorldTransform *= Matrix4::CreateFromQuaternion(mRotation);
+        mWorldTransform *= Matrix4::CreateTranslation(mPosition);
+
+        for (const auto comp : mComponents)
+            comp->OnUpdateWorldTransform();
+    }
 }

@@ -5,9 +5,9 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class Bullet : public Actor2D
+class Bullet : public Actor
 {
 public:
     explicit Bullet(Engine* game);

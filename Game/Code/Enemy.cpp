@@ -10,7 +10,7 @@
 #include <Engine/include/NavComponent.h>
 #include <Engine/include/SpriteComponent.h>
 
-Enemy::Enemy(Engine* game) : Actor2D(game)
+Enemy::Enemy(Engine* game) : Actor(game)
 {
     //game->GetEnemies().emplace_back(this);
 
@@ -40,7 +40,7 @@ Enemy::~Enemy()
 
 void Enemy::UpdateActor(const float deltaTime)
 {
-    Actor2D::UpdateActor(deltaTime);
+    Actor::UpdateActor(deltaTime);
 
     // am i near the end tile?
     // Vector2 diff = GetPosition() - GetGame()->GetGrid()->GetEndTile()->GetPosition();

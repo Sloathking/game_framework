@@ -5,9 +5,9 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class Ship : public Actor2D
+class Ship : public Actor
 {
 public:
     explicit Ship(Engine* game);
@@ -17,7 +17,6 @@ public:
 
 private:
     class SpriteComponent* mShipSprite;
-    class PhysicsInputComponent* mInputComp;
     class CircleComponent* mCollider;
 
     float mLaserCooldown{0.0};

@@ -5,9 +5,9 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "Actor2D.h"
+#include "Actor.h"
 
-class Tile : public Actor2D
+class Tile : public Actor
 {
 public:
     friend class Grid;

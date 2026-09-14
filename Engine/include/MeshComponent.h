@@ -11,8 +11,8 @@
 class MeshComponent : public Component
 {
 public:
-    MeshComponent(class Actor3D* owner);
-    ~MeshComponent();
+    explicit MeshComponent(class Actor* owner);
+    ~MeshComponent() override;
 
     // draw this mesh comp with provided shader
     virtual void Draw(class Shader* shader);
@@ -25,7 +25,6 @@ private:
     Mesh* mMesh{};
     size_t mTextureIndex{};
 
-    Actor3D* mOwner;
 };
 
 #endif //MESHCOMPONENT_H

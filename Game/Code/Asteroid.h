@@ -5,10 +5,9 @@
 #ifndef ASTEROID_H
 #define ASTEROID_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-
-class Asteroid : public Actor2D
+class Asteroid : public Actor
 {
 public:
     explicit Asteroid(Engine* game);
@@ -19,10 +18,8 @@ public:
     [[nodiscard]] class CircleComponent* GetCircle() const { return mCircleComp; }
 
 private:
-    class PhysicsMoveComponent* mMoveComp;
     CircleComponent* mCircleComp;
 
 };
-
 
 #endif //ASTEROID_H

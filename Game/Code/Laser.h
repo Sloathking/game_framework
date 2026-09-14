@@ -5,9 +5,9 @@
 #ifndef LASER_H
 #define LASER_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class Laser : public Actor2D
+class Laser : public Actor
 {
 public:
     explicit Laser(Engine* game, Vector2 dir);

@@ -3,22 +3,24 @@
 //
 
 #include "include/CircleComponent.h"
-#include "include/Actor2D.h"
+#include "include/Actor.h"
 
-CircleComponent::CircleComponent(Actor2D* owner) : Component(owner)
+CircleComponent::CircleComponent(Actor* owner) : Component(owner)
 {
 
 }
 
-const Vector2& CircleComponent::GetCenter() const
+const Vector3& CircleComponent::GetCenter() const
 {
-    return dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+    return mOwner->GetPosition();
 }
 
 bool Intersect(const CircleComponent& a, const CircleComponent& b)
 {
     // calc distance squared
-    const Vector2 diff = a.GetCenter() - b.GetCenter();
+    const Vector3 aCenter = a.GetCenter();
+    const Vector3 bCenter = b.GetCenter();
+    const Vector2 diff = Vector2(aCenter.x, aCenter.y) - Vector2(bCenter.x, bCenter.y);
     const float distSQ = diff.LengthSq();
 
     // calc sum of radii squared

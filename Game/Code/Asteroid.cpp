@@ -7,15 +7,15 @@
 #include <Engine/include/Renderer.h>
 #include <Engine/include/Random.h>
 #include <Engine/include/SpriteComponent.h>
-#include <Engine/include/PhysicsMoveComponent.h>
 #include <Engine/include/CircleComponent.h>
 
-Asteroid::Asteroid(Engine* game) : Actor2D(game)
+Asteroid::Asteroid(Engine* game) : Actor(game)
 {
     // init to random position and rotation
     const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(5120, 5120));
-    SetPosition(randPos);
-    SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
+    Vector3 newPos = GetPosition();
+    newPos += Vector3(randPos.x, randPos.y, newPos.z);
+    SetPosition(newPos);
 
     // create sprit comp and set texture
     auto* spriteComp = new SpriteComponent(this);
@@ -24,9 +24,9 @@ Asteroid::Asteroid(Engine* game) : Actor2D(game)
     spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 
     // create move comp and set forward speed
-    mMoveComp = new PhysicsMoveComponent(this);
-    mMoveComp->SetMass(1.0f);
-    mMoveComp->AddForce(GetForward() * 1000);
+    // mMoveComp = new PhysicsMoveComponent(this);
+    // mMoveComp->SetMass(1.0f);
+    // mMoveComp->AddForce(GetForward() * 1000);
 
     mCircleComp = new CircleComponent(this);
     mCircleComp->SetRadius(40.0f);

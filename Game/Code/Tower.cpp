@@ -9,7 +9,7 @@
 #include <Engine/include/MoveComponent.h>
 #include <Engine/include/SpriteComponent.h>
 
-Tower::Tower(Engine* game) : Actor2D(game)
+Tower::Tower(Engine* game) : Actor(game)
 {
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Tower.png"));
@@ -23,7 +23,7 @@ Tower::Tower(Engine* game) : Actor2D(game)
 
 void Tower::UpdateActor(const float deltaTime)
 {
-    Actor2D::UpdateActor(deltaTime);
+    Actor::UpdateActor(deltaTime);
     mNextAttack -= deltaTime;
     /*if (mNextAttack <= 0.0f)
     {

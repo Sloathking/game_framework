@@ -137,7 +137,7 @@ void Renderer::RemoveMeshComp(const MeshComponent* meshComp)
 void Renderer::Draw() const
 {
     // set the clear color
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
     // clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -149,6 +149,7 @@ void Renderer::Draw() const
     mMeshShader->SetActive();
     // update view-prof matrix
     mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+    SetLightUniforms(mMeshShader);
     for (const auto meshComp : mMeshComps)
         meshComp->Draw(mMeshShader);
 
@@ -245,7 +246,7 @@ bool Renderer::LoadShaders()
 
     // create basic mesh shader
     mMeshShader = new Shader();
-    if (!mMeshShader->Load(fullPath + "Shaders/BasicMesh.vert", fullPath + "Shaders/BasicMesh.frag"))
+    if (!mMeshShader->Load(fullPath + "Shaders/Phong.vert", fullPath + "Shaders/Phong.frag"))
         return false;
     mMeshShader->SetActive();
     mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
@@ -270,4 +271,20 @@ void Renderer::CreateSpriteVerts()
     };
 
     mSpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
+}
+
+void Renderer::SetLightUniforms(const Shader* shader) const
+{
+    // camera pos is inverted view
+    Matrix4 invView = mView;
+    invView.Invert();
+    shader->SetVectorUniform("uCameraPos", invView.GetTranslation());
+
+    // ambient light
+    shader->SetVectorUniform("uAmbientLight", mAmbientLight);
+
+    // dir light
+    shader->SetVectorUniform("uDirLight.mDirection", mDirLight.mDirection);
+    shader->SetVectorUniform("uDirLight.mDiffuseColor", mDirLight.mDiffuseColor);
+    shader->SetVectorUniform("uDirLight.mSpecColor", mDirLight.mSpecColor);
 }

@@ -11,12 +11,12 @@
 class CircleComponent : public Component
 {
 public:
-    explicit CircleComponent(class Actor2D* owner);
+    explicit CircleComponent(class Actor* owner);
 
     [[nodiscard]] float GetRadius() const { return mRadius; }
     void SetRadius(const float radius) { mRadius = radius; }
 
-    [[nodiscard]] const Vector2& GetCenter() const;
+    [[nodiscard]] const Vector3& GetCenter() const;
 
 private:
     float mRadius{0.0f};

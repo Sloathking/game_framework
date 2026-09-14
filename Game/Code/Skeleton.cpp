@@ -8,7 +8,7 @@
 #include <Engine/include/AnimSpriteComponent.h>
 #include <Engine/include/Constants.h>
 
-Skeleton::Skeleton(Engine* game) : Actor2D(game)
+Skeleton::Skeleton(Engine* game) : Actor(game)
 {
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
@@ -42,7 +42,7 @@ Skeleton::Skeleton(Engine* game) : Actor2D(game)
 
 void Skeleton::UpdateActor(const float deltaTime)
 {
-    Actor2D::UpdateActor(deltaTime);
+    Actor::UpdateActor(deltaTime);
 }
 
 void Skeleton::ActorInput(const InputState& state)

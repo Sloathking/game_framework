@@ -23,6 +23,8 @@ target_sources(Game PRIVATE
         Code/Bullet.h
         Code/Dot.cpp
         Code/Dot.h
+        Code/CameraActor.cpp
+        Code/CameraActor.h
 )
 
 target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

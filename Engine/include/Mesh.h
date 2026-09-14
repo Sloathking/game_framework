@@ -26,6 +26,8 @@ public:
 
     [[nodiscard]] float GetRadius() const { return mRadius; }
 
+    [[nodiscard]] float GetSpecPower() const { return mSpecPower; }
+
 private:
     std::vector<Texture*> mTextures;
 
@@ -41,6 +43,5 @@ private:
     float mSpecPower;
 
 };
-
 
 #endif //MESH_H

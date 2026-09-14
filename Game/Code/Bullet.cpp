@@ -10,7 +10,7 @@
 #include <Engine/include/MoveComponent.h>
 #include <Engine/include/SpriteComponent.h>
 
-Bullet::Bullet(Engine* game) : Actor2D(game)
+Bullet::Bullet(Engine* game) : Actor(game)
 {
     auto* spriteComp = new SpriteComponent(this);
     spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
@@ -28,7 +28,7 @@ Bullet::Bullet(Engine* game) : Actor2D(game)
 
 void Bullet::UpdateActor(const float deltaTime)
 {
-    Actor2D::UpdateActor(deltaTime);
+    Actor::UpdateActor(deltaTime);
 
     /*
     // check for collision vs enemies

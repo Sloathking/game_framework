@@ -5,11 +5,11 @@
 #include "include/SpriteComponent.h"
 #include "include/Engine.h"
 #include "include/Renderer.h"
-#include "include/Actor2D.h"
+#include "include/Actor.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 
-SpriteComponent::SpriteComponent(Actor2D* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
+SpriteComponent::SpriteComponent(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
     mOwner->GetGame()->GetRenderer()->AddSprite(this);
 }
@@ -26,7 +26,7 @@ void SpriteComponent::Draw(Shader* shader)
         // scale the quad by the width/height of texture
         const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
         //const Matrix4 scaleMat = Matrix4::CreateScale(100.0f, 100.0f, 1.0f);
-        const Matrix4 world = scaleMat * dynamic_cast<Actor2D*>(mOwner)->GetWorldTransform();
+        const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
 
         // set world transform
         shader->SetMatrixUniform("uWorldTransform", world);

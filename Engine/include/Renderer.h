@@ -11,6 +11,13 @@
 #include <unordered_map>
 #include <vector>
 
+struct DirectionalLight
+{
+    Vector3 mDirection;
+    Vector3 mDiffuseColor;
+    Vector3 mSpecColor;
+};
+
 class Renderer
 {
 public:
@@ -35,12 +42,22 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(const SpriteComponent* sprite);
 
+    // getters / setters
+    [[nodiscard]] float GetScreenWidth() const { return mScreenWidth; }
+    [[nodiscard]] float GetScreenHeight() const { return mScreenHeight; }
+
+    void SetViewMatrix(const Matrix4& view) { mView = view; }
+
+    void SetAmbientLight(const Vector3& ambient) { mAmbientLight = ambient; }
+
+    DirectionalLight& GetDirectionalLight() { return mDirLight; }
 
     SDL_Window* GetWindow() const { return mWindow; }
 
 private:
     bool LoadShaders();
     void CreateSpriteVerts();
+    void SetLightUniforms(const class Shader* shader) const;
 
     Engine* mGame;
 
@@ -62,7 +79,7 @@ private:
     // all sprites to draw
     std::vector<SpriteComponent*> mSprites{};
 
-    class Shader* mSpriteShader{};
+    Shader* mSpriteShader{};
     class VertexArray* mSpriteVerts{};
 
     Shader* mMeshShader{};
@@ -70,6 +87,10 @@ private:
     // view / proj for 3D
     Matrix4 mView{};
     Matrix4 mProjection{};
+
+    // lighting stuff
+    Vector3 mAmbientLight{};
+    DirectionalLight mDirLight{};
 
     float mScreenWidth{};
     float mScreenHeight{};

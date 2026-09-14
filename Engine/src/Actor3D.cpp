@@ -1,3 +1,4 @@
+/*
 //
 // Created by sloath on 10-Sep-26.
 //
@@ -47,3 +48,4 @@ void Actor3D::ComputeWorldTransform()
             comp->OnUpdateWorldTransform();
     }
 }
+*/

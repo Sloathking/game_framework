@@ -7,11 +7,8 @@ target_sources(Engine PRIVATE
         include/Renderer.h
         include/Constants.h
         src/Actor.cpp
+        src/Actor.cpp
         include/Actor.h
-        src/Actor2D.cpp
-        include/Actor2D.h
-        src/Actor3D.cpp
-        include/Actor3D.h
         src/Component.cpp
         include/Component.h
         src/SpriteComponent.cpp
@@ -31,8 +28,6 @@ target_sources(Engine PRIVATE
         include/MoveComponent.h
         src/Random.cpp
         include/Random.h
-        src/InputComponent.cpp
-        include/InputComponent.h
         src/CircleComponent.cpp
         include/CircleComponent.h
         src/AIComponent.cpp
@@ -41,10 +36,6 @@ target_sources(Engine PRIVATE
         include/AIState.h
         src/NavComponent.cpp
         include/NavComponent.h
-        src/PhysicsMoveComponent.cpp
-        include/PhysicsMoveComponent.h
-        src/PhysicsInputComponent.cpp
-        include/PhysicsInputComponent.h
         src/InputSystem.cpp
         include/InputSystem.h
         src/CameraComponent.cpp
@@ -55,8 +46,6 @@ target_sources(Engine PRIVATE
         include/Shader.h
         src/Texture.cpp
         include/Texture.h
-        src/MoveComponent3D.cpp
-        include/MoveComponent3D.h
         src/VertexArray.cpp
         include/VertexArray.h
         src/Mesh.cpp

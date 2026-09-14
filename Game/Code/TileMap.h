@@ -5,9 +5,9 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include <Engine/include/Actor2D.h>
+#include <Engine/include/Actor.h>
 
-class TileMap : public Actor2D
+class TileMap : public Actor
 {
 public:
     explicit TileMap(Engine* game);
