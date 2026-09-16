@@ -42,6 +42,8 @@ public:
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(const SpriteComponent* sprite);
 
+    void SetShaderName(const std::string& shaderName, MeshComponent* meshComp);
+
     // getters / setters
     [[nodiscard]] float GetScreenWidth() const { return mScreenWidth; }
     [[nodiscard]] float GetScreenHeight() const { return mScreenHeight; }
@@ -53,6 +55,7 @@ public:
     DirectionalLight& GetDirectionalLight() { return mDirLight; }
 
     SDL_Window* GetWindow() const { return mWindow; }
+
 
 private:
     bool LoadShaders();
@@ -75,6 +78,8 @@ private:
 
     // vector of mesh comps
     std::vector<MeshComponent*> mMeshComps;
+    std::unordered_map<std::string, Shader*> mShaderMap;
+    std::unordered_map<std::string, std::vector<MeshComponent*>> mShaderMeshMap;
 
     // all sprites to draw
     std::vector<SpriteComponent*> mSprites{};
@@ -83,6 +88,7 @@ private:
     class VertexArray* mSpriteVerts{};
 
     Shader* mMeshShader{};
+    Shader* mPhongShader{};
 
     // view / proj for 3D
     Matrix4 mView{};

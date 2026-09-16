@@ -8,6 +8,8 @@
 #include "Component.h"
 #include <cstddef>
 
+#include "Mesh.h"
+
 class MeshComponent : public Component
 {
 public:
@@ -18,8 +20,10 @@ public:
     virtual void Draw(class Shader* shader);
 
     // set the mesh / tex index used
-    virtual void SetMesh(class Mesh* mesh) { mMesh = mesh; }
+    virtual void SetMesh(class Mesh* mesh);
     void SetTextureIndex(const size_t index) { mTextureIndex = index; }
+
+    [[nodiscard]] const std::string& GetMeshShaderName() const { return mMesh->GetShaderName(); }
 
 private:
     Mesh* mMesh{};

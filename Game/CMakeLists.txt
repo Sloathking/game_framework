@@ -25,6 +25,8 @@ target_sources(Game PRIVATE
         Code/Dot.h
         Code/CameraActor.cpp
         Code/CameraActor.h
+        Code/PlaneActor.cpp
+        Code/PlaneActor.h
 )
 
 target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

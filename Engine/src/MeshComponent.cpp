@@ -3,7 +3,7 @@
 //
 
 #include "include/MeshComponent.h"
-#include "include/Actor3D.h"
+#include "include/Actor.h"
 #include "include/Engine.h"
 #include "include/Mesh.h"
 #include "include/Renderer.h"
@@ -38,4 +38,11 @@ void MeshComponent::Draw(Shader* shader)
         // draw
         glDrawElements(GL_TRIANGLES, vertArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
     }
+}
+
+void MeshComponent::SetMesh(Mesh* mesh)
+{
+    mMesh = mesh;
+    const std::string shaderName = mMesh->GetShaderName();
+    mOwner->GetGame()->GetRenderer()->SetShaderName(shaderName, this);
 }

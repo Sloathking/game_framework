@@ -4,9 +4,10 @@
 
 #include "Game.h"
 #include "CameraActor.h"
+#include "PlaneActor.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer.h>
-#include <Engine/include/Actor3D.h>
+#include <Engine/include/Actor.h>
 #include <Engine/include/MeshComponent.h>
 
 Game::Game() = default;
@@ -38,12 +39,24 @@ void Game::LoadData()
     auto* cubeMeshComp = new MeshComponent(mCube);
     cubeMeshComp->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
 
+    // setup floor
+    float start = -1250;
+    float size = 250.0f;
+    for (int i = 0; i < 10; ++i)
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            Actor* temp = new PlaneActor(this);
+            temp->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
+        }
+    }
+
     // setup lights
-    mRenderer->SetAmbientLight(Vector3(0.7f, 0.7f, 0.7f));
+    mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
     DirectionalLight& dirLight = mRenderer->GetDirectionalLight();
     dirLight.mDirection = Vector3(0.0f, -0.7f, -0.7f);
-    dirLight.mDiffuseColor = Vector3(0.f, 1.f, 0.f);
-    dirLight.mSpecColor = Vector3(1.f, .0f, .0f);
+    dirLight.mDiffuseColor = Vector3(0.78f, 0.88f, 1.f);
+    dirLight.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
     // loc of camera
     const Vector3 eye = mCamActor->GetPosition();

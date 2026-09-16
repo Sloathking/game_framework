@@ -22,7 +22,7 @@ public:
 
     [[nodiscard]] class Texture* GetTexture(size_t index) const;
 
-    [[nodiscard]] const std::string& GetShaderName() const { return mShaderName; }
+    [[nodiscard]] const std::string& GetShaderName() { return mShaderName; }
 
     [[nodiscard]] float GetRadius() const { return mRadius; }
 

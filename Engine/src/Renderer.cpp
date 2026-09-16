@@ -97,9 +97,13 @@ void Renderer::Shutdown()
     delete mSpriteShader;
     mSpriteShader = nullptr;
 
-    // mMeshShader->Unload();
-    // delete mMeshShader;
-    // mMeshShader = nullptr;
+    mMeshShader->Unload();
+    delete mMeshShader;
+    mMeshShader = nullptr;
+
+    mPhongShader->Unload();
+    delete mPhongShader;
+    mPhongShader = nullptr;
 
     SDL_GL_DestroyContext(mContext);
     SDL_DestroyWindow(mWindow);
@@ -145,13 +149,23 @@ void Renderer::Draw() const
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
-    // set the basic mesh shader active
-    mMeshShader->SetActive();
-    // update view-prof matrix
-    mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
-    SetLightUniforms(mMeshShader);
-    for (const auto meshComp : mMeshComps)
-        meshComp->Draw(mMeshShader);
+    for (std::pair<std::string, std::vector<MeshComponent*>> shader : mShaderMeshMap)
+    {
+        if (auto it = mShaderMap.find(shader.first); it != mShaderMap.end())
+        {
+            const auto currShader = it->second;
+            // set shader active
+            currShader->SetActive();
+            // set matrix uniform
+            currShader->SetMatrixUniform("uViewProj", mView * mProjection);
+            // set lights
+            SetLightUniforms(currShader);
+            // draw each mesh
+            for (const auto mesh : shader.second)
+                mesh->Draw(currShader);
+        }
+        else SDL_Log("Unknown Shader Name: %s", shader.first.c_str());
+    }
 
     // disable depth test, enable alpha blend and sets func
     glDisable(GL_DEPTH_TEST);
@@ -188,6 +202,22 @@ void Renderer::RemoveSprite(const SpriteComponent* sprite)
         mSprites.erase(iter);
 }
 
+void Renderer::SetShaderName(const std::string& shaderName, MeshComponent* meshComp)
+{
+    // if meshcomp is already in shader map under another entry, we just move it to the new entry
+    for (std::pair<std::string, std::vector<MeshComponent*>> shader : mShaderMeshMap)
+    {
+        auto it = std::find(shader.second.begin(), shader.second.end(), meshComp);
+        if (it != shader.second.end())
+        {
+            mShaderMeshMap[shaderName].insert(mShaderMeshMap[shaderName].end(), meshComp);
+            mShaderMeshMap[shader.first].erase(it);
+            return;
+        }
+    }
+    mShaderMeshMap[shaderName].push_back(meshComp);
+}
+
 Texture* Renderer::GetTexture(const std::string& fileName)
 {
     Texture* tex{ nullptr };
@@ -221,7 +251,10 @@ Mesh* Renderer::GetMesh(const std::string& fileName)
     {
         mesh = new Mesh();
         if (mesh->Load(fileName, this))
+        {
             mMeshes.emplace(fileName, mesh);
+            // mShaderMap.emplace(mesh->GetShaderName(), mesh);
+        }
         else
         {
             delete mesh;
@@ -240,18 +273,27 @@ bool Renderer::LoadShaders()
     mSpriteShader = new Shader();
     if (!mSpriteShader->Load(fullPath + "Shaders/Sprite.vert", fullPath + "Shaders/Sprite.frag"))
         return false;
-    mSpriteShader->SetActive();
-    const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920.0f, 1080.0f);
+    //mSpriteShader->SetActive();
+    const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(windowWidth, windowHeight);
     mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
     // create basic mesh shader
     mMeshShader = new Shader();
-    if (!mMeshShader->Load(fullPath + "Shaders/Phong.vert", fullPath + "Shaders/Phong.frag"))
+    if (!mMeshShader->Load(fullPath + "Shaders/BasicMesh.vert", fullPath + "Shaders/BasicMesh.frag"))
         return false;
+    mShaderMap["BasicMesh"] = mMeshShader;
+
+    // create phong shader
+    mPhongShader = new Shader();
+    if (!mPhongShader->Load(fullPath + "Shaders/Phong.vert", fullPath + "Shaders/Phong.frag"))
+        return false;
+    mShaderMap["Phong"] = mPhongShader;
+
     mMeshShader->SetActive();
     mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
     mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f), mScreenWidth, mScreenHeight, 25.0f, 10000.0f);
     mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+    mPhongShader->SetMatrixUniform("uViewProj", mView * mProjection);
 
     return true;
 }
