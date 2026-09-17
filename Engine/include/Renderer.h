@@ -56,7 +56,6 @@ public:
 
     SDL_Window* GetWindow() const { return mWindow; }
 
-
 private:
     bool LoadShaders();
     void CreateSpriteVerts();

@@ -14,18 +14,24 @@ public:
 
     void Update(float deltaTime) override;
 
-    [[nodiscard]] float GetAngularSpeed() const { return mAngularSpeed; }
-    void SetAngularSpeed(const float speed) { mAngularSpeed = speed; }
-
     [[nodiscard]] float GetForwardSpeed() const { return mForwardSpeed; }
     void SetForwardSpeed(const float speed) { mForwardSpeed = speed; }
 
-private:
-    // controls rotation radians/s
-    float mAngularSpeed{0.0};
+    [[nodiscard]] float GetStrafeSpeed() const { return mStrafeSpeed; }
+    void SetStrafeSpeed(const float speed) { mStrafeSpeed = speed; }
 
+    [[nodiscard]] float GetAngularSpeed() const { return mAngularSpeed; }
+    void SetAngularSpeed(const float speed) { mAngularSpeed = speed; }
+
+private:
     // controls forward movement units/s
     float mForwardSpeed{0.0};
+
+    // controls strafe speed
+    float mStrafeSpeed{0.0f};
+
+    // controls rotation radians/s
+    float mAngularSpeed{0.0};
 
 };
 

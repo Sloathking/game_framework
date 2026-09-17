@@ -13,7 +13,6 @@ MoveComponent::MoveComponent(Actor* owner, const int updateOrder) : Component(ow
 
 void MoveComponent::Update(const float deltaTime)
 {
-    // physics and non-physics
     if (!Math::NearZero(mAngularSpeed))
     {
         Quaternion rot = mOwner->GetRotation();
@@ -23,10 +22,12 @@ void MoveComponent::Update(const float deltaTime)
         mOwner->SetRotation(rot);
     }
 
-    if (!Math::NearZero(mForwardSpeed))
+    if (!Math::NearZero(mForwardSpeed) or !Math::NearZero(mStrafeSpeed))
     {
         Vector3 pos = mOwner->GetPosition();
         pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+        pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
         mOwner->SetPosition(pos);
     }
+
 }

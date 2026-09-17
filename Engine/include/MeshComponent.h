@@ -23,9 +23,14 @@ public:
     virtual void SetMesh(class Mesh* mesh);
     void SetTextureIndex(const size_t index) { mTextureIndex = index; }
 
+    // getters / setters
+    [[nodiscard]] bool GetVisible() const { return mVisible; }
+    void SetVisible(const bool visible) { mVisible = visible; }
+
     [[nodiscard]] const std::string& GetMeshShaderName() const { return mMesh->GetShaderName(); }
 
 private:
+    bool mVisible{true};
     Mesh* mMesh{};
     size_t mTextureIndex{};
 

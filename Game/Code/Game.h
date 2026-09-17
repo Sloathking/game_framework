@@ -6,7 +6,6 @@
 #define GAME_H
 
 #include <Engine/include/Engine.h>
-#include <Engine/include/Math.h>
 
 class Game : public Engine
 {
@@ -23,12 +22,7 @@ protected:
 
 private:
     std::vector<Actor*> mSpriteActors;
-
-    //TODO: Update sizes for moving Camera
-    Vector2 mWorldSize{1920, 1080};
-
-    class CameraActor* mCamActor{};
-
+    class FPSActor* mFPSActor{};
     Actor* mSphere{};
     Actor* mCube{};
 };

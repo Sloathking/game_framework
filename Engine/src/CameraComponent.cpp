@@ -4,24 +4,16 @@
 
 #include "include/CameraComponent.h"
 #include "include/Actor.h"
+#include "include/Engine.h"
+#include "include/Renderer.h"
 
 CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {
 
 }
 
-void CameraComponent::Update(const float deltaTime)
+void CameraComponent::SetViewMatrix(const Matrix4& view) const
 {
-    /*const Vector2 ownerPos = mOwner->GetPosition();
-    mView->x = ownerPos.x - mWindowSize.x * 0.5f;
-    mView->y = ownerPos.y - mWindowSize.y * 0.5f;*/
-}
-
-[[nodiscard]] Vector2 CameraComponent::GetPosition() const
-{
-    const Vector3 ownerPos = mOwner->GetPosition();
-    Vector2 pos;
-    pos.x = ownerPos.x - mWindowSize.x * 0.5f;
-    pos.y = ownerPos.y - mWindowSize.y * 0.5f;
-    return pos;
+    const Engine* game = mOwner->GetGame();
+    game->GetRenderer()->SetViewMatrix(view);
 }

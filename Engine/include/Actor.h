@@ -56,6 +56,8 @@ public:
     void SetPosition(const Vector3& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
 
     [[nodiscard]] Vector3 GetForward() const { return Vector3::Transform(Vector3::UnitX, mRotation); }
+    [[nodiscard]] Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, mRotation); }
+
     [[nodiscard]] float GetScale() const { return mScale; }
     void SetScale(const float scale) { mScale = scale; mRecomputeWorldTransform = true; }
 

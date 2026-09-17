@@ -3,14 +3,19 @@
 //
 
 #include "Game.h"
-#include "CameraActor.h"
+#include "FPSActor.h"
 #include "PlaneActor.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer.h>
 #include <Engine/include/Actor.h>
+#include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
 
-Game::Game() = default;
+
+Game::Game()
+{
+
+}
 
 Game::~Game() = default;
 
@@ -21,8 +26,10 @@ void Game::ProcessInput()
 
 void Game::LoadData()
 {
-    mCamActor = new CameraActor(this);
-    mCamActor->SetPosition(Vector3(0,0,0));
+    mInputSystem->SetRelativeMouseMode(true);
+
+    mFPSActor = new FPSActor(this);
+    mFPSActor->SetPosition(Vector3(0,0,0));
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -58,13 +65,6 @@ void Game::LoadData()
     dirLight.mDiffuseColor = Vector3(0.78f, 0.88f, 1.f);
     dirLight.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
-    // loc of camera
-    const Vector3 eye = mCamActor->GetPosition();
-
-    // point 10 units in front of camera
-    const Vector3 target = mCamActor->GetPosition() + mCamActor->GetForward() * 10.0f;
-
-    Matrix4 view = Matrix4::CreateLookAt(eye, target, Vector3::UnitZ);
 }
 
 void Game::UnloadData()

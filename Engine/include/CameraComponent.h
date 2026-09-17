@@ -6,25 +6,16 @@
 #define CAMERACOMPONENT_H
 
 #include "Component.h"
-#include "Constants.h"
 #include "Math.h"
 
 class CameraComponent : public Component
 {
 public:
-    explicit CameraComponent(class Actor* owner, int updateOrder = 100);
+    explicit CameraComponent(class Actor* owner, int updateOrder = 200);
 
-    void Update(float deltaTime) override;
-
-    [[nodiscard]] Vector2 GetWindowSize() const { return mWindowSize; }
-    void SetWindowSize(const Vector2 size) { mWindowSize = size; }
-
-    [[nodiscard]] Vector2 GetPosition() const;
-
-private:
-    Vector2 mWindowSize{windowWidth, windowHeight};
+protected:
+    void SetViewMatrix(const Matrix4& view) const;
 
 };
-
 
 #endif //CAMERACOMPONENT_H
