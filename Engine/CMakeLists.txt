@@ -54,6 +54,8 @@ target_sources(Engine PRIVATE
         include/MeshComponent.h
         src/FPSCamera.cpp
         include/FPSCamera.h
+        src/FollowCamera.cpp
+        include/FollowCamera.h
 )
 
 target_include_directories(Engine

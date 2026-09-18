@@ -27,7 +27,7 @@ void FPSActor::UpdateActor(const float deltaTime)
     Actor::UpdateActor(deltaTime);
 
     // update position of FPS model relative to actor position
-    const Vector3 modelOffset{Vector3(10.0f, 10.0f, -10.0f)};
+    const auto modelOffset{Vector3(10.0f, 10.0f, -10.0f)};
     Vector3 modelPos = GetPosition();
     modelPos += GetForward() * modelOffset.x;
     modelPos += GetRight() * modelOffset.y;

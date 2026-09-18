@@ -5,11 +5,13 @@
 #include "Game.h"
 #include "FPSActor.h"
 #include "PlaneActor.h"
+#include "FollowActor.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer.h>
 #include <Engine/include/Actor.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
+
 
 
 Game::Game()
@@ -22,14 +24,31 @@ Game::~Game() = default;
 void Game::ProcessInput()
 {
     Engine::ProcessInput();
+
+    const InputState& state = mInputSystem->GetState();
+
+    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_1) == EPressed) SwitchActor(FPSCam);
+    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_2) == EPressed) SwitchActor(FollowCam);
+}
+
+bool Game::ProcessGameEvent(SDL_Event* event)
+{
+    switch (event->type)
+    {
+    default:
+        return false;
+    }
 }
 
 void Game::LoadData()
 {
     mInputSystem->SetRelativeMouseMode(true);
 
-    mFPSActor = new FPSActor(this);
-    mFPSActor->SetPosition(Vector3(0,0,0));
+    // mFPSActor = new FPSActor(this);
+    // mFPSActor->SetPosition(Vector3(0,0,0));
+
+    mFollowActor = new FollowActor(this);
+    // mFollowActor->SetPosition(Vector3(10.0f, -10.0f, 0.0f));
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -65,6 +84,7 @@ void Game::LoadData()
     dirLight.mDiffuseColor = Vector3(0.78f, 0.88f, 1.f);
     dirLight.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
+    SwitchActor(static_cast<ActorName>(0));
 }
 
 void Game::UnloadData()
@@ -72,4 +92,29 @@ void Game::UnloadData()
     // delete actors
     while (!mActors.empty())
         delete mActors.back();
+}
+
+
+void Game::SwitchActor(const ActorName actor) const
+{
+    // disable everything
+    // mFPSActor->SetState(Actor::EPaused);
+    // mFPSActor->SetVisible(false);
+
+    mFollowActor->SetState(Actor::EPaused);
+    mFollowActor->SetVisible(false);
+
+    switch (actor)
+    {
+    // case FPSCam:
+    //     mFPSActor->SetState(Actor::EActive);
+    //     mFPSActor->SetVisible(true);
+    //     break;
+    case FollowCam:
+        mFollowActor->SetState(Actor::EActive);
+        mFollowActor->SetVisible(true);
+        break;
+    default:
+        break;
+    }
 }

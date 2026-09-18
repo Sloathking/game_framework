@@ -25,6 +25,7 @@ public:
 
 protected:
     virtual void ProcessInput();
+    virtual bool ProcessGameEvent(SDL_Event* event) = 0;
 
     virtual void LoadData() = 0;
     virtual void UnloadData() = 0;
