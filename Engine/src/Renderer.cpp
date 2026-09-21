@@ -162,7 +162,8 @@ void Renderer::Draw() const
             SetLightUniforms(currShader);
             // draw each mesh
             for (const auto mesh : shader.second)
-                mesh->Draw(currShader);
+                if (mesh->GetVisible())
+                    mesh->Draw(currShader);
         }
         else SDL_Log("Unknown Shader Name: %s", shader.first.c_str());
     }

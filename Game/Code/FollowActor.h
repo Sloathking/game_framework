@@ -17,9 +17,9 @@ public:
     void SetVisible(bool visible) const;
 
 private:
-    class MoveComponent* mMoveComp;
-    class FollowCamera* mCam;
-    class MeshComponent* mMesh;
+    class MoveComponent* mMoveComp{};
+    class FollowCamera* mCam{};
+    class MeshComponent* mMesh{};
 
 };
 

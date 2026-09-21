@@ -115,7 +115,7 @@ void Engine::ProcessInput()
 	// while there are events - process
 	while (SDL_PollEvent(&event))
 	{
-		if (ProcessGameEvent(&event)) continue;
+		// if (ProcessGameEvent(&event)) continue;
 		switch (event.type)
 		{
 		case SDL_EVENT_QUIT:

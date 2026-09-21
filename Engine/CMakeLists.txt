@@ -56,6 +56,8 @@ target_sources(Engine PRIVATE
         include/FPSCamera.h
         src/FollowCamera.cpp
         include/FollowCamera.h
+        src/Timer.cpp
+        include/Timer.h
 )
 
 target_include_directories(Engine

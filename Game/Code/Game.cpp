@@ -12,12 +12,7 @@
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
 
-
-
-Game::Game()
-{
-
-}
+Game::Game() = default;
 
 Game::~Game() = default;
 
@@ -27,8 +22,8 @@ void Game::ProcessInput()
 
     const InputState& state = mInputSystem->GetState();
 
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_1) == EPressed) SwitchActor(FPSCam);
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_2) == EPressed) SwitchActor(FollowCam);
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_1) == EPressed) SwitchActor(FPSCam);
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_2) == EPressed) SwitchActor(FollowCam);
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)
@@ -44,11 +39,8 @@ void Game::LoadData()
 {
     mInputSystem->SetRelativeMouseMode(true);
 
-    // mFPSActor = new FPSActor(this);
-    // mFPSActor->SetPosition(Vector3(0,0,0));
-
+    mFPSActor = new FPSActor(this);
     mFollowActor = new FollowActor(this);
-    // mFollowActor->SetPosition(Vector3(10.0f, -10.0f, 0.0f));
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -94,22 +86,21 @@ void Game::UnloadData()
         delete mActors.back();
 }
 
-
 void Game::SwitchActor(const ActorName actor) const
 {
     // disable everything
-    // mFPSActor->SetState(Actor::EPaused);
-    // mFPSActor->SetVisible(false);
+    mFPSActor->SetState(Actor::EPaused);
+    mFPSActor->SetVisible(false);
 
     mFollowActor->SetState(Actor::EPaused);
     mFollowActor->SetVisible(false);
 
     switch (actor)
     {
-    // case FPSCam:
-    //     mFPSActor->SetState(Actor::EActive);
-    //     mFPSActor->SetVisible(true);
-    //     break;
+    case FPSCam:
+        mFPSActor->SetState(Actor::EActive);
+        mFPSActor->SetVisible(true);
+        break;
     case FollowCam:
         mFollowActor->SetState(Actor::EActive);
         mFollowActor->SetVisible(true);
