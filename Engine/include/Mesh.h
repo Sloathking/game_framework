@@ -40,7 +40,7 @@ private:
     float mRadius{0.0f};
 
     // specular power of surface
-    float mSpecPower;
+    float mSpecPower{0.0f};
 
 };
 

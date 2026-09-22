@@ -14,6 +14,8 @@
 FPSActor::FPSActor(Game* game) : Actor(game)
 {
     mMoveComp = new MoveComponent(this);
+    mMoveComp->SetVertSpeed(10.0f);
+
     mCam = new FPSCamera(this);
 
     mFPSModel = new Actor(game);
@@ -27,7 +29,7 @@ void FPSActor::UpdateActor(const float deltaTime)
     Actor::UpdateActor(deltaTime);
 
     // update position of FPS model relative to actor position
-    const auto modelOffset{Vector3(10.0f, 10.0f, -10.0f)};
+    const auto modelOffset{Vector3(20.0f, 10.0f, -10.0f)};
     Vector3 modelPos = GetPosition();
     modelPos += GetForward() * modelOffset.x;
     modelPos += GetRight() * modelOffset.y;
@@ -49,6 +51,10 @@ void FPSActor::ActorInput(const InputState& state)
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_D) == EHeld) strafeSpeed += 300.0f;
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_A) == EHeld) strafeSpeed -= 300.0f;
 
+    float vertSpeed = 0.0f;
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_SPACE) == EHeld) vertSpeed += 100.0f;
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_LCTRL) == EHeld) vertSpeed -= 100.0f;
+
     constexpr int maxMouseSpeed = 500;
     const Vector2 mouseChange = state.Mouse.GetPosition();
     constexpr float maxAngularSpeed = Math::Pi * 8;
@@ -68,11 +74,24 @@ void FPSActor::ActorInput(const InputState& state)
         pitchSpeed *= maxPitchSpeed;
     }
 
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_LSHIFT) == EHeld)
+    {
+        forwardSpeed *= 4;
+        vertSpeed *= 4;
+        strafeSpeed *= 4;
+    }
     mMoveComp->SetForwardSpeed(forwardSpeed);
+    mMoveComp->SetVertSpeed(vertSpeed);
     mMoveComp->SetStrafeSpeed(strafeSpeed);
     mMoveComp->SetAngularSpeed(angularSpeed);
 
     mCam->SetPitchSpeed(pitchSpeed);
+
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_LALT) == EPressed)
+    {
+        SetPosition(Vector3::Zero);
+        SetRotation(Quaternion::Identity);
+    }
 }
 
 void FPSActor::SetVisible(const bool visible) const

@@ -58,6 +58,8 @@ target_sources(Engine PRIVATE
         include/FollowCamera.h
         src/Timer.cpp
         include/Timer.h
+        src/OrbitCamera.cpp
+        include/OrbitCamera.h
 )
 
 target_include_directories(Engine

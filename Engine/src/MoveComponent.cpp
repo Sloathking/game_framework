@@ -22,12 +22,27 @@ void MoveComponent::Update(const float deltaTime)
         mOwner->SetRotation(rot);
     }
 
-    if (!Math::NearZero(mForwardSpeed) or !Math::NearZero(mStrafeSpeed))
+    if (!Math::NearZero(mForwardSpeed) or !Math::NearZero(mStrafeSpeed) or !Math::NearZero(mVertSpeed))
     {
         Vector3 pos = mOwner->GetPosition();
         pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
         pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
+        pos += Vector3::UnitZ * mVertSpeed * deltaTime;
         mOwner->SetPosition(pos);
     }
 
 }
+
+// void MoveComponent::IncreaseHeight() const
+// {
+//     Vector3 pos = mOwner->GetPosition();
+//     pos.z += mVertSpeed;
+//     mOwner->SetPosition(pos);
+// }
+//
+// void MoveComponent::DecreaseHeight() const
+// {
+//     Vector3 pos = mOwner->GetPosition();
+//     pos.z -= mVertSpeed;
+//     mOwner->SetPosition(pos);
+// }

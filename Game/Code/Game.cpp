@@ -12,6 +12,8 @@
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
 
+#include "Engine/include/FPSCamera.h"
+
 Game::Game() = default;
 
 Game::~Game() = default;
@@ -40,7 +42,7 @@ void Game::LoadData()
     mInputSystem->SetRelativeMouseMode(true);
 
     mFPSActor = new FPSActor(this);
-    mFollowActor = new FollowActor(this);
+    //mFollowActor = new FollowActor(this);
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -58,16 +60,46 @@ void Game::LoadData()
     cubeMeshComp->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
 
     // setup floor
-    float start = -1250;
-    float size = 250.0f;
-    for (int i = 0; i < 10; ++i)
+    constexpr int numTimes = 5;
+    constexpr float size = 1000.0f;
+    constexpr float start = -1500.0f;
+    for (int i = 0; i < numTimes; ++i)
     {
-        for (int j = 0; j < 10; ++j)
+        for (int j = 0; j < numTimes; ++j)
         {
             Actor* temp = new PlaneActor(this);
             temp->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
         }
     }
+
+    // left/right walls
+    q = Quaternion(Vector3::UnitX, Math::PiOver2);
+    for (int i = 0; i < numTimes; ++i)
+    {
+        auto* plane = new PlaneActor(this);
+        plane->SetPosition(Vector3(start + i * size, start + -size * 0.5f, size * 0.25f));
+        plane->SetRotation(q);
+
+        plane = new PlaneActor(this);
+        plane->SetPosition(Vector3(start + i * size, start + size * numTimes - size * 0.5f, size * 0.25f));
+        plane->SetRotation(q);
+    }
+
+    // front / back walls
+    q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::PiOver2));
+    for (int i = 0; i < numTimes; ++i)
+    {
+        auto* plane = new PlaneActor(this);
+        plane->SetPosition(Vector3(start - size * 0.5f, start + i * size, size * 0.25f));
+        plane->SetRotation(q);
+
+        plane = new PlaneActor(this);
+        plane->SetPosition(Vector3(start + size * numTimes - size * 0.5f, start + i * size, size * 0.25f));
+        plane->SetRotation(q);
+    }
+
+    auto* temp = new PlaneActor(this);
+    temp->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
 
     // setup lights
     mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
@@ -89,21 +121,33 @@ void Game::UnloadData()
 void Game::SwitchActor(const ActorName actor) const
 {
     // disable everything
-    mFPSActor->SetState(Actor::EPaused);
-    mFPSActor->SetVisible(false);
+    if (mFPSActor)
+    {
+        mFPSActor->SetState(Actor::EPaused);
+        mFPSActor->SetVisible(false);
+    }
 
-    mFollowActor->SetState(Actor::EPaused);
-    mFollowActor->SetVisible(false);
+    if (mFollowActor)
+    {
+        mFollowActor->SetState(Actor::EPaused);
+        mFollowActor->SetVisible(false);
+    }
 
     switch (actor)
     {
     case FPSCam:
-        mFPSActor->SetState(Actor::EActive);
-        mFPSActor->SetVisible(true);
+        if (mFPSActor)
+        {
+            mFPSActor->SetState(Actor::EActive);
+            mFPSActor->SetVisible(true);
+        }
         break;
     case FollowCam:
-        mFollowActor->SetState(Actor::EActive);
-        mFollowActor->SetVisible(true);
+        if (mFollowActor)
+        {
+            mFollowActor->SetState(Actor::EActive);
+            mFollowActor->SetVisible(true);
+        }
         break;
     default:
         break;
