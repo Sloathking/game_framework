@@ -10,7 +10,8 @@
 enum ActorName
 {
     FPSCam = 0,
-    FollowCam = 1
+    FollowCam = 1,
+    OrbitCam = 2,
 };
 
 class Game : public Engine
@@ -33,6 +34,7 @@ private:
 
     class FPSActor* mFPSActor{};
     class FollowActor* mFollowActor{};
+    class OrbitActor* mOrbitActor{};
 
     Actor* mSphere{};
     Actor* mCube{};

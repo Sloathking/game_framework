@@ -12,8 +12,14 @@ class OrbitActor : public Actor
 public:
     explicit OrbitActor(class Game* game);
 
-private:
+    void ActorInput(const InputState& state) override;
 
+    void SetVisible(bool visible) const;
+
+private:
+    class OrbitCamera* mCam;
+    class MeshComponent* mMeshComp;
+    Vector3 mCamOffset{-400.0f, 0.0f, 0.0f};
 };
 
 #endif //ORBITACTOR_H

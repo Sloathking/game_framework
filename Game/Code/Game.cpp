@@ -6,13 +6,12 @@
 #include "FPSActor.h"
 #include "PlaneActor.h"
 #include "FollowActor.h"
+#include "OrbitActor.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer.h>
 #include <Engine/include/Actor.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
-
-#include "Engine/include/FPSCamera.h"
 
 Game::Game() = default;
 
@@ -26,6 +25,7 @@ void Game::ProcessInput()
 
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_1) == EPressed) SwitchActor(FPSCam);
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_2) == EPressed) SwitchActor(FollowCam);
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_3) == EPressed) SwitchActor(OrbitCam);
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)
@@ -42,7 +42,8 @@ void Game::LoadData()
     mInputSystem->SetRelativeMouseMode(true);
 
     mFPSActor = new FPSActor(this);
-    //mFollowActor = new FollowActor(this);
+    mFollowActor = new FollowActor(this);
+    mOrbitActor = new OrbitActor(this);
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -98,8 +99,8 @@ void Game::LoadData()
         plane->SetRotation(q);
     }
 
-    auto* temp = new PlaneActor(this);
-    temp->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
+    // auto* temp = new PlaneActor(this);
+    // temp->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
 
     // setup lights
     mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
@@ -133,6 +134,12 @@ void Game::SwitchActor(const ActorName actor) const
         mFollowActor->SetVisible(false);
     }
 
+    if (mOrbitActor)
+    {
+        mOrbitActor->SetState(Actor::EPaused);
+        mOrbitActor->SetVisible(false);
+    }
+
     switch (actor)
     {
     case FPSCam:
@@ -147,6 +154,13 @@ void Game::SwitchActor(const ActorName actor) const
         {
             mFollowActor->SetState(Actor::EActive);
             mFollowActor->SetVisible(true);
+        }
+        break;
+    case OrbitCam:
+        if (mOrbitActor)
+        {
+            mOrbitActor->SetState(Actor::EActive);
+            mOrbitActor->SetVisible(true);
         }
         break;
     default:
