@@ -25,7 +25,6 @@ void SpriteComponent::Draw(Shader* shader)
     {
         // scale the quad by the width/height of texture
         const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
-        //const Matrix4 scaleMat = Matrix4::CreateScale(100.0f, 100.0f, 1.0f);
         const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
 
         // set world transform

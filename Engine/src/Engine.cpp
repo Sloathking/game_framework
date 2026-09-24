@@ -105,6 +105,11 @@ void Engine::RemoveActor(const Actor* actor)
 	}
 }
 
+void Engine::SetRelativeMouseMode(const bool value) const
+{
+	mInputSystem->SetRelativeMouseMode(value);
+}
+
 void Engine::ProcessInput()
 {
 	mInputSystem->PrepareForUpdate();

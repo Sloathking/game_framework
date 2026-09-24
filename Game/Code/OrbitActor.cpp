@@ -5,10 +5,9 @@
 #include "OrbitActor.h"
 #include "Game.h"
 #include <Engine/include/Renderer.h>
+#include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
 #include <Engine/include/OrbitCamera.h>
-
-#include "Engine/include/InputSystem.h"
 
 OrbitActor::OrbitActor(Game* game) : Actor(game)
 {

@@ -7,6 +7,7 @@
 #include "PlaneActor.h"
 #include "FollowActor.h"
 #include "OrbitActor.h"
+#include "TopDownActor.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer.h>
 #include <Engine/include/Actor.h>
@@ -26,6 +27,7 @@ void Game::ProcessInput()
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_1) == EPressed) SwitchActor(FPSCam);
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_2) == EPressed) SwitchActor(FollowCam);
     if (state.Keyboard.GetKeyState(SDL_SCANCODE_3) == EPressed) SwitchActor(OrbitCam);
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_4) == EPressed) SwitchActor(TopDownCam);
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)
@@ -44,6 +46,7 @@ void Game::LoadData()
     mFPSActor = new FPSActor(this);
     mFollowActor = new FollowActor(this);
     mOrbitActor = new OrbitActor(this);
+    mTopDownActor = new TopDownActor(this);
 
     mSphere = new Actor(this);
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
@@ -140,6 +143,12 @@ void Game::SwitchActor(const ActorName actor) const
         mOrbitActor->SetVisible(false);
     }
 
+    if (mTopDownActor)
+    {
+        mTopDownActor->SetState(Actor::EPaused);
+        mTopDownActor->SetVisible(false);
+    }
+
     switch (actor)
     {
     case FPSCam:
@@ -161,6 +170,13 @@ void Game::SwitchActor(const ActorName actor) const
         {
             mOrbitActor->SetState(Actor::EActive);
             mOrbitActor->SetVisible(true);
+        }
+        break;
+    case TopDownCam:
+        if (mTopDownActor)
+        {
+            mTopDownActor->SetState(Actor::EActive);
+            mTopDownActor->SetVisible(true);
         }
         break;
     default:

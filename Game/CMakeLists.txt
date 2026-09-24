@@ -33,6 +33,8 @@ target_sources(Game PRIVATE
         Code/FollowActor.h
         Code/OrbitActor.cpp
         Code/OrbitActor.h
+        Code/TopDownActor.cpp
+        Code/TopDownActor.h
 )
 
 target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

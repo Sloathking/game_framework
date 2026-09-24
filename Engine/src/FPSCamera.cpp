@@ -9,8 +9,9 @@ FPSCamera::FPSCamera(Actor* owner) : CameraComponent(owner) {}
 
 void FPSCamera::Update(const float deltaTime)
 {
-    // get position
     CameraComponent::Update(deltaTime);
+
+    // get position
     const Vector3 pos = mOwner->GetPosition();
 
     // calc current pitch, then rotate based on owner's Y

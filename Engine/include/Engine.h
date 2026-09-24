@@ -23,6 +23,8 @@ public:
 
     [[nodiscard]] class Renderer* GetRenderer() const { return mRenderer; }
 
+    void SetRelativeMouseMode(bool value) const;
+
 protected:
     virtual void ProcessInput();
     virtual bool ProcessGameEvent(SDL_Event* event) = 0;
