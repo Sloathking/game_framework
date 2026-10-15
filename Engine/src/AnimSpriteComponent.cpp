@@ -4,7 +4,7 @@
 
 #include "include/AnimSpriteComponent.h"
 
-AnimSpriteComponent::AnimSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mCurrFrame{ 0.0f }, mAnimFPS{ 24.0f }
+AnimSpriteComponent::AnimSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder), mCurrFrame{ 0.0f }, mAnimFPS{ 24.0f }
 {
 
 }
@@ -12,7 +12,7 @@ AnimSpriteComponent::AnimSpriteComponent(Actor* owner, const int drawOrder) : Sp
 // update anim every frame
 void AnimSpriteComponent::Update(const float deltaTime)
 {
-    SpriteComponent::Update(deltaTime);
+    SpriteComponent2D::Update(deltaTime);
 
     if (mAnimate)
     {
@@ -45,7 +45,7 @@ void AnimSpriteComponent::Update(const float deltaTime)
 }
 
 // set textures used for anim
-void AnimSpriteComponent::SetAnimTextures(const std::vector<Texture*>& textures)
+void AnimSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textures)
 {
     mAnimTextures = textures;
     if (!mAnimTextures.empty())
@@ -56,14 +56,14 @@ void AnimSpriteComponent::SetAnimTextures(const std::vector<Texture*>& textures)
 }
 
 // add animation to animation map, but DOES NOT update existing animations
-void AnimSpriteComponent::AddAnimation(const int& num, LoopingType toLoop, const std::vector<Texture*>& textures)
+void AnimSpriteComponent::AddAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures)
 {
     if (mAnimations.contains(num)) return;
     mAnimations[num] = {toLoop, textures};
 }
 
 // if able to update an animation in Animations returns TRUE, else FALSE
-void AnimSpriteComponent::UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<Texture*>& textures)
+void AnimSpriteComponent::UpdateAnimation(const int& num, LoopingType toLoop, const std::vector<SDL_Texture*>& textures)
 {
     mAnimations[num] = {toLoop, textures};
 }

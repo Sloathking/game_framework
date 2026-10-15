@@ -10,7 +10,7 @@
 class Dot : public Actor
 {
 public:
-    explicit Dot(Engine* game);
+    explicit Dot(class Game* game);
 
     void UpdateActor(float deltaTime) override;
 

@@ -14,7 +14,7 @@ public:
     Mesh();
     ~Mesh();
 
-    bool Load(const std::string& fileName, class Renderer* renderer);
+    bool Load(const std::string& fileName, class Renderer3D* renderer);
     void Unload();
 
     // getters

@@ -3,12 +3,13 @@
 //
 
 #include "Grid.h"
+#include "Game.h"
 #include "Tower.h"
 #include "Enemy.h"
 #include <Engine/include/Tile.h>
 #include <algorithm>
 
-Grid::Grid(Engine* game) : Actor(game)
+Grid::Grid(Game* game) : Actor(game)
 {
     // size tiles correctly
     mTiles.resize(NumRows);
@@ -142,7 +143,7 @@ void Grid::BuildTower() const
         mSelectedTile->mBlocked = true;
         if (FindPath(GetEndTile(), GetStartTile()))
         {
-            auto* t = new Tower(GetGame());
+            auto* t = new Tower(dynamic_cast<Game*>(GetGame()));
             t->SetPosition(mSelectedTile->GetPosition());
         }
         else
@@ -173,7 +174,7 @@ void Grid::UpdateActor(const float deltaTime)
     mNextEnemyTimer -= deltaTime;
     if (mNextEnemyTimer <= 0.0f)
     {
-        new Enemy(GetGame());
+        new Enemy(dynamic_cast<Game*>(GetGame()));
         mNextEnemyTimer += EnemyTime;
     }
 }

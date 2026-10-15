@@ -1,18 +1,23 @@
-add_library(Engine)
+add_library(Engine STATIC)
 
 target_sources(Engine PRIVATE
         src/Engine.cpp
         include/Engine.h
-        src/Renderer.cpp
+        #src/Renderer.cpp
         include/Renderer.h
+        src/Renderer2D.cpp
+        include/Renderer2D.h
+        src/Renderer3D.cpp
+        include/Renderer3D.h
         include/Constants.h
-        src/Actor.cpp
         src/Actor.cpp
         include/Actor.h
         src/Component.cpp
         include/Component.h
-        src/SpriteComponent.cpp
-        include/SpriteComponent.h
+        src/SpriteComponent2D.cpp
+        include/SpriteComponent2D.h
+        src/SpriteComponent3D.cpp
+        include/SpriteComponent3D.h
         src/Math.cpp
         include/Math.h
         src/AnimSpriteComponent.cpp

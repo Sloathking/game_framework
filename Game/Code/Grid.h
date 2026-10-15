@@ -11,7 +11,7 @@
 class Grid : public Actor
 {
 public:
-    explicit Grid(Engine* game);
+    explicit Grid(class Game* game);
 
     void UpdateActor(float deltaTime) override;
 

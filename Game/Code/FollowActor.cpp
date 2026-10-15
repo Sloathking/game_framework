@@ -4,7 +4,7 @@
 
 #include "FollowActor.h"
 #include "Game.h"
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer3D.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MoveComponent.h>
 #include <Engine/include/FollowCamera.h>
@@ -22,7 +22,8 @@ FollowActor::FollowActor(Game* game) : Actor(game)
     mCam->SnapToIdeal();
 
     mMesh = new MeshComponent(this);
-    mMesh->SetMesh(game->GetRenderer()->GetMesh("Assets/RacingCar.gpmesh"));
+    auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
+    mMesh->SetMesh(renderer->GetMesh("Assets/RacingCar.gpmesh"));
 }
 
 void FollowActor::ActorInput(const InputState& state)

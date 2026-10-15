@@ -1,4 +1,4 @@
-add_library(Game)
+add_library(Game STATIC)
 
 target_sources(Game PRIVATE
         Code/Game.cpp

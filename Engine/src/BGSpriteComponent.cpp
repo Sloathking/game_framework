@@ -5,7 +5,7 @@
 #include "include/BGSpriteComponent.h"
 #include "include/Actor.h"
 
-BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder), mScrollSpeed{0.0f}
+BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder), mScrollSpeed{0.0f}
 {
 
 }
@@ -13,7 +13,7 @@ BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : Sprite
 // update draw override
 void BGSpriteComponent::Update(const float deltaTime)
 {
-    SpriteComponent::Update(deltaTime);
+    SpriteComponent2D::Update(deltaTime);
 
     for (auto& bg : mBGTextures)
     {

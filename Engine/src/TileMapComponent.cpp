@@ -3,10 +3,10 @@
 //
 
 #include "include/TileMapComponent.h"
-#include "include/CSVUTils.h"
+#include "include/CSVUtils.h"
 #include "include/Actor.h"
 
-TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent(owner, drawOrder)
+TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder)
 {
 
 }

@@ -1,16 +1,16 @@
 //
-// Created by sloath on 06-Aug-26.
+// Created by sloath on 10/15/26.
 //
-// figure out anchor point stuff
-#ifndef SPRITECOMPONENT_H
-#define SPRITECOMPONENT_H
+
+#ifndef SPRITECOMPONENT2D_H
+#define SPRITECOMPONENT2D_H
 
 #include "Component.h"
 #include "Math.h"
 #include <SDL3_image/SDL_image.h>
 #include <unordered_map>
 
-class SpriteComponent : public Component
+class SpriteComponent2D : public Component
 {
 public:
     enum AnchorPoint { TopLeft = 0, TopCenter = 1, TopRight = 2, CenterLeft = 3, CenterCenter = 4, CenterRight = 5, BottomLeft = 6, BottomCenter = 7, BottomRight = 8 };
@@ -18,12 +18,12 @@ public:
     // symbolic constant
     static constexpr float kOriginalSize = -1.0f;
 
-    explicit SpriteComponent(class Actor* owner, int drawOrder = 100);
-    ~SpriteComponent() override;
+    explicit SpriteComponent2D(class Actor* owner, int drawOrder = 100);
+    ~SpriteComponent2D() override;
 
     virtual void Draw(class Shader* shader);
 
-    virtual void SetTexture(class Texture* texture);
+    virtual void SetTexture(class SDL_Texture* texture);
 
     [[nodiscard]] bool GetVisibility() const { return mIsVisible; }
     void SetVisibility(const bool visible) { mIsVisible = visible; }
@@ -57,7 +57,7 @@ protected:
     std::unordered_map<AnchorPoint, Vector2> anchorOffsets{};
     std::unordered_map<AnchorPoint, Vector2> rotOffsets{};
 
-    Texture* mTexture{ nullptr };
+    SDL_Texture* mTexture{ nullptr };
     int mDrawOrder;
     int mTexWidth{ 0 };
     int mTexHeight{ 0 };
@@ -75,4 +75,4 @@ protected:
 
 };
 
-#endif //SPRITECOMPONENT_H
+#endif //SPRITECOMPONENT2D_H

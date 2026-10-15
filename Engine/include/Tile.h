@@ -45,7 +45,7 @@ private:
     bool mInClosedSet{false};
     bool mBlocked{false};
 
-    class SpriteComponent* mSpriteComp;
+    class SpriteComponent2D* mSpriteComp;
 
     TileState mTileState{EDefault};
 

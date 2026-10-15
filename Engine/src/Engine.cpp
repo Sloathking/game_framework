@@ -4,6 +4,8 @@
 
 #include "include/Engine.h"
 #include "include/Renderer.h"
+#include "include/Renderer2D.h"
+#include "include/Renderer3D.h"
 #include "include/Constants.h"
 #include "include/InputSystem.h"
 #include "include/Actor.h"
@@ -14,7 +16,7 @@ Engine::Engine() = default;
 Engine::~Engine() = default;
 
 // initialize the game
-bool Engine::Initialize()
+bool Engine::Initialize(const RendererType rendererType)
 {
 	bool success{ true };
 
@@ -26,7 +28,19 @@ bool Engine::Initialize()
 	}
 	else
 	{
-		mRenderer = new Renderer(this);
+		switch (rendererType)
+		{
+			case TwoD:
+				mRenderer = new Renderer2D(this);
+				break;
+			case ThreeD:
+				mRenderer = new Renderer3D(this);
+				break;
+			default:
+				SDL_Log("Invalid Renderer Type");
+				break;
+		}
+		// mRenderer = new Renderer(this);
 		if (!mRenderer->Initialize(windowWidth, windowHeight))
 		{
 			SDL_Log("Unable to init Renderer");
@@ -218,23 +232,6 @@ void Engine::GenerateOutput()
 	mRenderer->Draw();
 
 #pragma region Old Render Code
-	/*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
-	SDL_RenderClear(mRenderer);
 
-	Vector2 camPos = mCamera->GetPosition();
-	camPos.x = -camPos.x;
-	camPos.y = -camPos.y;
-
-	for (const auto sprite : mSprites)
-	{
-		if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
-			sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
-	}
-
-	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-	const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
-	SDL_RenderFillRect(mRenderer, &dotRect);
-
-	SDL_RenderPresent(mRenderer);*/
 #pragma endregion
 }

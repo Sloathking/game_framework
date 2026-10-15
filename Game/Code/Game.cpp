@@ -9,7 +9,7 @@
 #include "OrbitActor.h"
 #include "TopDownActor.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer3D.h>
 #include <Engine/include/Actor.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
@@ -41,6 +41,7 @@ bool Game::ProcessGameEvent(SDL_Event* event)
 
 void Game::LoadData()
 {
+    auto* renderer = dynamic_cast<Renderer3D*>(mRenderer);
     mInputSystem->SetRelativeMouseMode(true);
 
     mFPSActor = new FPSActor(this);
@@ -52,7 +53,7 @@ void Game::LoadData()
     mSphere->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
     mSphere->SetScale(1.0f);
     auto* sphereMeshComp = new MeshComponent(mSphere);
-    sphereMeshComp->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+    sphereMeshComp->SetMesh(renderer->GetMesh("Assets/Sphere.gpmesh"));
 
     mCube = new Actor(this);
     mCube->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
@@ -61,7 +62,7 @@ void Game::LoadData()
     q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
     mCube->SetRotation(q);
     auto* cubeMeshComp = new MeshComponent(mCube);
-    cubeMeshComp->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
+    cubeMeshComp->SetMesh(renderer->GetMesh("Assets/Cube.gpmesh"));
 
     // setup floor
     constexpr int numTimes = 5;
@@ -106,8 +107,8 @@ void Game::LoadData()
     // temp->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
 
     // setup lights
-    mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
-    DirectionalLight& dirLight = mRenderer->GetDirectionalLight();
+    renderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
+    DirectionalLight& dirLight = renderer->GetDirectionalLight();
     dirLight.mDirection = Vector3(0.0f, -0.7f, -0.7f);
     dirLight.mDiffuseColor = Vector3(0.78f, 0.88f, 1.f);
     dirLight.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);

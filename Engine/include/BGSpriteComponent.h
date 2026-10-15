@@ -5,11 +5,11 @@
 #ifndef BGSPRITECOMPONENT_H
 #define BGSPRITECOMPONENT_H
 
-#include "SpriteComponent.h"
+#include "SpriteComponent2D.h"
 #include "Math.h"
 #include <vector>
 
-class BGSpriteComponent : public SpriteComponent
+class BGSpriteComponent : public SpriteComponent2D
 {
 public:
     explicit BGSpriteComponent(Actor* owner, int drawOrder = 10);

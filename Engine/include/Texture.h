@@ -14,21 +14,20 @@ public:
     ~Texture();
 
     bool Load(const std::string& fileName);
-    void Unload();
+    void Unload() const;
 
-    void SetActive();
+    void SetActive() const;
 
     [[nodiscard]] int GetWidth() const { return mWidth; }
     [[nodiscard]] int GetHeight() const { return mHeight; }
 
 private:
     // OpenGL ID of texture
-    unsigned int mTexID;
+    unsigned int mTexID{0};
 
-    int mWidth;
-    int mHeight;
+    int mWidth{0};
+    int mHeight{0};
 
 };
-
 
 #endif //TEXTURE_H

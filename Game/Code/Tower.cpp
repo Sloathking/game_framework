@@ -3,18 +3,19 @@
 //
 
 #include "Tower.h"
+#include "Game.h"
 #include "Enemy.h"
-#include <Engine/include/Engine.h>
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer2D.h>
 #include <Engine/include/MoveComponent.h>
-#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/SpriteComponent2D.h>
 
-Tower::Tower(Engine* game) : Actor(game)
+Tower::Tower(Game* game) : Actor(game)
 {
-    auto* spriteComp = new SpriteComponent(this);
-    spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Tower.png"));
-    spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
-    spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
+    auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
+    auto* spriteComp = new SpriteComponent2D(this);
+    spriteComp->SetTexture(renderer->GetTexture("Assets/Tower.png"));
+    spriteComp->SetAnchor(SpriteComponent2D::AnchorPoint::CenterCenter);
+    spriteComp->SetCenter(SpriteComponent2D::AnchorPoint::CenterCenter);
 
     mMoveComp = new MoveComponent(this);
 

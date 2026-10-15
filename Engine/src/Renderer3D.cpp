@@ -2,11 +2,11 @@
 // Created by sloath on 11-Sep-26.
 //
 
-#include "include/Renderer.h"
+#include "include/Renderer3D.h"
 #include "include/Engine.h"
 #include "include/Constants.h"
 #include "include/Shader.h"
-#include "include/SpriteComponent.h"
+#include "include/SpriteComponent3D.h"
 #include "include/Texture.h"
 #include "include/Mesh.h"
 #include "include/VertexArray.h"
@@ -14,11 +14,11 @@
 #include <GL/glew.h>
 #include <algorithm>
 
-Renderer::Renderer(Engine* game) : mGame(game) {}
+Renderer3D::Renderer3D(Engine* game) : mGame(game) {}
 
-Renderer::~Renderer() = default;
+Renderer3D::~Renderer3D() = default;
 
-bool Renderer::Initialize(const float screenWidth, const float screenHeight)
+bool Renderer3D::Initialize(const float screenWidth, const float screenHeight)
 {
     bool success{ true };
     mScreenWidth = screenWidth;
@@ -62,9 +62,9 @@ bool Renderer::Initialize(const float screenWidth, const float screenHeight)
         {
             // init GLEW
             glewExperimental = GL_TRUE;
-            if (glewInit() != GLEW_OK)
+            if (const GLenum err = glewInit(); err != GLEW_OK and err != GLEW_ERROR_NO_GLX_DISPLAY)
             {
-                SDL_Log("Error initializing GLEW!");
+                SDL_Log("Error initializing GLEW! glew Error: %s", reinterpret_cast<const char *>(glewGetErrorString(err)));
                 success = false;
             }
             else
@@ -88,7 +88,7 @@ bool Renderer::Initialize(const float screenWidth, const float screenHeight)
     return success;
 }
 
-void Renderer::Shutdown()
+void Renderer3D::Shutdown()
 {
     delete mSpriteVerts;
     mSpriteVerts = nullptr;
@@ -110,7 +110,7 @@ void Renderer::Shutdown()
     mWindow = nullptr;
 }
 
-void Renderer::UnloadData()
+void Renderer3D::UnloadData()
 {
     // destroy textures
     for (const auto& tex : mTextures)
@@ -123,12 +123,12 @@ void Renderer::UnloadData()
     mMeshes.clear();
 }
 
-void Renderer::AddMeshComp(MeshComponent* meshComp)
+void Renderer3D::AddMeshComp(MeshComponent* meshComp)
 {
     mMeshComps.emplace_back(meshComp);
 }
 
-void Renderer::RemoveMeshComp(const MeshComponent* meshComp)
+void Renderer3D::RemoveMeshComp(const MeshComponent* meshComp)
 {
     auto iter = std::find(mMeshComps.begin(), mMeshComps.end(), meshComp);
     if (iter != mMeshComps.end())
@@ -138,7 +138,7 @@ void Renderer::RemoveMeshComp(const MeshComponent* meshComp)
     }
 }
 
-void Renderer::Draw() const
+void Renderer3D::Draw() const
 {
     // set the clear color
     glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
@@ -184,9 +184,30 @@ void Renderer::Draw() const
 
     //swap buffers,
     SDL_GL_SwapWindow(mWindow);
+
+#pragma region 2D Rendering
+    /*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
+    SDL_RenderClear(mRenderer);
+
+    Vector2 camPos = mCamera->GetPosition();
+    camPos.x = -camPos.x;
+    camPos.y = -camPos.y;
+
+    for (const auto sprite : mSprites)
+    {
+        if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
+            sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+    }
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
+    SDL_RenderFillRect(mRenderer, &dotRect);
+
+    SDL_RenderPresent(mRenderer);*/
+#pragma endregion
 }
 
-void Renderer::AddSprite(SpriteComponent* sprite)
+void Renderer3D::AddSprite(SpriteComponent3D* sprite)
 {
     // find insertion point in sorted vector (first element with drawOrder higher)
     const int drawOrder = sprite->GetDrawOder();
@@ -197,13 +218,13 @@ void Renderer::AddSprite(SpriteComponent* sprite)
     mSprites.insert(iter, sprite);
 }
 
-void Renderer::RemoveSprite(const SpriteComponent* sprite)
+void Renderer3D::RemoveSprite(const SpriteComponent3D* sprite)
 {
     if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
         mSprites.erase(iter);
 }
 
-void Renderer::SetShaderName(const std::string& shaderName, MeshComponent* meshComp)
+void Renderer3D::SetShaderName(const std::string& shaderName, MeshComponent* meshComp)
 {
     // if meshcomp is already in shader map under another entry, we just move it to the new entry
     for (std::pair<std::string, std::vector<MeshComponent*>> shader : mShaderMeshMap)
@@ -219,7 +240,7 @@ void Renderer::SetShaderName(const std::string& shaderName, MeshComponent* meshC
     mShaderMeshMap[shaderName].push_back(meshComp);
 }
 
-Texture* Renderer::GetTexture(const std::string& fileName)
+Texture* Renderer3D::GetTexture(const std::string& fileName)
 {
     Texture* tex{ nullptr };
 
@@ -243,7 +264,7 @@ Texture* Renderer::GetTexture(const std::string& fileName)
     return tex;
 }
 
-Mesh* Renderer::GetMesh(const std::string& fileName)
+Mesh* Renderer3D::GetMesh(const std::string& fileName)
 {
     Mesh* mesh{nullptr};
 
@@ -266,7 +287,7 @@ Mesh* Renderer::GetMesh(const std::string& fileName)
     return mesh;
 }
 
-bool Renderer::LoadShaders()
+bool Renderer3D::LoadShaders()
 {
     const std::string fullPath = "../../Game/";
 
@@ -299,7 +320,7 @@ bool Renderer::LoadShaders()
     return true;
 }
 
-void Renderer::CreateSpriteVerts()
+void Renderer3D::CreateSpriteVerts()
 {
     static float vertexBuffer[] = {
         -0.5f,  0.5f,   0.0f,	0.0f,	0.0f,	0.0f,	0.0f,	0.0f,
@@ -316,7 +337,7 @@ void Renderer::CreateSpriteVerts()
     mSpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
 }
 
-void Renderer::SetLightUniforms(const Shader* shader) const
+void Renderer3D::SetLightUniforms(const Shader* shader) const
 {
     // camera pos is inverted view
     Matrix4 invView = mView;

@@ -5,7 +5,7 @@
 #ifndef TILEMAPCOMPONENT_H
 #define TILEMAPCOMPONENT_H
 
-#include "SpriteComponent.h"
+#include "SpriteComponent2D.h"
 #include <string>
 #include <vector>
 
@@ -16,7 +16,7 @@ struct TileData
     Vector2 spriteCoords;
 };
 
-class TileMapComponent : public SpriteComponent
+class TileMapComponent : public SpriteComponent2D
 {
 public:
     explicit TileMapComponent(Actor* owner, int drawOrder = 100);

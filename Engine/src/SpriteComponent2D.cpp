@@ -1,45 +1,47 @@
 //
-// Created by sloath on 06-Aug-26.
+// Created by sloath on 10/15/26.
 //
 
-#include "include/SpriteComponent.h"
+#include "include/SpriteComponent2D.h"
 #include "include/Engine.h"
-#include "include/Renderer.h"
+#include "include/Renderer2D.h"
 #include "include/Actor.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 
-SpriteComponent::SpriteComponent(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
+SpriteComponent2D::SpriteComponent2D(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
-    mOwner->GetGame()->GetRenderer()->AddSprite(this);
+    auto* renderer = dynamic_cast<Renderer2D*>(mOwner->GetGame()->GetRenderer());
+    renderer->AddSprite(this);
 }
 
-SpriteComponent::~SpriteComponent()
+SpriteComponent2D::~SpriteComponent2D()
 {
-    mOwner->GetGame()->GetRenderer()->RemoveSprite(this);
+    auto* renderer = dynamic_cast<Renderer2D*>(mOwner->GetGame()->GetRenderer());
+    renderer->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(Shader* shader)
+void SpriteComponent2D::Draw(Shader* shader)
 {
     if (mIsVisible)
     {
-        // scale the quad by the width/height of texture
-        const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
-        const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
-
-        // set world transform
-        shader->SetMatrixUniform("uWorldTransform", world);
-
-        mTexture->SetActive();
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        // // scale the quad by the width/height of texture
+        // const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
+        // const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
+        //
+        // // set world transform
+        // shader->SetMatrixUniform("uWorldTransform", world);
+        //
+        // mTexture->SetActive();
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 }
 
-void SpriteComponent::SetTexture(Texture* texture)
+void SpriteComponent2D::SetTexture(SDL_Texture* texture)
 {
     mTexture = texture;
-    mTexWidth = texture->GetWidth();
-    mTexHeight = texture->GetHeight();
+    mTexWidth = texture->w;
+    mTexHeight = texture->h;
 
     anchorOffsets = {
         { TopLeft, Vector2(0,0) },{ TopCenter, Vector2(-(mTexWidth * 0.5f),0) }, { TopRight, Vector2(-mTexWidth,0) },
@@ -48,7 +50,7 @@ void SpriteComponent::SetTexture(Texture* texture)
     };
 }
 
-SDL_FPoint* SpriteComponent::GetCenter(const SDL_FRect& dstRect)
+SDL_FPoint* SpriteComponent2D::GetCenter(const SDL_FRect& dstRect)
 {
     switch (mRotPoint)
     {

@@ -3,18 +3,20 @@
 //
 
 #include "Dot.h"
-#include <Engine/include/Engine.h>
-#include <Engine/include/Renderer.h>
+#include "Game.h"
+#include <Engine/include/Renderer2D.h>
+#include <Engine/include/SpriteComponent2D.h>
 #include <Engine/include/CameraComponent.h>
-#include <Engine/include/SpriteComponent.h>
 #include <Engine/include/InputSystem.h>
 
-Dot::Dot(Engine* game) : Actor(game)
+Dot::Dot(Game* game) : Actor(game)
 {
-    auto* sprite = new SpriteComponent(this);
-    sprite->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
-    sprite->SetAnchor(SpriteComponent::CenterCenter);
-    sprite->SetCenter(SpriteComponent::CenterCenter);
+    auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
+
+    auto* sprite = new SpriteComponent2D(this);
+    sprite->SetTexture(renderer->GetTexture("Assets/Projectile.png"));
+    sprite->SetAnchor(SpriteComponent2D::CenterCenter);
+    sprite->SetCenter(SpriteComponent2D::CenterCenter);
 
     // mCameraComp = new CameraComponent(this);
     //game->SetMainCamera(mCameraComp);

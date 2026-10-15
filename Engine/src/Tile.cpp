@@ -4,15 +4,15 @@
 
 #include "include/Tile.h"
 #include "include/Engine.h"
-#include "include/SpriteComponent.h"
-#include "include/Renderer.h"
+#include "include/SpriteComponent2D.h"
+#include "include/Renderer2D.h"
 #include <string>
 
 Tile::Tile(Engine* game) : Actor(game)
 {
-    mSpriteComp = new SpriteComponent(this);
-    mSpriteComp->SetAnchor(SpriteComponent::CenterCenter);
-    mSpriteComp->SetCenter(SpriteComponent::CenterCenter);
+    mSpriteComp = new SpriteComponent2D(this);
+    mSpriteComp->SetAnchor(SpriteComponent2D::CenterCenter);
+    mSpriteComp->SetCenter(SpriteComponent2D::CenterCenter);
     UpdateTexture();
 }
 
@@ -58,5 +58,6 @@ void Tile::UpdateTexture() const
             text = "Assets/TileBrown.png";
         break;
     }
-    mSpriteComp->SetTexture(GetGame()->GetRenderer()->GetTexture(text));
+    auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
+    mSpriteComp->SetTexture(renderer->GetTexture(text));
 }

@@ -4,15 +4,16 @@
 
 #include "OrbitActor.h"
 #include "Game.h"
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer3D.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
 #include <Engine/include/OrbitCamera.h>
 
 OrbitActor::OrbitActor(Game* game) : Actor(game)
 {
+    auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
     mMeshComp = new MeshComponent(this);
-    mMeshComp->SetMesh(game->GetRenderer()->GetMesh("Assets/RacingCar.gpmesh"));
+    mMeshComp->SetMesh(renderer->GetMesh("Assets/RacingCar.gpmesh"));
 
     mCam = new OrbitCamera(this);
     mCam->SetOffset(mCamOffset);

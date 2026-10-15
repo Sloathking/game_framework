@@ -4,7 +4,7 @@
 
 #include "include/InputSystem.h"
 #include "include/Engine.h"
-#include "include/Renderer.h"
+#include "include/Renderer3D.h"
 #include <algorithm>
 
 bool InputSystem::Initialize(Engine* game)

@@ -6,7 +6,10 @@
 #define ENGINE_H
 
 #include <SDL3/SDL.h>
+#include "Renderer.h"
 #include <vector>
+
+enum RendererType{ TwoD, ThreeD };
 
 class Engine
 {
@@ -14,14 +17,14 @@ public:
     Engine();
     virtual ~Engine();
 
-    bool Initialize();
+    bool Initialize(RendererType);
     void RunLoop();
     void Shutdown();
 
     void AddActor(class Actor* actor);
     void RemoveActor(const Actor* actor);
 
-    [[nodiscard]] class Renderer* GetRenderer() const { return mRenderer; }
+    [[nodiscard]] Renderer* GetRenderer() const { return mRenderer; }
 
     void SetRelativeMouseMode(bool value) const;
 

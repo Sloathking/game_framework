@@ -16,7 +16,7 @@ public:
     void ActorInput(const InputState& state) override;
 
 private:
-    class SpriteComponent* mShipSprite;
+    class SpriteComponent2D* mShipSprite;
     class CircleComponent* mCollider;
 
     float mLaserCooldown{0.0};

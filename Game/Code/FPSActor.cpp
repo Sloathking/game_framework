@@ -4,15 +4,15 @@
 
 #include "FPSActor.h"
 #include "Game.h"
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer3D.h>
 #include <Engine/include/FPSCamera.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/MoveComponent.h>
 #include <Engine/include/MeshComponent.h>
 
-
 FPSActor::FPSActor(Game* game) : Actor(game)
 {
+    auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
     mMoveComp = new MoveComponent(this);
     mMoveComp->SetVertSpeed(10.0f);
 
@@ -21,7 +21,7 @@ FPSActor::FPSActor(Game* game) : Actor(game)
     mFPSModel = new Actor(game);
     mFPSModel->SetScale(0.75f);
     mMesh = new MeshComponent(mFPSModel);
-    mMesh->SetMesh(game->GetRenderer()->GetMesh("Assets/Rifle.gpmesh"));
+    mMesh->SetMesh(renderer->GetMesh("Assets/Rifle.gpmesh"));
 }
 
 void FPSActor::UpdateActor(const float deltaTime)

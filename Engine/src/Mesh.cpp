@@ -3,7 +3,7 @@
 //
 
 #include "include/Mesh.h"
-#include "include/Renderer.h"
+#include "include/Renderer3D.h"
 #include "include/Math.h"
 #include "include/Texture.h"
 #include "include/VertexArray.h"
@@ -17,7 +17,7 @@ Mesh::Mesh() = default;
 
 Mesh::~Mesh() = default;
 
-bool Mesh::Load(const std::string& fileName, Renderer* renderer)
+bool Mesh::Load(const std::string& fileName, Renderer3D* renderer)
 {
     std::ifstream file("../../Game/" + fileName);
     if (!file.is_open())

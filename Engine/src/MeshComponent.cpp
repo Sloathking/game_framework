@@ -6,19 +6,21 @@
 #include "include/Actor.h"
 #include "include/Engine.h"
 #include "include/Mesh.h"
-#include "include/Renderer.h"
+#include "include/Renderer3D.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 #include "include/VertexArray.h"
 
 MeshComponent::MeshComponent(Actor* owner) : Component(owner)
 {
-    mOwner->GetGame()->GetRenderer()->AddMeshComp(this);
+    auto* renderer = dynamic_cast<Renderer3D*>(mOwner->GetGame()->GetRenderer());
+    renderer->AddMeshComp(this);
 }
 
 MeshComponent::~MeshComponent()
 {
-    mOwner->GetGame()->GetRenderer()->RemoveMeshComp(this);
+    auto* renderer = dynamic_cast<Renderer3D*>(mOwner->GetGame()->GetRenderer());
+    renderer->RemoveMeshComp(this);
 }
 
 // draw this mesh comp with provided shader
@@ -42,7 +44,8 @@ void MeshComponent::Draw(Shader* shader)
 
 void MeshComponent::SetMesh(Mesh* mesh)
 {
+    auto* renderer = dynamic_cast<Renderer3D*>(mOwner->GetGame()->GetRenderer());
     mMesh = mesh;
     const std::string shaderName = mMesh->GetShaderName();
-    mOwner->GetGame()->GetRenderer()->SetShaderName(shaderName, this);
+    renderer->SetShaderName(shaderName, this);
 }

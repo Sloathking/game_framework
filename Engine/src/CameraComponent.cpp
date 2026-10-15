@@ -5,7 +5,7 @@
 #include "include/CameraComponent.h"
 #include "include/Actor.h"
 #include "include/Engine.h"
-#include "include/Renderer.h"
+#include "include/Renderer3D.h"
 
 CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
 {
@@ -15,5 +15,6 @@ CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Componen
 void CameraComponent::SetViewMatrix(const Matrix4& view) const
 {
     const Engine* game = mOwner->GetGame();
-    game->GetRenderer()->SetViewMatrix(view);
+    auto* renderer = dynamic_cast<Renderer3D*>(game->GetRenderer());
+    renderer->SetViewMatrix(view);
 }

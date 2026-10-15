@@ -4,24 +4,25 @@
 
 #include "TileMap.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer2D.h>
 #include <Engine/include/TileMapComponent.h>
 
 TileMap::TileMap(Engine* game) : Actor(game)
 {
+    auto* renderer = dynamic_cast<Renderer2D*>(game->GetRenderer());
     mClosestTileMap = new TileMapComponent(this, 30);
-    mClosestTileMap->SetTexture(game->GetRenderer()->GetTexture("Assets/Tiles.png"));
-    mClosestTileMap->SetAnchor(SpriteComponent::AnchorPoint::TopLeft);
+    mClosestTileMap->SetTexture(renderer->GetTexture("Assets/Tiles.png"));
+    mClosestTileMap->SetAnchor(SpriteComponent2D::AnchorPoint::TopLeft);
     mClosestTileMap->SetSpriteProperties(8, 24, 32, 32);
 
     mMiddleTileMap = new TileMapComponent(this, 20);
-    mMiddleTileMap->SetTexture(game->GetRenderer()->GetTexture("Assets/Tiles.png"));
-    mMiddleTileMap->SetAnchor(SpriteComponent::AnchorPoint::TopLeft);
+    mMiddleTileMap->SetTexture(renderer->GetTexture("Assets/Tiles.png"));
+    mMiddleTileMap->SetAnchor(SpriteComponent2D::AnchorPoint::TopLeft);
     mMiddleTileMap->SetSpriteProperties(8, 24, 32, 32);
 
     mFarthestTileMap = new TileMapComponent(this, 10);
-    mFarthestTileMap->SetTexture(game->GetRenderer()->GetTexture("Assets/Tiles.png"));
-    mFarthestTileMap->SetAnchor(SpriteComponent::AnchorPoint::TopLeft);
+    mFarthestTileMap->SetTexture(renderer->GetTexture("Assets/Tiles.png"));
+    mFarthestTileMap->SetAnchor(SpriteComponent2D::AnchorPoint::TopLeft);
     mFarthestTileMap->SetSpriteProperties(8, 24, 32, 32);
 
     std::string fileName{"../../Game/Assets/MapLayer1.csv"};

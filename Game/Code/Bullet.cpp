@@ -3,19 +3,20 @@
 //
 
 #include "Bullet.h"
+#include "Game.h"
 #include "Enemy.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/Renderer.h>
+#include <Engine/include/Renderer3D.h>
 #include <Engine/include/CircleComponent.h>
 #include <Engine/include/MoveComponent.h>
-#include <Engine/include/SpriteComponent.h>
+#include <Engine/include/SpriteComponent3D.h>
 
-Bullet::Bullet(Engine* game) : Actor(game)
+Bullet::Bullet(Game* game) : Actor(game)
 {
-    auto* spriteComp = new SpriteComponent(this);
-    spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
-    spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
-    spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
+    // auto* spriteComp = new SpriteComponent(this);
+    // spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Projectile.png"));
+    // spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
+    // spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
 
     auto* moveComp = new MoveComponent(this);
     moveComp->SetForwardSpeed(400.0f);

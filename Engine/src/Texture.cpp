@@ -8,15 +8,9 @@
 #include <GL/glew.h>
 #include <SDL3/SDL_log.h>
 
-Texture::Texture()
-{
+Texture::Texture() = default;
 
-}
-
-Texture::~Texture()
-{
-
-}
+Texture::~Texture() = default;
 
 bool Texture::Load(const std::string& fileName)
 {
@@ -43,12 +37,12 @@ bool Texture::Load(const std::string& fileName)
     return true;
 }
 
-void Texture::Unload()
+void Texture::Unload() const
 {
     glDeleteTextures(1, &mTexID);
 }
 
-void Texture::SetActive()
+void Texture::SetActive() const
 {
     glBindTexture(GL_TEXTURE_2D, mTexID);
 }

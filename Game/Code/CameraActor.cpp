@@ -8,7 +8,7 @@
 
 #include "Engine/include/Engine.h"
 #include "Engine/include/InputSystem.h"
-#include "Engine/include/Renderer.h"
+#include "Engine/include/Renderer3D.h"
 
 CameraActor::CameraActor(Engine* game) : Actor(game)
 {
@@ -25,7 +25,8 @@ void CameraActor::UpdateActor(const float deltaTime)
     const Vector3 up = Vector3::UnitZ;
 
     const Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
-    GetGame()->GetRenderer()->SetViewMatrix(view);
+    auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
+    renderer->SetViewMatrix(view);
 }
 
 void CameraActor::ActorInput(const InputState& state)
