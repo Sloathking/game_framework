@@ -30,19 +30,4 @@ void MoveComponent::Update(const float deltaTime)
         pos += Vector3::UnitZ * mVertSpeed * deltaTime;
         mOwner->SetPosition(pos);
     }
-
 }
-
-// void MoveComponent::IncreaseHeight() const
-// {
-//     Vector3 pos = mOwner->GetPosition();
-//     pos.z += mVertSpeed;
-//     mOwner->SetPosition(pos);
-// }
-//
-// void MoveComponent::DecreaseHeight() const
-// {
-//     Vector3 pos = mOwner->GetPosition();
-//     pos.z -= mVertSpeed;
-//     mOwner->SetPosition(pos);
-// }

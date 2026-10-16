@@ -5,11 +5,11 @@
 #include "include/Renderer2D.h"
 #include "include/Engine.h"
 #include "include/Constants.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 #include "include/SpriteComponent2D.h"
 #include <algorithm>
 
-Renderer2D::Renderer2D(Engine* game) : mGame(game) {}
+Renderer2D::Renderer2D(Engine* game) : Renderer(game) {}
 
 Renderer2D::~Renderer2D() = default;
 
@@ -19,19 +19,13 @@ bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
     mScreenWidth = screenWidth;
     mScreenHeight = screenHeight;
 
-    SDL_CreateWindowAndRenderer(windowTitle.c_str(),
+    if (SDL_CreateWindowAndRenderer(windowTitle.c_str(),
         static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight),
         SDL_WINDOW_RESIZABLE,
-        &mWindow, &mRenderer);
-
-    if (!mWindow)
+        &mWindow, &mRenderer) == false)
     {
-        SDL_Log("Unable to create Window and Renderer! SDL Error: %s\n", SDL_GetError());
+        SDL_Log("Unable to create Window and Renderer! SDL Error: %s", SDL_GetError());
         success = false;
-    }
-    else
-    {
-
     }
 
     return success;
@@ -58,24 +52,25 @@ void Renderer2D::UnloadData()
 
 void Renderer2D::Draw() const
 {
-    // SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
-    // SDL_RenderClear(mRenderer);
-    //
+    SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
+    SDL_RenderClear(mRenderer);
+
     // Vector2 camPos = mCamera->GetPosition();
     // camPos.x = -camPos.x;
     // camPos.y = -camPos.y;
     //
-    // for (const auto sprite : mSprites)
-    // {
-    //     if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
-    //         sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
-    // }
+    for (const auto sprite : mSprites)
+    {
+        // if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
+        //     sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+        sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+    }
     //
     // SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     // const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
     // SDL_RenderFillRect(mRenderer, &dotRect);
-    //
-    // SDL_RenderPresent(mRenderer);
+
+    SDL_RenderPresent(mRenderer);
 }
 
 void Renderer2D::AddSprite(SpriteComponent2D* sprite)

@@ -14,7 +14,7 @@
 #include <GL/glew.h>
 #include <algorithm>
 
-Renderer3D::Renderer3D(Engine* game) : mGame(game) {}
+Renderer3D::Renderer3D(Engine* game) : Renderer(game) {}
 
 Renderer3D::~Renderer3D() = default;
 

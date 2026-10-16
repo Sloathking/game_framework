@@ -5,11 +5,11 @@
 #include "include/SpriteComponent3D.h"
 #include "include/Engine.h"
 #include "include/Renderer3D.h"
-#include "include/Actor.h"
+#include "include/Actor3D.h"
 #include "include/Shader.h"
 #include "include/Texture.h"
 
-SpriteComponent3D::SpriteComponent3D(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
+SpriteComponent3D::SpriteComponent3D(Actor3D* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
     auto* renderer = dynamic_cast<Renderer3D*>(owner->GetGame()->GetRenderer());
     renderer->AddSprite(this);
@@ -27,7 +27,7 @@ void SpriteComponent3D::Draw(Shader* shader)
     {
         // scale the quad by the width/height of texture
         const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
-        const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
+        const Matrix4 world = scaleMat * dynamic_cast<Actor3D*>(mOwner)->GetWorldTransform();
 
         // set world transform
         shader->SetMatrixUniform("uWorldTransform", world);

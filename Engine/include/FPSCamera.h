@@ -10,7 +10,7 @@
 class FPSCamera : public CameraComponent
 {
 public:
-    explicit FPSCamera(Actor* owner);
+    explicit FPSCamera(class Actor3D* owner);
 
     void Update(float deltaTime) override;
 

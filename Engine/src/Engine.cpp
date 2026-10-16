@@ -21,7 +21,7 @@ bool Engine::Initialize(const RendererType rendererType)
 	bool success{ true };
 
 	// init SDL
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD) == false)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD) == false)
 	{
 		SDL_Log("Unable to initialize SDL! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -40,7 +40,7 @@ bool Engine::Initialize(const RendererType rendererType)
 				SDL_Log("Invalid Renderer Type");
 				break;
 		}
-		// mRenderer = new Renderer(this);
+
 		if (!mRenderer->Initialize(windowWidth, windowHeight))
 		{
 			SDL_Log("Unable to init Renderer");

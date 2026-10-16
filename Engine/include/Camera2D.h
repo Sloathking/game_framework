@@ -10,7 +10,7 @@
 class Camera2D : public CameraComponent
 {
 public:
-    explicit Camera2D(Actor* owner);
+    explicit Camera2D(class Actor2D* owner);
 
     void Update(float deltaTime) override;
 
@@ -26,6 +26,5 @@ private:
     float mPitch{0.0f};
 
 };
-
 
 #endif //CAMERA2D_H

@@ -7,14 +7,6 @@
 
 #include <Engine/include/Engine.h>
 
-enum ActorName
-{
-    FPSCam = 0,
-    FollowCam = 1,
-    OrbitCam = 2,
-    TopDownCam = 3,
-};
-
 class Game : public Engine
 {
 public:
@@ -29,17 +21,7 @@ protected:
     void UnloadData() override;
 
 private:
-    void SwitchActor(ActorName) const;
 
-    std::vector<Actor*> mSpriteActors;
-
-    class FPSActor* mFPSActor{};
-    class FollowActor* mFollowActor{};
-    class OrbitActor* mOrbitActor{};
-    class TopDownActor* mTopDownActor{};
-
-    Actor* mSphere{};
-    Actor* mCube{};
 };
 
 #endif //GAME_H

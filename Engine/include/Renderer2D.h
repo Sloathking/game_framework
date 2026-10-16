@@ -14,7 +14,7 @@
 class Renderer2D : public Renderer
 {
 public:
-    explicit Renderer2D(class Engine* game);
+    explicit Renderer2D(Engine* game);
     ~Renderer2D() override;
 
     // init / shutdown
@@ -35,8 +35,6 @@ public:
     [[nodiscard]] float GetScreenHeight() const { return mScreenHeight; }
 
 private:
-    Engine* mGame;
-
     // renderer created by SDL
     SDL_Renderer* mRenderer{nullptr};
 
@@ -45,9 +43,6 @@ private:
 
     // all sprites to draw
     std::vector<SpriteComponent2D*> mSprites{};
-
-    // camera?
-
 
     float mScreenWidth{};
     float mScreenHeight{};

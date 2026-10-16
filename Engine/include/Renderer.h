@@ -9,7 +9,7 @@
 
 class Renderer {
 public:
-    Renderer() = default;
+    explicit Renderer(class Engine* game) : mGame(game) {}
     virtual ~Renderer() = default;
     virtual bool Initialize(float screenWidth, float screenHeight) = 0;
     virtual void Shutdown() = 0;
@@ -19,7 +19,7 @@ public:
 
 protected:
     SDL_Window* mWindow{nullptr};
-    // class Engine* mGame{nullptr};
+    Engine* mGame{nullptr};
 
 private:
 

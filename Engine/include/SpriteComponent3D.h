@@ -6,14 +6,11 @@
 #define SPRITECOMPONENT3D_H
 
 #include "Component.h"
-#include "Math.h"
-#include <SDL3_image/SDL_image.h>
-#include <unordered_map>
 
 class SpriteComponent3D : public Component
 {
 public:
-    explicit SpriteComponent3D(class Actor* owner, int drawOrder = 100);
+    explicit SpriteComponent3D(class Actor3D* owner, int drawOrder = 100);
     ~SpriteComponent3D() override;
 
     virtual void Draw(class Shader* shader);

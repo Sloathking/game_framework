@@ -10,7 +10,7 @@
 class OrbitCamera : public CameraComponent
 {
 public:
-    explicit OrbitCamera(Actor* owner);
+    explicit OrbitCamera(class Actor3D* owner);
 
     void Update(float deltaTime) override;
 

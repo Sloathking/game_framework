@@ -18,12 +18,12 @@ public:
     // symbolic constant
     static constexpr float kOriginalSize = -1.0f;
 
-    explicit SpriteComponent2D(class Actor* owner, int drawOrder = 100);
+    explicit SpriteComponent2D(class Actor2D* owner, int drawOrder = 100);
     ~SpriteComponent2D() override;
 
-    virtual void Draw(class Shader* shader);
+    virtual void Draw(SDL_Renderer* renderer);
 
-    virtual void SetTexture(class SDL_Texture* texture);
+    virtual void SetTexture(SDL_Texture* texture);
 
     [[nodiscard]] bool GetVisibility() const { return mIsVisible; }
     void SetVisibility(const bool visible) { mIsVisible = visible; }
@@ -68,7 +68,7 @@ protected:
 
     SDL_FlipMode spriteFlipMode{SDL_FLIP_NONE};
 
-    SDL_FPoint mCenter{.x = 0.0f,.y = 0.0f};
+    SDL_FPoint mCenter{ .x = 0.0f, .y = 0.0f };
 
     AnchorPoint mAnchor{ TopLeft };
     AnchorPoint mRotPoint{ TopLeft };

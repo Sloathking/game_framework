@@ -24,10 +24,11 @@ public:
     virtual ~Actor();
 
     // update function called from Game (not overridable)
-    void Update(float deltaTime);
+    virtual void Update(float deltaTime) = 0;
 
     // updates all the components attached to the actor (not overridable)
     void UpdateComponents(float deltaTime) const;
+
     // Actors specific Update (overridable)
     virtual void UpdateActor(float deltaTime);
 
@@ -45,26 +46,12 @@ public:
     [[nodiscard]] State GetState() const { return mState; }
     void SetState(const State state) { mState = state; }
 
-    // Updates World Scale, Rotation, and Location
-    void ComputeWorldTransform();
-    [[nodiscard]] Matrix4 GetWorldTransform() const { return mWorldTransform; }
-
-    [[nodiscard]] Quaternion GetRotation() const { return mRotation; }
-    void SetRotation(const Quaternion& rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] const Vector3& GetPosition() const { return mPosition; }
-    void SetPosition(const Vector3& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
-
-    [[nodiscard]] Vector3 GetForward() const { return Vector3::Transform(Vector3::UnitX, mRotation); }
-    [[nodiscard]] Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, mRotation); }
-
     [[nodiscard]] float GetScale() const { return mScale; }
-    void SetScale(const float scale) { mScale = scale; mRecomputeWorldTransform = true; }
+    virtual void SetScale(float scale) = 0;
 
     [[nodiscard]] Engine* GetGame() const { return mGame; }
 
-
-private:
+protected:
     // Actor's state
     State mState{EActive};
 
@@ -72,13 +59,9 @@ private:
     std::vector<Component*> mComponents;
     Engine* mGame;
 
-    Matrix4 mWorldTransform{Matrix4::Identity};
-    bool mRecomputeWorldTransform{true};
+    float mScale{1.0f};
 
-    // transform properties
-    Quaternion mRotation{Quaternion::Identity};
-    Vector3 mPosition{Vector3::Zero};
-    float mScale{1.0f};         		// uniforms scale of actor
+private:
 
 };
 

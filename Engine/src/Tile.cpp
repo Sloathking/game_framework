@@ -8,7 +8,7 @@
 #include "include/Renderer2D.h"
 #include <string>
 
-Tile::Tile(Engine* game) : Actor(game)
+Tile::Tile(Engine* game) : Actor2D(game)
 {
     mSpriteComp = new SpriteComponent2D(this);
     mSpriteComp->SetAnchor(SpriteComponent2D::CenterCenter);

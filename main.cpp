@@ -8,7 +8,7 @@ int main()
     int exitCode{ 0 };
 
     Game game;
-    if (!game.Initialize(ThreeD))
+    if (!game.Initialize(TwoD))
     {
         SDL_Log("Unable to initialize game!");
         exitCode = 1;

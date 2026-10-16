@@ -3,7 +3,6 @@ add_library(Engine STATIC)
 target_sources(Engine PRIVATE
         src/Engine.cpp
         include/Engine.h
-        #src/Renderer.cpp
         include/Renderer.h
         src/Renderer2D.cpp
         include/Renderer2D.h
@@ -12,6 +11,10 @@ target_sources(Engine PRIVATE
         include/Constants.h
         src/Actor.cpp
         include/Actor.h
+        src/Actor2D.cpp
+        include/Actor2D.h
+        src/Actor3D.cpp
+        include/Actor3D.h
         src/Component.cpp
         include/Component.h
         src/SpriteComponent2D.cpp

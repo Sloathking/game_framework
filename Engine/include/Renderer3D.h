@@ -22,7 +22,7 @@ struct DirectionalLight
 class Renderer3D : public Renderer
 {
 public:
-    explicit Renderer3D(class Engine* game);
+    explicit Renderer3D(Engine* game);
     ~Renderer3D() override;
 
     // init / shutdown
@@ -59,8 +59,6 @@ private:
     bool LoadShaders();
     void CreateSpriteVerts();
     void SetLightUniforms(const class Shader* shader) const;
-
-    Engine* mGame;
 
     // OpenGL context
     SDL_GLContext mContext{nullptr};

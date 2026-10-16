@@ -5,11 +5,9 @@
 #include "include/SpriteComponent2D.h"
 #include "include/Engine.h"
 #include "include/Renderer2D.h"
-#include "include/Actor.h"
-#include "include/Shader.h"
-#include "include/Texture.h"
+#include "include/Actor2D.h"
 
-SpriteComponent2D::SpriteComponent2D(Actor* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
+SpriteComponent2D::SpriteComponent2D(Actor2D* owner, const int drawOrder) : Component{owner}, mDrawOrder{drawOrder}
 {
     auto* renderer = dynamic_cast<Renderer2D*>(mOwner->GetGame()->GetRenderer());
     renderer->AddSprite(this);
@@ -21,19 +19,17 @@ SpriteComponent2D::~SpriteComponent2D()
     renderer->RemoveSprite(this);
 }
 
-void SpriteComponent2D::Draw(Shader* shader)
+void SpriteComponent2D::Draw(SDL_Renderer* renderer)
 {
+    const Vector2 pos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+    const SDL_FRect dstRect {
+        .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
+        .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
+        .w = static_cast<float>(mTexWidth), .h = static_cast<float>(mTexHeight)
+    };
     if (mIsVisible)
     {
-        // // scale the quad by the width/height of texture
-        // const Matrix4 scaleMat = Matrix4::CreateScale(static_cast<float>(mTexWidth), static_cast<float>(mTexHeight), 1.0f);
-        // const Matrix4 world = scaleMat * mOwner->GetWorldTransform();
-        //
-        // // set world transform
-        // shader->SetMatrixUniform("uWorldTransform", world);
-        //
-        // mTexture->SetActive();
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        SDL_RenderTextureRotated(renderer, mTexture, nullptr, &dstRect, mRotation, nullptr, SDL_FLIP_NONE);
     }
 }
 
