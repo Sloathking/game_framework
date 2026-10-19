@@ -3,7 +3,7 @@
 //
 
 #include "include/MeshComponent.h"
-#include "include/Actor.h"
+#include "include/Actor3D.h"
 #include "include/Engine.h"
 #include "include/Mesh.h"
 #include "include/Renderer3D.h"
@@ -11,7 +11,7 @@
 #include "include/Texture.h"
 #include "include/VertexArray.h"
 
-MeshComponent::MeshComponent(Actor* owner) : Component(owner)
+MeshComponent::MeshComponent(Actor3D* owner) : Component(owner)
 {
     auto* renderer = dynamic_cast<Renderer3D*>(mOwner->GetGame()->GetRenderer());
     renderer->AddMeshComp(this);
@@ -29,7 +29,7 @@ void MeshComponent::Draw(Shader* shader)
     if (mMesh)
     {
         // set world transform
-        shader->SetMatrixUniform("uWorldTransform", mOwner->GetWorldTransform());
+        shader->SetMatrixUniform("uWorldTransform", dynamic_cast<Actor3D*>(mOwner)->GetWorldTransform());
         shader->SetFloatUniform("uSpecPower", mMesh->GetSpecPower());
         // set the active texture
         Texture* tex = mMesh->GetTexture(mTextureIndex);

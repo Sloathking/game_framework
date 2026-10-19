@@ -12,18 +12,18 @@
 class BGSpriteComponent : public SpriteComponent2D
 {
 public:
-    explicit BGSpriteComponent(Actor* owner, int drawOrder = 10);
+    explicit BGSpriteComponent(Actor2D* owner, int drawOrder = 10);
 
     // update draw override
     void Update(float deltaTime) override;
-    void Draw(Shader* shader) override;
+    void Draw(SDL_Renderer* renderer) override;
 
     // set the texture used for the background
     void SetBGTextures(const std::vector<SDL_Texture*>& textures);
 
     // get / set the screen size and scroll speed
     void SetScreenSize(const Vector2& size) { mScreenSize = size; }
-    void SetScrollSpeed(float scrollSpeed) { mScrollSpeed = scrollSpeed; }
+    void SetScrollSpeed(const float scrollSpeed) { mScrollSpeed = scrollSpeed; }
     [[nodiscard]] float GetScrollSpeed() const { return mScrollSpeed; }
 
 private:
@@ -36,7 +36,7 @@ private:
 
     std::vector<BGTexture> mBGTextures;
     Vector2 mScreenSize;
-    float mScrollSpeed;
+    float mScrollSpeed{0.0f};
 };
 
 #endif //BGSPRITECOMPONENT_H

@@ -5,19 +5,19 @@
 #ifndef CAMERAACTOR_H
 #define CAMERAACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
-class CameraActor : public Actor
+class CameraActor : public Actor3D
 {
 public:
-    explicit CameraActor(Engine* game);
+    explicit CameraActor(class Game* game);
 
     void UpdateActor(float deltaTime) override;
 
     void ActorInput(const InputState& state) override;
 
 private:
-    class MoveComponent* mMoveComp;
+    class MoveComponent3D* mMoveComp;
 
 };
 

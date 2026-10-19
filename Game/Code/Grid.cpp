@@ -9,7 +9,7 @@
 #include <Engine/include/Tile.h>
 #include <algorithm>
 
-Grid::Grid(Game* game) : Actor(game)
+Grid::Grid(Game* game) : Actor2D(game)
 {
     // size tiles correctly
     mTiles.resize(NumRows);
@@ -22,7 +22,7 @@ Grid::Grid(Game* game) : Actor(game)
         for (size_t j = 0; j < mTiles[i].size(); ++j)
         {
             mTiles[i][j] = new Tile(GetGame());
-            mTiles[i][j]->SetPosition(Vector3(TileSize * 0.5f + j * TileSize, StartY + i * TileSize, 0.0f));
+            mTiles[i][j]->SetPosition(Vector2(TileSize * 0.5f + j * TileSize, StartY + i * TileSize));
         }
     }
 
@@ -179,9 +179,9 @@ void Grid::UpdateActor(const float deltaTime)
     }
 }
 
-std::vector<Vector3> Grid::GetTilePositions() const
+std::vector<Vector2> Grid::GetTilePositions() const
 {
-    std::vector<Vector3> gridPos;
+    std::vector<Vector2> gridPos;
     for (int i = 0; i < mTiles.size(); ++i)
         for (int j = 0; j < mTiles[i].size(); ++j)
             gridPos.emplace_back(mTiles[i][j]->GetPosition());

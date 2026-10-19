@@ -32,8 +32,10 @@ target_sources(Engine PRIVATE
         src/TileMapComponent.cpp
         include/TileMapComponent.h
         include/CSVUtils.h
-        src/MoveComponent.cpp
-        include/MoveComponent.h
+        src/MoveComponent2D.cpp
+        include/MoveComponent2D.h
+        src/MoveComponent3D.cpp
+        include/MoveComponent3D.h
         src/Random.cpp
         include/Random.h
         src/CircleComponent.cpp

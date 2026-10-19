@@ -20,6 +20,8 @@ protected:
     void LoadData() override;
     void UnloadData() override;
 
+    int asteroidCount{0};
+
 private:
 
 };

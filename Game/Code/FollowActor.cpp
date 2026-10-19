@@ -4,15 +4,15 @@
 
 #include "FollowActor.h"
 #include "Game.h"
-#include <Engine/include/Renderer3D.h>
-#include <Engine/include/InputSystem.h>
-#include <Engine/include/MoveComponent.h>
 #include <Engine/include/FollowCamera.h>
+#include <Engine/include/InputSystem.h>
 #include <Engine/include/MeshComponent.h>
+#include <Engine/include/MoveComponent3D.h>
+#include <Engine/include/Renderer3D.h>
 
-FollowActor::FollowActor(Game* game) : Actor(game)
+FollowActor::FollowActor(Game* game) : Actor3D(game)
 {
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new MoveComponent3D(this);
 
     mCam = new FollowCamera(this);
     mCam->SetHorizontalDist(350.0f);

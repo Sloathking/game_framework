@@ -5,9 +5,9 @@
 #ifndef ORBITACTOR_H
 #define ORBITACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
-class OrbitActor : public Actor
+class OrbitActor : public Actor3D
 {
 public:
     explicit OrbitActor(class Game* game);

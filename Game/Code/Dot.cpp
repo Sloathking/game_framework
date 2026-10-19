@@ -9,7 +9,7 @@
 #include <Engine/include/CameraComponent.h>
 #include <Engine/include/InputSystem.h>
 
-Dot::Dot(Game* game) : Actor(game)
+Dot::Dot(Game* game) : Actor2D(game)
 {
     auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
 
@@ -29,10 +29,10 @@ void Dot::UpdateActor(float deltaTime)
 
 void Dot::ActorInput(const InputState& state)
 {
-    // Vector2 pos = GetPosition();
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_W) == EHeld) pos.y -= 10.0;
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_S) == EHeld) pos.y += 10.0;
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_D) == EHeld) pos.x += 10.0;
-    // if (state.Keyboard.GetKeyState(SDL_SCANCODE_A) == EHeld) pos.x -= 10.0;
-    // SetPosition(pos);
+    Vector2 pos = GetPosition();
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_W) == EHeld) pos.y -= 10.0;
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_S) == EHeld) pos.y += 10.0;
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_D) == EHeld) pos.x += 10.0;
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_A) == EHeld) pos.x -= 10.0;
+    SetPosition(pos);
 }

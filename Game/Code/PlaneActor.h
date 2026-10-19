@@ -5,15 +5,13 @@
 #ifndef PLANEACTOR_H
 #define PLANEACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
-
-class PlaneActor : public Actor
+class PlaneActor : public Actor3D
 {
 public:
     explicit PlaneActor(class Game* game);
     
 };
-
 
 #endif //PLANEACTOR_H

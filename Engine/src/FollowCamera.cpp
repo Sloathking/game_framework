@@ -3,13 +3,9 @@
 //
 
 #include "include/FollowCamera.h"
+#include "include/Actor3D.h"
 
-#include "include/Actor.h"
-
-FollowCamera::FollowCamera(Actor* owner) : CameraComponent(owner)
-{
-
-}
+FollowCamera::FollowCamera(Actor3D* owner) : CameraComponent(owner) {}
 
 void FollowCamera::Update(const float deltaTime)
 {
@@ -26,7 +22,8 @@ void FollowCamera::Update(const float deltaTime)
     mVelocity += accel * deltaTime;
     mActualPos += mVelocity * deltaTime;
 
-    const Vector3 target = mOwner->GetPosition() + mOwner->GetForward() * mTargetDist;
+    const auto owner = dynamic_cast<Actor3D*>(mOwner);
+    const Vector3 target = owner->GetPosition() + owner->GetForward() * mTargetDist;
 
     const Matrix4 view = Matrix4::CreateLookAt(mActualPos, target, Vector3::UnitZ);
     SetViewMatrix(view);
@@ -34,18 +31,22 @@ void FollowCamera::Update(const float deltaTime)
 
 void FollowCamera::SnapToIdeal()
 {
+    const auto owner = dynamic_cast<Actor3D*>(mOwner);
+
     mActualPos = ComputeCameraPos();
     mVelocity = Vector3::Zero;
-    const Vector3 target = mOwner->GetForward() + mOwner->GetForward() * mTargetDist;
+    const Vector3 target = owner->GetForward() + owner->GetForward() * mTargetDist;
     const Matrix4 view = Matrix4::CreateLookAt(mActualPos, target, Vector3::UnitZ);
     SetViewMatrix(view);
 }
 
 [[nodiscard]] Vector3 FollowCamera::ComputeCameraPos() const
 {
+    const auto owner = dynamic_cast<Actor3D*>(mOwner);
+
     // set camera position behind and above owner
-    Vector3 cameraPos = mOwner->GetPosition();
-    cameraPos -= mOwner->GetForward() * mHorizontalDist;
+    Vector3 cameraPos = owner->GetPosition();
+    cameraPos -= owner->GetForward() * mHorizontalDist;
     cameraPos += Vector3::UnitZ * mVerticalDist;
     return cameraPos;
 }

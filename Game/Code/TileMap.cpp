@@ -3,11 +3,11 @@
 //
 
 #include "TileMap.h"
-#include <Engine/include/Engine.h>
+#include "Game.h"
 #include <Engine/include/Renderer2D.h>
 #include <Engine/include/TileMapComponent.h>
 
-TileMap::TileMap(Engine* game) : Actor(game)
+TileMap::TileMap(Game* game) : Actor2D(game)
 {
     auto* renderer = dynamic_cast<Renderer2D*>(game->GetRenderer());
     mClosestTileMap = new TileMapComponent(this, 30);

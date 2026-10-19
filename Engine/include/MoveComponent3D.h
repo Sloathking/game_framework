@@ -2,15 +2,15 @@
 // Created by sloath on 17-Aug-26.
 //
 
-#ifndef MOVECOMPONENT_H
-#define MOVECOMPONENT_H
+#ifndef MOVECOMPONENT3D_H
+#define MOVECOMPONENT3D_H
 
 #include "Component.h"
 
-class MoveComponent : public Component
+class MoveComponent3D : public Component
 {
 public:
-    explicit MoveComponent(class Actor* owner, int updateOrder = 10);
+    explicit MoveComponent3D(class Actor3D* owner, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 
@@ -25,9 +25,6 @@ public:
 
     [[nodiscard]] float GetAngularSpeed() const { return mAngularSpeed; }
     void SetAngularSpeed(const float speed) { mAngularSpeed = speed; }
-    //
-    // void IncreaseHeight() const;
-    // void DecreaseHeight() const;
 
 private:
     // controls forward movement units/s
@@ -44,4 +41,4 @@ private:
 
 };
 
-#endif //MOVECOMPONENT_H
+#endif //MOVECOMPONENT3D_H

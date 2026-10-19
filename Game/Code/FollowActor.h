@@ -5,9 +5,9 @@
 #ifndef FOLLOWACTOR_H
 #define FOLLOWACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
-class FollowActor : public Actor
+class FollowActor : public Actor3D
 {
 public:
     explicit FollowActor(class Game* game);
@@ -17,7 +17,7 @@ public:
     void SetVisible(bool visible) const;
 
 private:
-    class MoveComponent* mMoveComp{};
+    class MoveComponent3D* mMoveComp{};
     class FollowCamera* mCam{};
     class MeshComponent* mMesh{};
 

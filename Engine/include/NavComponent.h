@@ -5,10 +5,10 @@
 #ifndef NAVCOMPONENT_H
 #define NAVCOMPONENT_H
 
-#include "MoveComponent.h"
 #include "Math.h"
+#include "MoveComponent2D.h"
 
-class NavComponent : public MoveComponent
+class NavComponent : public MoveComponent2D
 {
 public:
     explicit NavComponent(class Actor2D* owner, int updateOrder = 10);
@@ -23,6 +23,5 @@ private:
     const Tile* mNextNode{nullptr};
 
 };
-
 
 #endif //NAVCOMPONENT_H

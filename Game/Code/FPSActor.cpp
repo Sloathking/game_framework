@@ -4,21 +4,21 @@
 
 #include "FPSActor.h"
 #include "Game.h"
-#include <Engine/include/Renderer3D.h>
 #include <Engine/include/FPSCamera.h>
 #include <Engine/include/InputSystem.h>
-#include <Engine/include/MoveComponent.h>
 #include <Engine/include/MeshComponent.h>
+#include <Engine/include/MoveComponent3D.h>
+#include <Engine/include/Renderer3D.h>
 
-FPSActor::FPSActor(Game* game) : Actor(game)
+FPSActor::FPSActor(Game* game) : Actor3D(game)
 {
     auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new MoveComponent3D(this);
     mMoveComp->SetVertSpeed(10.0f);
 
     mCam = new FPSCamera(this);
 
-    mFPSModel = new Actor(game);
+    mFPSModel = new Actor3D(game);
     mFPSModel->SetScale(0.75f);
     mMesh = new MeshComponent(mFPSModel);
     mMesh->SetMesh(renderer->GetMesh("Assets/Rifle.gpmesh"));

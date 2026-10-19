@@ -58,14 +58,15 @@ void Renderer2D::Draw() const
     // Vector2 camPos = mCamera->GetPosition();
     // camPos.x = -camPos.x;
     // camPos.y = -camPos.y;
-    //
+
     for (const auto sprite : mSprites)
     {
         // if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
         //     sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
-        sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+        sprite->Draw(mRenderer);
+        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
     }
-    //
+
     // SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
     // const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
     // SDL_RenderFillRect(mRenderer, &dotRect);

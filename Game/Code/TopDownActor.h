@@ -5,10 +5,10 @@
 #ifndef TOPDOWNACTOR_H
 #define TOPDOWNACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
 
-class TopDownActor : public Actor
+class TopDownActor : public Actor3D
 {
 public:
     explicit TopDownActor(class Game* game);
@@ -20,8 +20,8 @@ public:
     void SetVisible(bool visible) const;
 
 private:
-    class Camera2D* mCam{};
-    class MoveComponent* mMoveComp;
+    // class Camera2D* mCam{};
+    class MoveComponent3D* mMoveComp;
     Vector3 mCamOffset{Vector3(0.0f, 0.0f, 100.0f)};
     float mZoomScale{50.0f};
 

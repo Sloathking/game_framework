@@ -3,12 +3,9 @@
 //
 
 #include "include/BGSpriteComponent.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-BGSpriteComponent::BGSpriteComponent(Actor* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder), mScrollSpeed{0.0f}
-{
-
-}
+BGSpriteComponent::BGSpriteComponent(Actor2D* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder) {}
 
 // update draw override
 void BGSpriteComponent::Update(const float deltaTime)
@@ -26,17 +23,18 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(Shader* shader)
+void BGSpriteComponent::Draw(SDL_Renderer* renderer)
 {
-    // for (auto& bg : mBGTextures)
-    // {
-    //     SDL_FRect dstRect;
-    //     dstRect.w = mScreenSize.x;
-    //     dstRect.h = mScreenSize.y;
-    //     dstRect.x = mOwner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
-    //     dstRect.y = mOwner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
-    //     SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
-    // }
+    const auto owner = dynamic_cast<Actor2D*>(mOwner);
+    for (auto& bg : mBGTextures)
+    {
+        SDL_FRect dstRect;
+        dstRect.w = mScreenSize.x;
+        dstRect.h = mScreenSize.y;
+        dstRect.x = owner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
+        dstRect.y = owner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
+        SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
+    }
 }
 
 // set the texture used for the background

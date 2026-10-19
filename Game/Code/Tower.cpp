@@ -3,13 +3,13 @@
 //
 
 #include "Tower.h"
-#include "Game.h"
 #include "Enemy.h"
+#include "Game.h"
+#include <Engine/include/MoveComponent2D.h>
 #include <Engine/include/Renderer2D.h>
-#include <Engine/include/MoveComponent.h>
 #include <Engine/include/SpriteComponent2D.h>
 
-Tower::Tower(Game* game) : Actor(game)
+Tower::Tower(Game* game) : Actor2D(game)
 {
     auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
     auto* spriteComp = new SpriteComponent2D(this);
@@ -17,7 +17,7 @@ Tower::Tower(Game* game) : Actor(game)
     spriteComp->SetAnchor(SpriteComponent2D::AnchorPoint::CenterCenter);
     spriteComp->SetCenter(SpriteComponent2D::AnchorPoint::CenterCenter);
 
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new MoveComponent2D(this);
 
     mNextAttack = AttackTime;
 }

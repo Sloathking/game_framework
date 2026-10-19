@@ -5,9 +5,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 
-class Enemy : public Actor
+class Enemy : public Actor2D
 {
 public:
     explicit Enemy(class Game* game);

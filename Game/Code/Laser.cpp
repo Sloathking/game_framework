@@ -3,17 +3,18 @@
 //
 
 #include "Laser.h"
+#include "Game.h"
 #include "Asteroid.h"
-#include <Engine/include/Engine.h>
-#include <Engine/include/Renderer3D.h>
+#include <Engine/include/Renderer2D.h>
 #include <Engine/include/CircleComponent.h>
-#include <Engine/include/SpriteComponent3D.h>
+#include <Engine/include/SpriteComponent2D.h>
 
-Laser::Laser(Engine* game, const Vector2 dir) : Actor(game)
+Laser::Laser(Game* game, const Vector2 dir) : Actor2D(game)
 {
+    const auto renderer = dynamic_cast<Renderer2D*>(game->GetRenderer());
     // create sprite comp
-    // auto* spriteComp = new SpriteComponent(this);
-    // spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Laser2.png"));
+    auto* spriteComp = new SpriteComponent2D(this);
+    spriteComp->SetTexture(renderer->GetTexture("Assets/Laser2.png"));
 
     // create move comp
     // auto* moveComp = new PhysicsMoveComponent(this);

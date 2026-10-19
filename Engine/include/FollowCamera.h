@@ -10,7 +10,7 @@
 class FollowCamera : public CameraComponent
 {
 public:
-    explicit FollowCamera(Actor* owner);
+    explicit FollowCamera(class Actor3D* owner);
 
     void Update(float deltaTime) override;
 

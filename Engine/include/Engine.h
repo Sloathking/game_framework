@@ -55,7 +55,7 @@ protected:
 private:
     // helper functions for the game loop
     void UpdateGame();
-    void GenerateOutput();
+    void GenerateOutput() const;
 
 };
 

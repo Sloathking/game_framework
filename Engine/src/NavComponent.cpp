@@ -6,7 +6,7 @@
 #include "include/Actor2D.h"
 #include "include/Tile.h"
 
-NavComponent::NavComponent(Actor2D* owner, const int updateOrder) : MoveComponent(owner, updateOrder)
+NavComponent::NavComponent(Actor2D* owner, const int updateOrder) : MoveComponent2D(owner, updateOrder)
 {
 
 }
@@ -23,8 +23,9 @@ void NavComponent::Update(const float deltaTime)
             TurnTo(mNextNode->GetPosition());
         }
     }
+
     // this moves the actor forward
-    MoveComponent::Update(deltaTime);
+    MoveComponent2D::Update(deltaTime);
 }
 
 void NavComponent::StartPath(const Tile* start)

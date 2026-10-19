@@ -5,10 +5,10 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 #include <vector>
 
-class Grid : public Actor
+class Grid : public Actor2D
 {
 public:
     explicit Grid(class Game* game);
@@ -25,7 +25,7 @@ public:
     [[nodiscard]] Tile* GetEndTile() const;
 
 
-    [[nodiscard]] std::vector<Vector3> GetTilePositions() const;
+    [[nodiscard]] std::vector<Vector2> GetTilePositions() const;
 
 private:
     void SelectTile(size_t row, size_t col);

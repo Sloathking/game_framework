@@ -14,7 +14,7 @@ class AnimSpriteComponent : public SpriteComponent2D
 public:
     enum LoopingType { NO_LOOP, LOOP };
 
-    explicit AnimSpriteComponent(Actor* owner, int drawOrder = 100);
+    explicit AnimSpriteComponent(Actor2D* owner, int drawOrder = 100);
 
     // update anim every frame
     void Update(float deltaTime) override;

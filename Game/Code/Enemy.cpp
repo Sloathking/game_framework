@@ -6,22 +6,23 @@
 #include "Game.h"
 #include <Engine/include/Tile.h>
 #include <Engine/include/Engine.h>
-#include <Engine/include/Renderer3D.h>
+#include <Engine/include/Renderer2D.h>
 #include <Engine/include/CircleComponent.h>
 #include <Engine/include/NavComponent.h>
-#include <Engine/include/SpriteComponent3D.h>
+#include <Engine/include/SpriteComponent2D.h>
 
-Enemy::Enemy(Game* game) : Actor(game)
+Enemy::Enemy(Game* game) : Actor2D(game)
 {
     //game->GetEnemies().emplace_back(this);
 
-    // auto* spriteComp = new SpriteComponent(this);
-    // spriteComp->SetTexture(game->GetRenderer()->GetTexture("Assets/Airplane.png"));
-    // spriteComp->SetAnchor(SpriteComponent::AnchorPoint::CenterCenter);
-    // spriteComp->SetCenter(SpriteComponent::AnchorPoint::CenterCenter);
+    auto renderer = dynamic_cast<Renderer2D*>(game->GetRenderer());
+    auto* spriteComp = new SpriteComponent2D(this);
+    spriteComp->SetTexture(renderer->GetTexture("Assets/Airplane.png"));
+    spriteComp->SetAnchor(SpriteComponent2D::AnchorPoint::CenterCenter);
+    spriteComp->SetCenter(SpriteComponent2D::AnchorPoint::CenterCenter);
 
     // set pos to start tile of curr grid
-    //SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
+    // SetPosition(GetGame()->GetGrid()->GetStartTile()->GetPosition());
 
     // setup nav comp
     auto* navComp = new NavComponent(this);

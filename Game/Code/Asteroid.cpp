@@ -3,25 +3,25 @@
 //
 
 #include "Asteroid.h"
-#include <Engine/include/Engine.h>
+#include "Game.h"
 #include <Engine/include/Renderer2D.h>
 #include <Engine/include/Random.h>
 #include <Engine/include/SpriteComponent2D.h>
 #include <Engine/include/CircleComponent.h>
 
-Asteroid::Asteroid(Engine* game) : Actor(game)
+Asteroid::Asteroid(Game* game) : Actor2D(game)
 {
     auto* renderer = dynamic_cast<Renderer2D*>(game->GetRenderer());
 
     // init to random position and rotation
     const Vector2 randPos = Random::GetVector(Vector2::Zero, Vector2(5120, 5120));
-    Vector3 newPos = GetPosition();
-    newPos += Vector3(randPos.x, randPos.y, newPos.z);
+    Vector2 newPos = GetPosition();
+    newPos += Vector2(randPos.x, randPos.y);
     SetPosition(newPos);
 
     // create sprit comp and set texture
     auto* spriteComp = new SpriteComponent2D(this);
-    spriteComp->SetTexture(renderer->GetTexture(("Assets/Asteroid.png")));
+    spriteComp->SetTexture(renderer->GetTexture(("../../Game/Assets/Asteroid.png")));
     spriteComp->SetAnchor(SpriteComponent2D::AnchorPoint::CenterCenter);
     spriteComp->SetCenter(SpriteComponent2D::AnchorPoint::CenterCenter);
 

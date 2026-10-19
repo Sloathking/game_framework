@@ -5,12 +5,12 @@
 #ifndef LASER_H
 #define LASER_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 
-class Laser : public Actor
+class Laser : public Actor2D
 {
 public:
-    explicit Laser(Engine* game, Vector2 dir);
+    explicit Laser(class Game* game, Vector2 dir);
 
     void UpdateActor(float deltaTime) override;
 

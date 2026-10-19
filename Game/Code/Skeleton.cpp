@@ -3,14 +3,14 @@
 //
 
 #include "Skeleton.h"
-#include <Engine/include/Engine.h>
+#include "Game.h"
 #include <Engine/include/Renderer2D.h>
 #include <Engine/include/AnimSpriteComponent.h>
 #include <Engine/include/Constants.h>
 
-Skeleton::Skeleton(Engine* game) : Actor(game)
+Skeleton::Skeleton(Game* game) : Actor2D(game)
 {
-    auto* renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
+    const auto renderer = dynamic_cast<Renderer2D*>(GetGame()->GetRenderer());
     mAnimSprite = new AnimSpriteComponent(this);
     mAnimSprite->SetAnimFPS(12.0f);
     std::vector<SDL_Texture*> anims{};

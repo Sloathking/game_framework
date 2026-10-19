@@ -5,14 +5,14 @@
 #ifndef SKELETON_H
 #define SKELETON_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 
 enum animNames { DEFAULT = 0, WALKING = 1, RUNNING = 2, JUMPING = 3, PUNCH = 4 };
 
-class Skeleton : public Actor
+class Skeleton : public Actor2D
 {
 public:
-    explicit Skeleton(Engine* game);
+    explicit Skeleton(class Game* game);
 
     void UpdateActor(float deltaTime) override;
     void ActorInput(const InputState& state) override;
@@ -21,6 +21,5 @@ private:
     class AnimSpriteComponent* mAnimSprite;
 
 };
-
 
 #endif //SKELETON_H

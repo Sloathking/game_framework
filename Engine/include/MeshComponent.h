@@ -6,14 +6,12 @@
 #define MESHCOMPONENT_H
 
 #include "Component.h"
-#include <cstddef>
-
 #include "Mesh.h"
 
 class MeshComponent : public Component
 {
 public:
-    explicit MeshComponent(class Actor* owner);
+    explicit MeshComponent(class Actor3D* owner);
     ~MeshComponent() override;
 
     // draw this mesh comp with provided shader

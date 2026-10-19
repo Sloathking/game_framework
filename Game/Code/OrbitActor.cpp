@@ -9,9 +9,9 @@
 #include <Engine/include/MeshComponent.h>
 #include <Engine/include/OrbitCamera.h>
 
-OrbitActor::OrbitActor(Game* game) : Actor(game)
+OrbitActor::OrbitActor(Game* game) : Actor3D(game)
 {
-    auto* renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
+    const auto renderer = dynamic_cast<Renderer3D*>(GetGame()->GetRenderer());
     mMeshComp = new MeshComponent(this);
     mMeshComp->SetMesh(renderer->GetMesh("Assets/RacingCar.gpmesh"));
 

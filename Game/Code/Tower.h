@@ -5,16 +5,16 @@
 #ifndef TOWER_H
 #define TOWER_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor2D.h>
 
-class Tower : public Actor
+class Tower : public Actor2D
 {
 public:
     explicit Tower(class Game* game);
     void UpdateActor(float deltaTime) override;
 
 private:
-    class MoveComponent* mMoveComp;
+    class MoveComponent2D* mMoveComp;
 
     float mNextAttack{0.0f};
     const float AttackTime = 2.5f;

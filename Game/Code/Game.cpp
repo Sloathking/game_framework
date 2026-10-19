@@ -3,16 +3,12 @@
 //
 
 #include "Game.h"
-#include "FPSActor.h"
-#include "PlaneActor.h"
-#include "FollowActor.h"
-#include "OrbitActor.h"
-#include "TopDownActor.h"
+#include "Asteroid.h"
 #include <Engine/include/Engine.h>
 #include <Engine/include/Renderer3D.h>
 #include <Engine/include/Actor.h>
 #include <Engine/include/InputSystem.h>
-#include <Engine/include/MeshComponent.h>
+#include <Engine/include/Random.h>
 
 Game::Game() = default;
 
@@ -22,7 +18,7 @@ void Game::ProcessInput()
 {
     Engine::ProcessInput();
 
-    // const InputState& state = mInputSystem->GetState();
+    //const InputState& state = mInputSystem->GetState();
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)

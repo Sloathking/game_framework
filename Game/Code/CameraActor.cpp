@@ -3,16 +3,14 @@
 //
 
 #include "CameraActor.h"
+#include "Game.h"
+#include <Engine/include/MoveComponent3D.h>
+#include <Engine/include/InputSystem.h>
+#include <Engine/include/Renderer3D.h>
 
-#include <Engine/include/MoveComponent.h>
-
-#include "Engine/include/Engine.h"
-#include "Engine/include/InputSystem.h"
-#include "Engine/include/Renderer3D.h"
-
-CameraActor::CameraActor(Engine* game) : Actor(game)
+CameraActor::CameraActor(Game* game) : Actor3D(game)
 {
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new MoveComponent3D(this);
 }
 
 void CameraActor::UpdateActor(const float deltaTime)

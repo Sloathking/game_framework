@@ -4,17 +4,16 @@
 
 #include "TopDownActor.h"
 #include "Game.h"
-#include <Engine/include/Camera2D.h>
-#include <Engine/include/MoveComponent.h>
 #include <Engine/include/InputSystem.h>
+#include <Engine/include/MoveComponent3D.h>
 
-TopDownActor::TopDownActor(Game* game) : Actor(game)
+TopDownActor::TopDownActor(Game* game) : Actor3D(game)
 {
-    mCam = new Camera2D(this);
-    mCam->SetOffset(mCamOffset);
-    mCam->SetPitch(Math::Pi / 2.0f);
+    // mCam = new Camera2D(this);
+    // mCam->SetOffset(mCamOffset);
+    // mCam->SetPitch(Math::Pi / 2.0f);
 
-    mMoveComp = new MoveComponent(this);
+    mMoveComp = new MoveComponent3D(this);
 }
 
 void TopDownActor::UpdateActor(const float deltaTime)
@@ -51,7 +50,7 @@ void TopDownActor::ActorInput(const InputState& state)
     if (const Vector2 mouseWheel = state.Mouse.GetScrollWheel(); mouseWheel.y != 0)
     {
         mCamOffset.z -= mouseWheel.y * mZoomScale;
-        mCam->SetOffset(mCamOffset);
+        // mCam->SetOffset(mCamOffset);
     }
 
     mMoveComp->SetForwardSpeed(forwardSpeed);

@@ -5,9 +5,9 @@
 #ifndef FPSACTOR_H
 #define FPSACTOR_H
 
-#include <Engine/include/Actor.h>
+#include <Engine/include/Actor3D.h>
 
-class FPSActor : public Actor
+class FPSActor : public Actor3D
 {
 public:
     explicit FPSActor(class Game* game);
@@ -19,12 +19,11 @@ public:
     void SetVisible(bool visible) const;
 
 private:
-    class MoveComponent* mMoveComp;
+    class MoveComponent3D* mMoveComp;
     class FPSCamera* mCam;
-    class MeshComponent* mMesh;
-    Actor* mFPSModel;
+    class MeshComponent* mMesh{nullptr};
+    Actor3D* mFPSModel;
 
 };
-
 
 #endif //FPSACTOR_H

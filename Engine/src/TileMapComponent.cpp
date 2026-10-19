@@ -4,60 +4,58 @@
 
 #include "include/TileMapComponent.h"
 #include "include/CSVUtils.h"
-#include "include/Actor.h"
+#include "include/Actor2D.h"
 
-TileMapComponent::TileMapComponent(Actor* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder)
-{
-
-}
+TileMapComponent::TileMapComponent(Actor2D* owner, const int drawOrder) : SpriteComponent2D(owner, drawOrder) {}
 
 void TileMapComponent::Update(const float deltaTime)
 {
 
 }
 
-void TileMapComponent::Draw(Shader* shader)
+void TileMapComponent::Draw(SDL_Renderer* renderer)
 {
-    // for (TileData& tile : mTiles)
-    // {
-    //     SDL_FRect srcRect{
-    //         .x = mTileWidth * tile.spriteCoords.x,
-    //         .y = mTileWidth * tile.spriteCoords.y,
-    //         .w = mTileWidth,
-    //         .h = mTileHeight
-    //     };
-    //
-    //     SDL_FRect dstRect{
-    //         .x = mOwner->GetPosition().x + mTileWidth * tile.xOffset,
-    //         .y = mOwner->GetPosition().y + mTileHeight * tile.yOffset,
-    //         .w = mTileWidth * mOwner->GetScale(),
-    //         .h = mTileHeight * mOwner->GetScale()
-    //     };
-    //
-    //     //Default to clip dimensions if clip is given
-    //     if( clip != nullptr )
-    //     {
-    //         dstRect.w = clip->w;
-    //         dstRect.h = clip->h;
-    //     }
-    //
-    //     //Resize if new dimensions are given
-    //     if( width > 0 )
-    //     {
-    //         dstRect.w = width;
-    //     }
-    //     if( height > 0 )
-    //     {
-    //         dstRect.h = height;
-    //     }
-    //
-    //     SDL_FPoint anchor;
-    //     anchor.x = rotOffsets[mRotPoint].x;
-    //     anchor.y = rotOffsets[mRotPoint].y;
-    //
-    //     //Render texture
-    //     SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(mRotation), &anchor, spriteFlipMode);
-    // }
+    auto owner = dynamic_cast<Actor2D*>(mOwner);
+    for (TileData& tile : mTiles)
+    {
+        SDL_FRect srcRect{
+            .x = mTileWidth * tile.spriteCoords.x,
+            .y = mTileWidth * tile.spriteCoords.y,
+            .w = mTileWidth,
+            .h = mTileHeight
+        };
+
+        SDL_FRect dstRect{
+            .x = owner->GetPosition().x + mTileWidth * tile.xOffset,
+            .y = owner->GetPosition().y + mTileHeight * tile.yOffset,
+            .w = mTileWidth * mOwner->GetScale(),
+            .h = mTileHeight * mOwner->GetScale()
+        };
+
+        // //Default to clip dimensions if clip is given
+        // if( clip != nullptr )
+        // {
+        //     dstRect.w = clip->w;
+        //     dstRect.h = clip->h;
+        // }
+        //
+        // //Resize if new dimensions are given
+        // if( width > 0 )
+        // {
+        //     dstRect.w = width;
+        // }
+        // if( height > 0 )
+        // {
+        //     dstRect.h = height;
+        // }
+
+        SDL_FPoint anchor;
+        anchor.x = rotOffsets[mRotPoint].x;
+        anchor.y = rotOffsets[mRotPoint].y;
+
+        //Render texture
+        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(mRotation), &anchor, spriteFlipMode);
+    }
 }
 
 void TileMapComponent::ReadFile(const std::string& fileName)

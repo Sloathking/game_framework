@@ -9,6 +9,8 @@
 #include "include/Constants.h"
 #include "include/InputSystem.h"
 #include "include/Actor.h"
+#include "include/Actor2D.h"
+#include "include/Actor3D.h"
 #include <algorithm>
 
 Engine::Engine() = default;
@@ -205,7 +207,8 @@ void Engine::UpdateGame()
 	// move any pending Actors to mActors
 	for (auto pending : mPendingActors)
 	{
-		pending->ComputeWorldTransform();
+	    if (const auto pendingCast = dynamic_cast<Actor3D*>(pending); pendingCast)
+		    pendingCast->ComputeWorldTransform();
 		mActors.emplace_back(pending);
 	}
 	mPendingActors.clear();
@@ -227,11 +230,7 @@ void Engine::UpdateGame()
 		SDL_Log("Delta Time: %f | FPS Capped: %c | VSync: %c", deltaTime, fpsCapEnabled ? 'T' : 'F', vSyncEnabled ? 'T' : 'F');
 }
 
-void Engine::GenerateOutput()
+void Engine::GenerateOutput() const
 {
 	mRenderer->Draw();
-
-#pragma region Old Render Code
-
-#pragma endregion
 }
