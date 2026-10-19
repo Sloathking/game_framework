@@ -27,6 +27,14 @@ bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
         SDL_Log("Unable to create Window and Renderer! SDL Error: %s", SDL_GetError());
         success = false;
     }
+    else
+    {
+        if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
+        {
+            SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
+            success = false;
+        }
+    }
 
     return success;
 }
@@ -45,10 +53,13 @@ void Renderer2D::UnloadData()
     mTextures.clear();
 }
 
-// bool IsInCamera(Vector2 pos, cam)
-// {
-//     return true;
-// }
+static bool IsInCamera(const Vector2& spritePos, const Vector2& camPos)
+{
+    const Vector2 windowSize{1920, 1080};
+    if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
+        return true;
+    return false;
+}
 
 void Renderer2D::Draw() const
 {
@@ -61,10 +72,9 @@ void Renderer2D::Draw() const
 
     for (const auto sprite : mSprites)
     {
-        // if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
-        //     sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
+        // if (IsInCamera(dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition(), Vector2(windowWidth * 0.5f, windowHeight * 0.5f)))
+        //     sprite->Draw(mRenderer);
         sprite->Draw(mRenderer);
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
     }
 
     // SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);

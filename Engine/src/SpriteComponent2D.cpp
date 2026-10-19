@@ -21,14 +21,16 @@ SpriteComponent2D::~SpriteComponent2D()
 
 void SpriteComponent2D::Draw(SDL_Renderer* renderer)
 {
-    const Vector2 pos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
-    const SDL_FRect dstRect {
-        .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
-        .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
-        .w = static_cast<float>(mTexWidth), .h = static_cast<float>(mTexHeight)
-    };
     if (mIsVisible)
     {
+        const Vector2 pos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+        const SDL_FRect dstRect {
+            .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
+            .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
+            .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
+            .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
+        };
+
         SDL_RenderTextureRotated(renderer, mTexture, nullptr, &dstRect, mRotation, nullptr, SDL_FLIP_NONE);
     }
 }

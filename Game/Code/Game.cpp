@@ -18,7 +18,15 @@ void Game::ProcessInput()
 {
     Engine::ProcessInput();
 
-    //const InputState& state = mInputSystem->GetState();
+    const InputState& state = mInputSystem->GetState();
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_SPACE) == EPressed)
+    {
+        asteroidCount++;
+        auto* a = new Asteroid(this);
+        const Vector2 pos = Random::GetVector(Vector2::Zero, Vector2(1000, 1000));
+        a->SetPosition(pos);
+        SDL_Log("Asteroid #%i - X: %f | Y: %f", asteroidCount, pos.x, pos.y);
+    }
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)

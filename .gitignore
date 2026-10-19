@@ -3,3 +3,5 @@ cmake-build-*
 external
 Game/Assets
 Game/Shaders
+Game/Code/**
+!Game/Code/Game.*
