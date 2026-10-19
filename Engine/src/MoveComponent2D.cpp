@@ -23,4 +23,11 @@ void MoveComponent2D::Update(const float deltaTime)
         pos += owner->GetForward() * mForwardSpeed * deltaTime;
         owner->SetPosition(pos);
     }
+
+    if (!Math::NearZero(mStrafeSpeed))
+    {
+        Vector2  pos = owner->GetPosition();
+        pos += owner->GetRight() * mStrafeSpeed * deltaTime;
+        owner->SetPosition(pos);
+    }
 }

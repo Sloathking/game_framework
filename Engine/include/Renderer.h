@@ -10,10 +10,16 @@
 class Renderer {
 public:
     explicit Renderer(class Engine* game) : mGame(game) {}
+
     virtual ~Renderer() = default;
+
     virtual bool Initialize(float screenWidth, float screenHeight) = 0;
+
     virtual void Shutdown() = 0;
+
     virtual void Draw() const = 0;
+
+    virtual bool SetVSync() = 0;
 
     [[nodiscard]] SDL_Window* GetWindow() const { return mWindow; }
 

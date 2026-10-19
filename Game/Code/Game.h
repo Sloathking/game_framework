@@ -20,6 +20,8 @@ protected:
     void LoadData() override;
     void UnloadData() override;
 
+    class Cam2DActor* mCamActor;
+
     int asteroidCount{0};
 
 private:

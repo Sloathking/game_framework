@@ -35,6 +35,8 @@ target_sources(Game PRIVATE
         Code/OrbitActor.h
         Code/TopDownActor.cpp
         Code/TopDownActor.h
+        Code/Cam2DActor.cpp
+        Code/Cam2DActor.h
 )
 
 target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

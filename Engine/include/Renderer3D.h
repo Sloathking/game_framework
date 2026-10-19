@@ -32,6 +32,8 @@ public:
 
     void Draw() const override;
 
+    bool SetVSync() override;
+
     // manage mesh components
     void AddMeshComp(class MeshComponent* meshComp);
     void RemoveMeshComp(const MeshComponent* meshComp);

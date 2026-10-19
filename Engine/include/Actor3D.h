@@ -29,7 +29,7 @@ public:
 
     void SetScale(const float scale) override { mScale = scale; mRecomputeWorldTransform = true; }
 
-private:
+protected:
     bool mRecomputeWorldTransform{true};
     Matrix4 mWorldTransform{Matrix4::Identity};
 

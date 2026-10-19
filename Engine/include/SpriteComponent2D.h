@@ -40,8 +40,8 @@ public:
     double GetRotation() const { return mRotation; }
     void SetRotation(const float rotation) { mRotation = rotation; }
 
-    [[nodiscard]] SDL_FlipMode GetFlipMode() const { return spriteFlipMode; }
-    void SetFlipMode(const SDL_FlipMode flip) { spriteFlipMode = flip; }
+    [[nodiscard]] SDL_FlipMode GetFlipMode() const { return mSpriteFlipMode; }
+    void SetFlipMode(const SDL_FlipMode flip) { mSpriteFlipMode = flip; }
 
     [[nodiscard]] AnchorPoint GetAnchor() const { return mAnchor; }
     void SetAnchor(const AnchorPoint anchor) { mAnchor = anchor; }
@@ -66,7 +66,7 @@ protected:
 
     float mRotation{ 0.0 };
 
-    SDL_FlipMode spriteFlipMode{SDL_FLIP_NONE};
+    SDL_FlipMode mSpriteFlipMode{SDL_FLIP_NONE};
 
     SDL_FPoint mCenter{ .x = 0.0f, .y = 0.0f };
 

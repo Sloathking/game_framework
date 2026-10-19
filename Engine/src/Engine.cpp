@@ -177,8 +177,7 @@ void Engine::ProcessInput()
 	if (state.Keyboard.GetKeyState(SDL_SCANCODE_F3) == EPressed)
 	{
 		vSyncEnabled = !vSyncEnabled;
-		if (!SDL_GL_SetSwapInterval(vSyncEnabled))
-			SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+		mRenderer->SetVSync();
 	}
 
 	mUpdatingActors = true;

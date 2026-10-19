@@ -24,6 +24,8 @@ public:
 
     void Draw() const override;
 
+    bool SetVSync() override;
+
     // load textures
     SDL_Texture* GetTexture(const std::string& fileName);
 

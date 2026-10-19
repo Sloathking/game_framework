@@ -23,7 +23,8 @@ void SpriteComponent2D::Draw(SDL_Renderer* renderer)
 {
     if (mIsVisible)
     {
-        const Vector2 pos = dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+        const auto owner = dynamic_cast<Actor2D*>(mOwner);
+        const Vector2 pos = owner->GetPosition();
         const SDL_FRect dstRect {
             .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
             .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
@@ -31,7 +32,13 @@ void SpriteComponent2D::Draw(SDL_Renderer* renderer)
             .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
         };
 
-        SDL_RenderTextureRotated(renderer, mTexture, nullptr, &dstRect, mRotation, nullptr, SDL_FLIP_NONE);
+        SDL_RenderTextureRotated(
+            renderer, mTexture,
+            nullptr, &dstRect,
+            -Math::ToDegrees(owner->GetRotation()),
+            GetCenter(dstRect),
+            mSpriteFlipMode
+            );
     }
 }
 

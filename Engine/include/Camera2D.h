@@ -23,6 +23,7 @@ public:
 
 private:
     Vector3 mOffset{Vector3::Zero};
+
     float mPitch{0.0f};
 
 };

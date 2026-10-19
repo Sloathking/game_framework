@@ -77,8 +77,7 @@ bool Renderer3D::Initialize(const float screenWidth, const float screenHeight)
                 else
                 {
                     // use vsync
-                    if (!SDL_GL_SetSwapInterval(1))
-                        SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+                    success = SetVSync();
                     CreateSpriteVerts();
                 }
             }
@@ -184,28 +183,16 @@ void Renderer3D::Draw() const
 
     //swap buffers,
     SDL_GL_SwapWindow(mWindow);
-
-#pragma region 2D Rendering
-    /*SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
-    SDL_RenderClear(mRenderer);
-
-    Vector2 camPos = mCamera->GetPosition();
-    camPos.x = -camPos.x;
-    camPos.y = -camPos.y;
-
-    for (const auto sprite : mSprites)
-    {
-        if (IsInCamera(sprite->GetOwner()->GetPosition(), mCamera))
-            sprite->Draw(mRenderer, camPos, nullptr, -1, -1);
-    }
-
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
-    SDL_RenderFillRect(mRenderer, &dotRect);
-
-    SDL_RenderPresent(mRenderer);*/
-#pragma endregion
 }
+
+bool Renderer3D::SetVSync()
+{
+    bool success{true};
+    if (!SDL_GL_SetSwapInterval(vSyncEnabled))
+        SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+    return success;
+}
+
 
 void Renderer3D::AddSprite(SpriteComponent3D* sprite)
 {

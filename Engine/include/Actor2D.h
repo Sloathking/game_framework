@@ -22,10 +22,11 @@ public:
     void SetPosition(const Vector2& pos) { mPosition = pos; }
 
     [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }
+    [[nodiscard]] Vector2 GetRight() const { return Vector2(1, 0); }
 
     void SetScale(const float scale) override { mScale = scale; }
 
-private:
+protected:
     // transform properties
     float mRotation{0.0f};
     Vector2 mPosition{Vector2::Zero};

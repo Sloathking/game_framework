@@ -29,11 +29,7 @@ bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
     }
     else
     {
-        if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
-        {
-            SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
-            success = false;
-        }
+        success = SetVSync();
     }
 
     return success;
@@ -82,6 +78,17 @@ void Renderer2D::Draw() const
     // SDL_RenderFillRect(mRenderer, &dotRect);
 
     SDL_RenderPresent(mRenderer);
+}
+
+bool Renderer2D::SetVSync()
+{
+    bool success{true};
+    if (SDL_SetRenderVSync(mRenderer, vSyncEnabled ? 1 : SDL_RENDERER_VSYNC_DISABLED) == false)
+    {
+        SDL_Log("Could not enable VSync! SDL Error: %s", SDL_GetError());
+        success = false;
+    }
+    return success;
 }
 
 void Renderer2D::AddSprite(SpriteComponent2D* sprite)

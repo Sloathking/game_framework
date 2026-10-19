@@ -20,10 +20,15 @@ public:
     [[nodiscard]] float GetForwardSpeed() const { return mForwardSpeed; }
     void SetForwardSpeed(const float speed) { mForwardSpeed = speed; }
 
+    [[nodiscard]] float GetStrafeSpeed() const { return mStrafeSpeed; }
+    void SetStrafeSpeed(const float speed) { mStrafeSpeed = speed; }
+
 private:
     float mAngularSpeed{0.0f};
 
     float mForwardSpeed{0.0f};
+
+    float mStrafeSpeed{0.0f};
 
 };
 
