@@ -24,6 +24,8 @@ protected:
 
     int asteroidCount{0};
 
+    class HexGridActor* mHexGrid;
+
 private:
 
 };

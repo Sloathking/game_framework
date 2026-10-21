@@ -71,6 +71,11 @@ void Renderer2D::Draw() const
         // if (IsInCamera(dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition(), Vector2(windowWidth * 0.5f, windowHeight * 0.5f)))
         //     sprite->Draw(mRenderer);
         sprite->Draw(mRenderer);
+
+        const Vector2 ownerPos = dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition();
+        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+        SDL_FRect rect{ .x = ownerPos.x - 1, .y = ownerPos.y - 1, .w = 2, .h = 2 };
+        SDL_RenderFillRect(mRenderer, &rect);
     }
 
     // SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);

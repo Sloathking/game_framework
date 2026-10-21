@@ -37,6 +37,12 @@ target_sources(Game PRIVATE
         Code/TopDownActor.h
         Code/Cam2DActor.cpp
         Code/Cam2DActor.h
+        Code/HexGrid.cpp
+        Code/HexGrid.h
+        Code/HexActor.cpp
+        Code/HexActor.h
+        Code/HexGridActor.cpp
+        Code/HexGridActor.h
 )
 
 target_include_directories(Game PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

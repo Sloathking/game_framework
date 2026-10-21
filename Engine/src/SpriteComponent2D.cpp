@@ -28,15 +28,16 @@ void SpriteComponent2D::Draw(SDL_Renderer* renderer)
         const SDL_FRect dstRect {
             .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
             .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
-            .w = static_cast<float>(mTexWidth) * mOwner->GetScale(),
-            .h = static_cast<float>(mTexHeight) * mOwner->GetScale()
+            .w = static_cast<float>(mTexWidth),
+            .h = static_cast<float>(mTexHeight)
         };
+
 
         SDL_RenderTextureRotated(
             renderer, mTexture,
-            nullptr, &dstRect,
+            &mClip, &dstRect,
             -Math::ToDegrees(owner->GetRotation()),
-            GetCenter(dstRect),
+            nullptr, //GetCenter(dstRect),
             mSpriteFlipMode
             );
     }
@@ -49,49 +50,58 @@ void SpriteComponent2D::SetTexture(SDL_Texture* texture)
     mTexHeight = texture->h;
 
     anchorOffsets = {
-        { TopLeft, Vector2(0,0) },{ TopCenter, Vector2(-(mTexWidth * 0.5f),0) }, { TopRight, Vector2(-mTexWidth,0) },
-        { CenterLeft, Vector2(0,-(mTexHeight * 0.5f)) },{ CenterCenter, Vector2(-(mTexWidth * 0.5f),-(mTexHeight * 0.5f)) }, { CenterRight, Vector2(-mTexWidth,-(mTexHeight * 0.5f)) },
-        { BottomLeft, Vector2(0,-mTexHeight) },{ BottomCenter, Vector2(-(mTexWidth * 0.5f),-mTexHeight) }, { BottomRight, Vector2(-mTexWidth,-mTexHeight) },
+        { TopLeft, Vector2(0,0) },
+        { TopCenter, Vector2(-(mTexWidth * 0.5f),0) },
+        { TopRight, Vector2(-mTexWidth,0) },
+        { CenterLeft, Vector2(0,-(mTexHeight * 0.5f)) },
+        { CenterCenter, Vector2(-(mTexWidth * 0.5f),-(mTexHeight * 0.5f)) },
+        { CenterRight, Vector2(-mTexWidth,-(mTexHeight * 0.5f)) },
+        { BottomLeft, Vector2(0,-mTexHeight) },
+        { BottomCenter, Vector2(-(mTexWidth * 0.5f),-mTexHeight) },
+        { BottomRight, Vector2(-mTexWidth,-mTexHeight) },
     };
+
+    mClip = SDL_FRect(0, 0, mTexWidth, mTexHeight);
 }
 
 SDL_FPoint* SpriteComponent2D::GetCenter(const SDL_FRect& dstRect)
 {
+    auto owner = dynamic_cast<Actor2D*>(mOwner);
     switch (mRotPoint)
     {
-    case 0:
+    case TopLeft:
         mCenter.x = 0;
         mCenter.y = 0;
         break;
-    case 1:
+    case TopCenter:
         mCenter.x = dstRect.w * 0.5f;
         mCenter.y = 0;
         break;
-    case 2:
+    case TopRight:
         mCenter.x = dstRect.w;
         mCenter.y = 0;
         break;
-    case 3:
+    case CenterLeft:
         mCenter.x = 0;
         mCenter.y = dstRect.h * 0.5f;
         break;
-    case 4:
+    case CenterCenter:
         mCenter.x = dstRect.w * 0.5f;
         mCenter.y = dstRect.h * 0.5f;
         break;
-    case 5:
+    case CenterRight:
         mCenter.x = dstRect.w;
         mCenter.y = dstRect.h * 0.5f;
         break;
-    case 6:
+    case BottomLeft:
         mCenter.x = 0;
         mCenter.y = dstRect.h;
         break;
-    case 7:
+    case BottomCenter:
         mCenter.x = dstRect.w * 0.5f;
         mCenter.y = dstRect.h;
         break;
-    case 8:
+    case BottomRight:
         mCenter.x = dstRect.w;
         mCenter.y = dstRect.h;
         break;

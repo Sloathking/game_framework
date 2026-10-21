@@ -54,7 +54,7 @@ void TileMapComponent::Draw(SDL_Renderer* renderer)
         anchor.y = rotOffsets[mRotPoint].y;
 
         //Render texture
-        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(mRotation), &anchor, mSpriteFlipMode);
+        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(owner->GetRotation()), &anchor, mSpriteFlipMode);
     }
 }
 

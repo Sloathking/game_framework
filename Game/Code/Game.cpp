@@ -5,14 +5,13 @@
 #include "Game.h"
 #include "Asteroid.h"
 #include "Cam2DActor.h"
-#include "Engine/include/Camera2D.h"
-#include "Engine/include/Constants.h"
-#include <Engine/include/Actor.h>
-#include <Engine/include/Actor2D.h>
+#include "HexGridActor.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/InputSystem.h>
+#include <Engine/include/Constants.h>
 #include <Engine/include/Random.h>
-#include <Engine/include/Renderer3D.h>
+#include <Engine/include/InputSystem.h>
+#include <Engine/include/Actor2D.h>
+#include <Engine/include/Camera2D.h>
 
 Game::Game() = default;
 
@@ -46,6 +45,9 @@ void Game::LoadData()
 {
     mCamActor = new Cam2DActor(this);
     mCamActor->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
+
+    mHexGrid = new HexGridActor(this);
+    mHexGrid->GenerateGrid(5, 3);
 }
 
 void Game::UnloadData()

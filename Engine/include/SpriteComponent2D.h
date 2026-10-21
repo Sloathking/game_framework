@@ -32,13 +32,12 @@ public:
 
     [[nodiscard]] int GetTexWidth() const { return mTexWidth; }
 
-    [[nodiscard]] int GetTextHeight() const { return mTexHeight; }
+    [[nodiscard]] int GetTexHeight() const { return mTexHeight; }
 
      [[nodiscard]] Vector2 GetOffset() const { return mOffset;}
     void SetOffset(const Vector2 vec) { mOffset = vec; }
 
-    double GetRotation() const { return mRotation; }
-    void SetRotation(const float rotation) { mRotation = rotation; }
+    void SetClip(const SDL_FRect rect) { mClip = rect; }
 
     [[nodiscard]] SDL_FlipMode GetFlipMode() const { return mSpriteFlipMode; }
     void SetFlipMode(const SDL_FlipMode flip) { mSpriteFlipMode = flip; }
@@ -59,12 +58,12 @@ protected:
 
     SDL_Texture* mTexture{ nullptr };
     int mDrawOrder;
-    int mTexWidth{ 0 };
-    int mTexHeight{ 0 };
+    int mTexWidth{0};
+    int mTexHeight{0};
 
     Vector2 mOffset{Vector2::Zero};
 
-    float mRotation{ 0.0 };
+    SDL_FRect mClip;
 
     SDL_FlipMode mSpriteFlipMode{SDL_FLIP_NONE};
 

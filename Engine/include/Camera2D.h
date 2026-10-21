@@ -14,17 +14,7 @@ public:
 
     void Update(float deltaTime) override;
 
-    // getters / setters
-    [[nodiscard]] Vector3 GetOffset() const { return mOffset; }
-    void SetOffset(const Vector3 offset) { mOffset = offset; }
-
-    [[nodiscard]] float GetPitch() const { return mPitch; }
-    void SetPitch(const float pitch) { mPitch = pitch; }
-
 private:
-    Vector3 mOffset{Vector3::Zero};
-
-    float mPitch{0.0f};
 
 };
 
