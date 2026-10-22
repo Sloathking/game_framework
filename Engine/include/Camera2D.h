@@ -14,7 +14,15 @@ public:
 
     void Update(float deltaTime) override;
 
+    // getters / setters
+    [[nodiscard]] Vector2 GetWindowSize() const { return Vector2(mWindowWidth, mWindowHeight); }
+    void SetWindowSize(const float width, const float height) { mWindowWidth = width; mWindowHeight = height; }
+
+    [[nodiscard]] Vector2 GetPosition() const;
+
 private:
+    float mWindowWidth{0.0};
+    float mWindowHeight{0.0};
 
 };
 

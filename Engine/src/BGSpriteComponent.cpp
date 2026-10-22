@@ -23,7 +23,7 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer* renderer)
+void BGSpriteComponent::Draw(SDL_Renderer* renderer, Vector2 offset)
 {
     const auto owner = dynamic_cast<Actor2D*>(mOwner);
     for (auto& bg : mBGTextures)

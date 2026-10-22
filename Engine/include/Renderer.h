@@ -21,6 +21,8 @@ public:
 
     virtual bool SetVSync() = 0;
 
+    virtual void ProcessEvent(const SDL_Event& event) {}
+
     [[nodiscard]] SDL_Window* GetWindow() const { return mWindow; }
 
 protected:

@@ -19,19 +19,18 @@ SpriteComponent2D::~SpriteComponent2D()
     renderer->RemoveSprite(this);
 }
 
-void SpriteComponent2D::Draw(SDL_Renderer* renderer)
+void SpriteComponent2D::Draw(SDL_Renderer* renderer, const Vector2 offset)
 {
     if (mIsVisible)
     {
         const auto owner = dynamic_cast<Actor2D*>(mOwner);
         const Vector2 pos = owner->GetPosition();
         const SDL_FRect dstRect {
-            .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x,
-            .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y,
+            .x = pos.x + anchorOffsets[mAnchor].x + mOffset.x - offset.x,
+            .y = pos.y + anchorOffsets[mAnchor].y + mOffset.y - offset.y,
             .w = static_cast<float>(mTexWidth),
             .h = static_cast<float>(mTexHeight)
         };
-
 
         SDL_RenderTextureRotated(
             renderer, mTexture,

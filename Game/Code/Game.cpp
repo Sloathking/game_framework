@@ -7,11 +7,9 @@
 #include "Cam2DActor.h"
 #include "HexGridActor.h"
 #include <Engine/include/Engine.h>
-#include <Engine/include/Constants.h>
 #include <Engine/include/Random.h>
 #include <Engine/include/InputSystem.h>
 #include <Engine/include/Actor2D.h>
-#include <Engine/include/Camera2D.h>
 
 Game::Game() = default;
 
@@ -44,10 +42,11 @@ bool Game::ProcessGameEvent(SDL_Event* event)
 void Game::LoadData()
 {
     mCamActor = new Cam2DActor(this);
-    mCamActor->SetPosition(Vector2(windowWidth * 0.5f, windowHeight * 0.5f));
+    mCamActor->SetPosition(Vector2(2000, 3200));
 
     mHexGrid = new HexGridActor(this);
-    mHexGrid->GenerateGrid(5, 3);
+    mHexGrid->SetPosition(Vector2(200, 300));
+    mHexGrid->GenerateGrid(100, 100);
 }
 
 void Game::UnloadData()

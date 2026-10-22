@@ -13,7 +13,7 @@ void TileMapComponent::Update(const float deltaTime)
 
 }
 
-void TileMapComponent::Draw(SDL_Renderer* renderer)
+void TileMapComponent::Draw(SDL_Renderer* renderer, Vector2 offset)
 {
     auto owner = dynamic_cast<Actor2D*>(mOwner);
     for (TileData& tile : mTiles)

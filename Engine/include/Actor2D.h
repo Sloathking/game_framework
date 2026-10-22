@@ -21,8 +21,8 @@ public:
     [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
     void SetPosition(const Vector2& pos) { mPosition = pos; }
 
-    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), Math::Sin(mRotation)); }
-    [[nodiscard]] Vector2 GetRight() const { return Vector2(1, 0); }
+    [[nodiscard]] Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), -Math::Sin(mRotation)); }
+    [[nodiscard]] Vector2 GetRight() const { return Vector2(Math::Sin(mRotation), Math::Cos(mRotation)); }
 
     void SetScale(const float scale) override { mScale = scale; }
 

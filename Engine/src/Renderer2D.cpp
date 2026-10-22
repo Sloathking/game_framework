@@ -5,8 +5,10 @@
 #include "include/Renderer2D.h"
 #include "include/Engine.h"
 #include "include/Constants.h"
+#include "include/Camera2D.h"
 #include "include/Actor2D.h"
 #include "include/SpriteComponent2D.h"
+#include <SDL3/SDL_log.h>
 #include <algorithm>
 
 Renderer2D::Renderer2D(Engine* game) : Renderer(game) {}
@@ -32,6 +34,8 @@ bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
         success = SetVSync();
     }
 
+    SDL_SetRenderLogicalPresentation(mRenderer,mScreenWidth,mScreenHeight,SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
+
     return success;
 }
 
@@ -39,6 +43,30 @@ void Renderer2D::Shutdown()
 {
     SDL_DestroyWindow(mWindow);
     mWindow = nullptr;
+}
+
+void Renderer2D::ProcessEvent(const SDL_Event& event)
+{
+    switch (event.type)
+    {
+    case SDL_EVENT_WINDOW_RESIZED:
+    {
+        int x, y;
+        if (!SDL_GetWindowSize(mWindow, &x, &y))
+        {
+            SDL_Log("SDL_EVENT_WINDOW_RESIZED - Error: %s", SDL_GetError());
+            //mIsRunning = false;
+            break;
+        }
+        mScreenWidth = x;
+        mScreenHeight = y;
+        mCamera->SetWindowSize(mScreenWidth, mScreenHeight);
+        SDL_SetRenderLogicalPresentation(mRenderer, mScreenWidth, mScreenHeight, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void Renderer2D::UnloadData()
@@ -49,10 +77,10 @@ void Renderer2D::UnloadData()
     mTextures.clear();
 }
 
-static bool IsInCamera(const Vector2& spritePos, const Vector2& camPos)
+bool Renderer2D::IsInCamera(const Vector2& spritePos, const Vector2& camPos) const
 {
-    const Vector2 windowSize{1920, 1080};
-    if (spritePos.x > camPos.x and spritePos.x < camPos.x + windowSize.x and spritePos.y > camPos.y and spritePos.y < camPos.y + windowSize.y)
+    if (spritePos.x >= camPos.x and spritePos.x <= camPos.x + mScreenWidth * mRenderScale
+        and spritePos.y >= camPos.y and spritePos.y <= camPos.y + mScreenHeight * mRenderScale)
         return true;
     return false;
 }
@@ -66,15 +94,18 @@ void Renderer2D::Draw() const
     // camPos.x = -camPos.x;
     // camPos.y = -camPos.y;
 
+    const Vector2 offset = mCamera->GetPosition();
     for (const auto sprite : mSprites)
     {
-        // if (IsInCamera(dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition(), Vector2(windowWidth * 0.5f, windowHeight * 0.5f)))
-        //     sprite->Draw(mRenderer);
-        sprite->Draw(mRenderer);
+        // SDL_Log("Offset - X: %F | Y: %f", offset.x, offset.y);
+        const auto ownerPos = dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition();
+        const auto ownerOffset = ownerPos - offset;
+        if (IsInCamera(ownerPos, offset))
+            sprite->Draw(mRenderer, offset);
+        //sprite->Draw(mRenderer, offset);
 
-        const Vector2 ownerPos = dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition();
         SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-        SDL_FRect rect{ .x = ownerPos.x - 1, .y = ownerPos.y - 1, .w = 2, .h = 2 };
+        SDL_FRect rect{ .x = ownerOffset.x - 1, .y = ownerOffset.y - 1, .w = 2, .h = 2 };
         SDL_RenderFillRect(mRenderer, &rect);
     }
 
@@ -94,23 +125,6 @@ bool Renderer2D::SetVSync()
         success = false;
     }
     return success;
-}
-
-void Renderer2D::AddSprite(SpriteComponent2D* sprite)
-{
-    // find insertion point in sorted vector (first element with drawOrder higher)
-    const int drawOrder = sprite->GetDrawOder();
-    auto iter = mSprites.begin();
-    for (; iter != mSprites.end(); ++iter)
-        if (drawOrder < (*iter)->GetDrawOder())
-            break;
-    mSprites.insert(iter, sprite);
-}
-
-void Renderer2D::RemoveSprite(const SpriteComponent2D* sprite)
-{
-    if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
-        mSprites.erase(iter);
 }
 
 SDL_Texture* Renderer2D::GetTexture(const std::string& fileName)
@@ -138,4 +152,27 @@ SDL_Texture* Renderer2D::GetTexture(const std::string& fileName)
         }
     }
     return tex;
+}
+
+void Renderer2D::AddSprite(SpriteComponent2D* sprite)
+{
+    // find insertion point in sorted vector (first element with drawOrder higher)
+    const int drawOrder = sprite->GetDrawOder();
+    auto iter = mSprites.begin();
+    for (; iter != mSprites.end(); ++iter)
+        if (drawOrder < (*iter)->GetDrawOder())
+            break;
+    mSprites.insert(iter, sprite);
+}
+
+void Renderer2D::RemoveSprite(const SpriteComponent2D* sprite)
+{
+    if (const auto iter = std::find(mSprites.begin(), mSprites.end(), sprite); iter != mSprites.end())
+        mSprites.erase(iter);
+}
+
+void Renderer2D::SetRenderScale(const float scale)
+{
+    mRenderScale = scale;
+    SDL_SetRenderLogicalPresentation(mRenderer, mScreenWidth, mScreenHeight, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
 }

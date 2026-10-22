@@ -9,7 +9,6 @@
 #include "include/Constants.h"
 #include "include/InputSystem.h"
 #include "include/Actor.h"
-#include "include/Actor2D.h"
 #include "include/Actor3D.h"
 #include <algorithm>
 
@@ -143,16 +142,7 @@ void Engine::ProcessInput()
 			mIsRunning = false;
 			break;
 		case SDL_EVENT_WINDOW_RESIZED:
-			{
-				// int x, y;
-				// if (!SDL_GetWindowSize(mWindow, &x, &y))
-				// {
-				// 	SDL_Log("SDL_EVENT_WINDOW_RESIZED - Error: %s", SDL_GetError());
-				// 	mIsRunning = false;
-				// 	break;
-				// }
-				// mCamera->SetWindowSize(Vector2(static_cast<float>(x), static_cast<float>(y)));
-			}
+			mRenderer->ProcessEvent(event);
 			break;
 		case SDL_EVENT_MOUSE_WHEEL:
 		case SDL_EVENT_GAMEPAD_ADDED:

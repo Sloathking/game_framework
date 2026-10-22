@@ -21,7 +21,7 @@ public:
     explicit SpriteComponent2D(class Actor2D* owner, int drawOrder = 100);
     ~SpriteComponent2D() override;
 
-    virtual void Draw(SDL_Renderer* renderer);
+    virtual void Draw(SDL_Renderer* renderer, Vector2 offset);
 
     virtual void SetTexture(SDL_Texture* texture);
 
