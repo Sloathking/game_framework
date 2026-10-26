@@ -11,7 +11,7 @@
 class NavComponent : public MoveComponent2D
 {
 public:
-    explicit NavComponent(class Actor2D* owner, int updateOrder = 10);
+    explicit NavComponent(Actor2D* owner, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 

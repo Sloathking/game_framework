@@ -6,11 +6,12 @@
 #define RENDERER2D_H
 
 #include "Renderer.h"
-#include <SDL3/SDL.h>
-#include <unordered_map>
 #include "Math.h"
-#include <vector>
+#include "Camera2D.h"
+#include <SDL3/SDL.h>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 class Renderer2D : public Renderer
 {
@@ -19,7 +20,7 @@ public:
     ~Renderer2D() override;
 
     // init / shutdown
-    bool Initialize(float screenWidth, float screenHeight) override;
+    bool Initialize(float windowWidth, float windowHeight) override;
     void Shutdown() override;
     void UnloadData();
 
@@ -36,22 +37,23 @@ public:
     void RemoveSprite(const SpriteComponent2D* sprite);
 
     // getters / setters
-    [[nodiscard]] int GetScreenWidth() const { return mScreenWidth; }
-    [[nodiscard]] int GetScreenHeight() const { return mScreenHeight; }
+    [[nodiscard]] Vector2 GetScreenSize() const { return Vector2(mWindowWidth, mWindowHeight); }
 
     float GetRenderScale() const { return mRenderScale; }
     void SetRenderScale(float scale);
 
-    void SetCamera(class Camera2D* cam) { mCamera = cam; }
+    void SetCamera(Camera2D* cam) { mCamera = cam; mCamera->SetWindowSize(mWindowWidth, mWindowHeight); }
 
 private:
-    bool IsInCamera(const class Vector2& spritePos, const Vector2& camPos) const;
+    bool IsInCamera(const Vector2& spritePos, int texWidth) const;
 
     // renderer created by SDL
     SDL_Renderer* mRenderer{nullptr};
 
     // render scaling
     float mRenderScale{1.0f};
+    float mMaxRenderScale{2.0f};
+    float mMinRenderScale{0.1f};
 
     // map of loaded Textures
     std::unordered_map<std::string, SDL_Texture*> mTextures{};
@@ -59,10 +61,14 @@ private:
     // all sprites to draw
     std::vector<SpriteComponent2D*> mSprites{};
 
-    int mScreenWidth{};
-    int mScreenHeight{};
+    float mWindowWidth{};
+    float mWindowHeight{};
 
-    Camera2D* mCamera;
+    // float mScreenWidth{};
+    // float mScreenHeight{};
+
+    Camera2D* mCamera{};
+
 };
 
 

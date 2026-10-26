@@ -40,7 +40,7 @@ void OrbitCamera::Update(const float deltaTime)
     mUp = Vector3::Transform(mUp, pitch);
 
     // compute transform matrix
-    const Vector3 target = dynamic_cast<Actor3D*>(mOwner)->GetPosition();
+    const Vector3 target = mOwner->GetPosition();
     const Vector3 camPos = target + mOffset;
     const Matrix4 view = Matrix4::CreateLookAt(camPos, target, mUp);
     SetViewMatrix(view);

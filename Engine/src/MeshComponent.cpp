@@ -11,7 +11,7 @@
 #include "include/Texture.h"
 #include "include/VertexArray.h"
 
-MeshComponent::MeshComponent(Actor3D* owner) : Component(owner)
+MeshComponent::MeshComponent(Actor3D* owner) : Component3D(owner)
 {
     auto* renderer = dynamic_cast<Renderer3D*>(mOwner->GetGame()->GetRenderer());
     renderer->AddMeshComp(this);
@@ -29,7 +29,7 @@ void MeshComponent::Draw(Shader* shader)
     if (mMesh)
     {
         // set world transform
-        shader->SetMatrixUniform("uWorldTransform", dynamic_cast<Actor3D*>(mOwner)->GetWorldTransform());
+        shader->SetMatrixUniform("uWorldTransform", mOwner->GetWorldTransform());
         shader->SetFloatUniform("uSpecPower", mMesh->GetSpecPower());
         // set the active texture
         Texture* tex = mMesh->GetTexture(mTextureIndex);

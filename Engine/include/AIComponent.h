@@ -5,14 +5,14 @@
 #ifndef AICOMPONENT_H
 #define AICOMPONENT_H
 
-#include "Component.h"
+#include "Component2D.h"
 #include <string>
 #include <unordered_map>
 
-class AIComponent : public Component
+class AIComponent : public Component2D
 {
 public:
-    explicit AIComponent(Actor* owner);
+    explicit AIComponent(class Actor2D* owner);
 
     void Update(float deltaTime) override;
     void ChangeState(const std::string& name);

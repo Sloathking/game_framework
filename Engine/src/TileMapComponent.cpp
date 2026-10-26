@@ -13,9 +13,8 @@ void TileMapComponent::Update(const float deltaTime)
 
 }
 
-void TileMapComponent::Draw(SDL_Renderer* renderer, Vector2 offset)
+void TileMapComponent::Draw(SDL_Renderer* renderer, Vector2 offset, const float scaleFactor)
 {
-    auto owner = dynamic_cast<Actor2D*>(mOwner);
     for (TileData& tile : mTiles)
     {
         SDL_FRect srcRect{
@@ -26,35 +25,14 @@ void TileMapComponent::Draw(SDL_Renderer* renderer, Vector2 offset)
         };
 
         SDL_FRect dstRect{
-            .x = owner->GetPosition().x + mTileWidth * tile.xOffset,
-            .y = owner->GetPosition().y + mTileHeight * tile.yOffset,
-            .w = mTileWidth * mOwner->GetScale(),
-            .h = mTileHeight * mOwner->GetScale()
+            .x = (mOwner->GetPosition().x + mTileWidth * tile.xOffset) * scaleFactor,
+            .y = (mOwner->GetPosition().y + mTileHeight * tile.yOffset) * scaleFactor,
+            .w = mTileWidth * mOwner->GetScale() * scaleFactor,
+            .h = mTileHeight * mOwner->GetScale() * scaleFactor
         };
 
-        // //Default to clip dimensions if clip is given
-        // if( clip != nullptr )
-        // {
-        //     dstRect.w = clip->w;
-        //     dstRect.h = clip->h;
-        // }
-        //
-        // //Resize if new dimensions are given
-        // if( width > 0 )
-        // {
-        //     dstRect.w = width;
-        // }
-        // if( height > 0 )
-        // {
-        //     dstRect.h = height;
-        // }
-
-        SDL_FPoint anchor;
-        anchor.x = rotOffsets[mRotPoint].x;
-        anchor.y = rotOffsets[mRotPoint].y;
-
         //Render texture
-        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(owner->GetRotation()), &anchor, mSpriteFlipMode);
+        SDL_RenderTextureRotated(renderer, mTexture, &srcRect, &dstRect, -Math::ToDegrees(mOwner->GetRotation()), nullptr, mSpriteFlipMode);
     }
 }
 

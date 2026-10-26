@@ -6,29 +6,28 @@
 #include "include/Actor3D.h"
 #include "include/Math.h"
 
-MoveComponent3D::MoveComponent3D(Actor3D* owner, const int updateOrder) : Component(owner, updateOrder)
+MoveComponent3D::MoveComponent3D(Actor3D* owner, const int updateOrder) : Component3D(owner, updateOrder)
 {
 
 }
 
 void MoveComponent3D::Update(const float deltaTime)
 {
-    const auto owner = dynamic_cast<Actor3D*>(mOwner);
     if (!Math::NearZero(mAngularSpeed))
     {
-        Quaternion rot = owner->GetRotation();
+        Quaternion rot = mOwner->GetRotation();
         const float angle = mAngularSpeed * deltaTime;
         const Quaternion inc(Vector3::UnitZ, angle);
         rot = Quaternion::Concatenate(rot, inc);
-        owner->SetRotation(rot);
+        mOwner->SetRotation(rot);
     }
 
     if (!Math::NearZero(mForwardSpeed) or !Math::NearZero(mStrafeSpeed) or !Math::NearZero(mVertSpeed))
     {
-        Vector3 pos = owner->GetPosition();
-        pos += owner->GetForward() * mForwardSpeed * deltaTime;
-        pos += owner->GetRight() * mStrafeSpeed * deltaTime;
+        Vector3 pos = mOwner->GetPosition();
+        pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+        pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
         pos += Vector3::UnitZ * mVertSpeed * deltaTime;
-        owner->SetPosition(pos);
+        mOwner->SetPosition(pos);
     }
 }

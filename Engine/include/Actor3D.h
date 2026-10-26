@@ -30,6 +30,8 @@ public:
     void SetScale(const float scale) override { mScale = scale; mRecomputeWorldTransform = true; }
 
 protected:
+    std::vector<class Component3D*> mComponents;
+
     bool mRecomputeWorldTransform{true};
     Matrix4 mWorldTransform{Matrix4::Identity};
 

@@ -16,7 +16,7 @@ void NavComponent::Update(const float deltaTime)
     if (mNextNode)
     {
         // if we've reached the next point, advance along path
-        if (const Vector2 diff = dynamic_cast<Actor2D*>(mOwner)->GetPosition() - mNextNode->GetPosition();
+        if (const Vector2 diff = mOwner->GetPosition() - mNextNode->GetPosition();
             Math::NearZero(diff.Length(), 2.0f))
         {
             mNextNode = mNextNode->GetParent();
@@ -36,10 +36,9 @@ void NavComponent::StartPath(const Tile* start)
 
 void NavComponent::TurnTo(const Vector2& pos) const
 {
-    auto * owner = dynamic_cast<Actor2D*>(mOwner);
     // vector from me to pos
-    const Vector2 dir = pos - owner->GetPosition();
+    const Vector2 dir = pos - mOwner->GetPosition();
     // new angle is just atan2 of this dir vector
     const float angle = Math::Atan2(-dir.y, dir.x);
-    owner->SetRotation(angle);
+    mOwner->SetRotation(angle);
 }

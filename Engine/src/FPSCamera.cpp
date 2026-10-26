@@ -10,7 +10,7 @@ FPSCamera::FPSCamera(Actor3D* owner) : CameraComponent(owner) {}
 void FPSCamera::Update(const float deltaTime)
 {
     CameraComponent::Update(deltaTime);
-    const auto * owner = dynamic_cast<Actor3D*>(mOwner);
+    const auto * owner = mOwner;
     // get position
     const Vector3 pos = owner->GetPosition();
 

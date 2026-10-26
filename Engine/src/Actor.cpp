@@ -23,7 +23,8 @@ Actor::~Actor()
 void Actor::UpdateComponents(const float deltaTime) const
 {
     for (const auto comp : mComponents)
-        comp->Update(deltaTime);
+        if (comp->GetUpdateState())
+            comp->Update(deltaTime);
 }
 
 void Actor::UpdateActor(float deltaTime) {}
@@ -54,9 +55,7 @@ void Actor::AddComponent(Component* component)
 
 void Actor::RemoveComponent(const Component* component)
 {
-    if (
-        const auto iter = std::find(mComponents.begin(), mComponents.end(), component);
-        iter != mComponents.end()
-        )
-        mComponents.erase(iter);
+    if (const auto iter = std::find(mComponents.begin(), mComponents.end(), component);
+        iter != mComponents.end())
+            mComponents.erase(iter);
 }

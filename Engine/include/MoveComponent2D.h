@@ -5,12 +5,12 @@
 #ifndef MOVECOMPONENT2D_H
 #define MOVECOMPONENT2D_H
 
-#include "Component.h"
+#include "Component2D.h"
 
-class MoveComponent2D : public Component
+class MoveComponent2D : public Component2D
 {
 public:
-    explicit MoveComponent2D(class Actor2D* owner, int updateOrder = 10);
+    explicit MoveComponent2D(Actor2D * owner, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 

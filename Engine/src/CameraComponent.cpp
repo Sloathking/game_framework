@@ -3,11 +3,11 @@
 //
 
 #include "include/CameraComponent.h"
-#include "include/Actor.h"
+#include "include/Actor3D.h"
 #include "include/Engine.h"
 #include "include/Renderer3D.h"
 
-CameraComponent::CameraComponent(Actor* owner, const int updateOrder) : Component(owner, updateOrder)
+CameraComponent::CameraComponent(Actor3D* owner, const int updateOrder) : Component3D(owner, updateOrder)
 {
 
 }

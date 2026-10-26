@@ -283,7 +283,7 @@ bool Renderer3D::LoadShaders()
     if (!mSpriteShader->Load(fullPath + "Shaders/Sprite.vert", fullPath + "Shaders/Sprite.frag"))
         return false;
     //mSpriteShader->SetActive();
-    const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(windowWidth, windowHeight);
+    const Matrix4 viewProj = Matrix4::CreateSimpleViewProj(gWindowWidth, gWindowHeight);
     mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
     // create basic mesh shader

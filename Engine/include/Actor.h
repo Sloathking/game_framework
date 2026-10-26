@@ -39,8 +39,8 @@ public:
     virtual void ActorInput(const InputState& state);
 
     // add/remove components
-    void AddComponent(class Component* component);
-    void RemoveComponent(const Component* component);
+    virtual void AddComponent(class Component* component);
+    virtual void RemoveComponent(const Component* component);
 
     // getters/setters
     [[nodiscard]] State GetState() const { return mState; }

@@ -9,20 +9,21 @@
 #include "include/Actor2D.h"
 #include "include/SpriteComponent2D.h"
 #include <SDL3/SDL_log.h>
+#include <SDL3_image/SDL_image.h>
 #include <algorithm>
 
 Renderer2D::Renderer2D(Engine* game) : Renderer(game) {}
 
 Renderer2D::~Renderer2D() = default;
 
-bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
+bool Renderer2D::Initialize(const float windowWidth, const float windowHeight)
 {
     bool success{ true };
-    mScreenWidth = screenWidth;
-    mScreenHeight = screenHeight;
+    mWindowWidth = windowWidth;
+    mWindowHeight = windowHeight;
 
     if (SDL_CreateWindowAndRenderer(windowTitle.c_str(),
-        static_cast<int>(mScreenWidth), static_cast<int>(mScreenHeight),
+        static_cast<int>(mWindowWidth), static_cast<int>(mWindowHeight),
         SDL_WINDOW_RESIZABLE,
         &mWindow, &mRenderer) == false)
     {
@@ -32,15 +33,20 @@ bool Renderer2D::Initialize(const float screenWidth, const float screenHeight)
     else
     {
         success = SetVSync();
+        if (!SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale))
+        {
+            SDL_Log("Unable to set Render Scale! SDL Error: %s", SDL_GetError());
+            success = false;
+        }
     }
-
-    SDL_SetRenderLogicalPresentation(mRenderer,mScreenWidth,mScreenHeight,SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
-
     return success;
 }
 
 void Renderer2D::Shutdown()
 {
+    SDL_DestroyRenderer(mRenderer);
+    mRenderer = nullptr;
+
     SDL_DestroyWindow(mWindow);
     mWindow = nullptr;
 }
@@ -58,10 +64,11 @@ void Renderer2D::ProcessEvent(const SDL_Event& event)
             //mIsRunning = false;
             break;
         }
-        mScreenWidth = x;
-        mScreenHeight = y;
-        mCamera->SetWindowSize(mScreenWidth, mScreenHeight);
-        SDL_SetRenderLogicalPresentation(mRenderer, mScreenWidth, mScreenHeight, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
+        mWindowWidth = x;
+        mWindowHeight = y;
+        mCamera->SetWindowSize(mWindowWidth, mWindowHeight);
+        if (!SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale))
+            SDL_Log("Unable to set Render Scale! SDL Error: %s", SDL_GetError());
         break;
     }
     default:
@@ -77,10 +84,10 @@ void Renderer2D::UnloadData()
     mTextures.clear();
 }
 
-bool Renderer2D::IsInCamera(const Vector2& spritePos, const Vector2& camPos) const
+bool Renderer2D::IsInCamera(const Vector2& spritePos, const int texWidth) const
 {
-    if (spritePos.x >= camPos.x and spritePos.x <= camPos.x + mScreenWidth * mRenderScale
-        and spritePos.y >= camPos.y and spritePos.y <= camPos.y + mScreenHeight * mRenderScale)
+    if (spritePos.x >= 0 - texWidth and spritePos.x <= mWindowWidth + texWidth
+        and spritePos.y >= 0 - texWidth and spritePos.y <= mWindowHeight + texWidth)
         return true;
     return false;
 }
@@ -90,28 +97,24 @@ void Renderer2D::Draw() const
     SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
     SDL_RenderClear(mRenderer);
 
-    // Vector2 camPos = mCamera->GetPosition();
-    // camPos.x = -camPos.x;
-    // camPos.y = -camPos.y;
-
-    const Vector2 offset = mCamera->GetPosition();
-    for (const auto sprite : mSprites)
+    if (mCamera)
     {
-        // SDL_Log("Offset - X: %F | Y: %f", offset.x, offset.y);
-        const auto ownerPos = dynamic_cast<Actor2D*>(sprite->GetOwner())->GetPosition();
-        const auto ownerOffset = ownerPos - offset;
-        if (IsInCamera(ownerPos, offset))
-            sprite->Draw(mRenderer, offset);
-        //sprite->Draw(mRenderer, offset);
+        const Vector2 camPos = mCamera->GetPosition();
+        const auto halfView(Vector2(mWindowWidth * 0.5f / mRenderScale, mWindowHeight * 0.5f / mRenderScale));
+        const Vector2 camOffset = camPos - halfView;
+        for (const auto sprite : mSprites)
+        {
+            const auto actorPos = sprite->GetOwner()->GetPosition();
+            if (const auto actorOffset = actorPos - camOffset; IsInCamera(actorOffset * mRenderScale, sprite->GetTexWidth()))
+            {
+                sprite->Draw(mRenderer, camOffset, 1.0f);
 
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-        SDL_FRect rect{ .x = ownerOffset.x - 1, .y = ownerOffset.y - 1, .w = 2, .h = 2 };
-        SDL_RenderFillRect(mRenderer, &rect);
+                SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+                SDL_FRect rect{ .x = actorOffset.x - 1, .y = actorOffset.y - 1, .w = 2, .h = 2 };
+                SDL_RenderFillRect(mRenderer, &rect);
+            }
+        }
     }
-
-    // SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    // const SDL_FRect dotRect{.x = mDot->GetPosition().x + camPos.x - 5, .y = mDot->GetPosition().y + camPos.y - 5, .w = 10, .h = 10};
-    // SDL_RenderFillRect(mRenderer, &dotRect);
 
     SDL_RenderPresent(mRenderer);
 }
@@ -141,14 +144,11 @@ SDL_Texture* Renderer2D::GetTexture(const std::string& fileName)
         }
         else
         {
-            tex = SDL_CreateTextureFromSurface(mRenderer, surf);
             if (tex = SDL_CreateTextureFromSurface(mRenderer, surf), !tex)
                 SDL_Log("Unable to create texture! SDL Error: %s", SDL_GetError());
             else
-            {
-                SDL_DestroySurface(surf);
                 mTextures.emplace(fileName, tex);
-            }
+            SDL_DestroySurface(surf);
         }
     }
     return tex;
@@ -157,10 +157,10 @@ SDL_Texture* Renderer2D::GetTexture(const std::string& fileName)
 void Renderer2D::AddSprite(SpriteComponent2D* sprite)
 {
     // find insertion point in sorted vector (first element with drawOrder higher)
-    const int drawOrder = sprite->GetDrawOder();
+    const int drawOrder = sprite->GetDrawOrder();
     auto iter = mSprites.begin();
     for (; iter != mSprites.end(); ++iter)
-        if (drawOrder < (*iter)->GetDrawOder())
+        if (drawOrder < (*iter)->GetDrawOrder())
             break;
     mSprites.insert(iter, sprite);
 }
@@ -173,6 +173,7 @@ void Renderer2D::RemoveSprite(const SpriteComponent2D* sprite)
 
 void Renderer2D::SetRenderScale(const float scale)
 {
-    mRenderScale = scale;
-    SDL_SetRenderLogicalPresentation(mRenderer, mScreenWidth, mScreenHeight, SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
+    mRenderScale = Math::Clamp(scale, mMinRenderScale, mMaxRenderScale);
+    if (!SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale))
+        SDL_Log("Unable to set Render Scale! SDL Error: %s", SDL_GetError());
 }

@@ -27,6 +27,8 @@ public:
     void SetScale(const float scale) override { mScale = scale; }
 
 protected:
+    std::vector<class Component2D*> mComponents;
+
     // transform properties
     float mRotation{0.0f};
     Vector2 mPosition{Vector2::Zero};

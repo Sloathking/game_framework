@@ -16,7 +16,7 @@ public:
 
     // update draw override
     void Update(float deltaTime) override;
-    void Draw(SDL_Renderer* renderer, Vector2 offset) override;
+    void Draw(SDL_Renderer* renderer, Vector2 offset, float scaleFactor) override;
 
     // set the texture used for the background
     void SetBGTextures(const std::vector<SDL_Texture*>& textures);

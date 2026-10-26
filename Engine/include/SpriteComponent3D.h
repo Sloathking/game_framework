@@ -5,12 +5,12 @@
 #ifndef SPRITECOMPONENT3D_H
 #define SPRITECOMPONENT3D_H
 
-#include "Component.h"
+#include "Component3D.h"
 
-class SpriteComponent3D : public Component
+class SpriteComponent3D : public Component3D
 {
 public:
-    explicit SpriteComponent3D(class Actor3D* owner, int drawOrder = 100);
+    explicit SpriteComponent3D(Actor3D* owner, int drawOrder = 100);
     ~SpriteComponent3D() override;
 
     virtual void Draw(class Shader* shader);

@@ -4,9 +4,10 @@
 
 #include "include/AIComponent.h"
 #include "include/AIState.h"
+#include "include/Actor2D.h"
 #include <SDL3/SDL_log.h>
 
-AIComponent::AIComponent(Actor* owner) : Component(owner)
+AIComponent::AIComponent(Actor2D* owner) : Component2D(owner)
 {
 
 }

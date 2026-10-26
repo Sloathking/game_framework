@@ -8,8 +8,8 @@
 #include <string>
 
 inline std::string windowTitle = "Game Programming with C++";
-inline float windowWidth{ 1920 };
-inline float windowHeight{ 1080 };
+inline float gWindowWidth{ 1920 };
+inline float gWindowHeight{ 1080 };
 inline int screenFPS{ 60 };
 
 inline bool vSyncEnabled{ true };

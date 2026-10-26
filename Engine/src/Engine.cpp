@@ -42,7 +42,7 @@ bool Engine::Initialize(const RendererType rendererType)
 				break;
 		}
 
-		if (!mRenderer->Initialize(windowWidth, windowHeight))
+		if (!mRenderer->Initialize(gWindowWidth, gWindowHeight))
 		{
 			SDL_Log("Unable to init Renderer");
 			delete mRenderer;
@@ -85,10 +85,12 @@ void Engine::Shutdown()
 	UnloadData();
 
 	mRenderer->Shutdown();
+    delete mRenderer;
 	mRenderer = nullptr;
 
 	mInputSystem->Shutdown();
 	delete mInputSystem;
+    mInputSystem = nullptr;
 
 	SDL_Quit();
 }

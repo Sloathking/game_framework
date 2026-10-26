@@ -5,13 +5,13 @@
 #ifndef CIRCLECOMPONENT_H
 #define CIRCLECOMPONENT_H
 
-#include "Component.h"
+#include "Component2D.h"
 #include "Math.h"
 
-class CircleComponent : public Component
+class CircleComponent : public Component2D
 {
 public:
-    explicit CircleComponent(class Actor2D* owner);
+    explicit CircleComponent(Actor2D* owner);
 
     [[nodiscard]] float GetRadius() const { return mRadius; }
     void SetRadius(const float radius) { mRadius = radius; }

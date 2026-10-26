@@ -5,23 +5,20 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "Actor.h"
+
 class Component
 {
 public:
-    // constructor (the lower the update order, the earlier the component updates)
-    explicit Component(class Actor* owner, int updateOrder = 100);
-
     // destructor
     virtual ~Component();
 
     // update this component by delta time
     virtual void Update(float deltaTime);
 
-    virtual void OnUpdateWorldTransform() {}
-
     virtual void ProcessInput(const struct InputState& state) {}
 
-    [[nodiscard]] Actor* GetOwner() const { return mOwner; }
+    [[nodiscard]] virtual Actor* GetOwner() const { return mOwner; }
 
     [[nodiscard]] bool GetUpdateState() const { return mUpdate; }
     void SetUpdateState(const bool update) { mUpdate = update; }
@@ -29,14 +26,20 @@ public:
     [[nodiscard]] int GetUpdateOrder() const { return mUpdateOrder; }
 
 protected:
-    // owning Actor
-    Actor* mOwner;
+    // constructor (the lower the update order, the earlier the component updates)
+    explicit Component(Actor* owner, int updateOrder = 100);
+
 
     // update order of component
     int mUpdateOrder;
 
     // whether this component should Update
     bool mUpdate{true};
+
+private:
+    // owning Actor
+    Actor* mOwner;
+
 };
 
 #endif //COMPONENT_H

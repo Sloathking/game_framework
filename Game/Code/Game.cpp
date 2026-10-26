@@ -6,10 +6,11 @@
 #include "Asteroid.h"
 #include "Cam2DActor.h"
 #include "HexGridActor.h"
-#include <Engine/include/Engine.h>
-#include <Engine/include/Random.h>
-#include <Engine/include/InputSystem.h>
 #include <Engine/include/Actor2D.h>
+#include <Engine/include/Engine.h>
+#include <Engine/include/Constants.h>
+#include <Engine/include/InputSystem.h>
+#include <Engine/include/Random.h>
 
 Game::Game() = default;
 
@@ -42,10 +43,10 @@ bool Game::ProcessGameEvent(SDL_Event* event)
 void Game::LoadData()
 {
     mCamActor = new Cam2DActor(this);
-    mCamActor->SetPosition(Vector2(2000, 3200));
+    mCamActor->SetPosition(Vector2(0, 0));
 
     mHexGrid = new HexGridActor(this);
-    mHexGrid->SetPosition(Vector2(200, 300));
+    mHexGrid->SetPosition(Vector2(-256 * 10,  -256 * 10));
     mHexGrid->GenerateGrid(100, 100);
 }
 

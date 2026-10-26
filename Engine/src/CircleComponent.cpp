@@ -5,14 +5,14 @@
 #include "include/CircleComponent.h"
 #include "include/Actor2D.h"
 
-CircleComponent::CircleComponent(Actor2D* owner) : Component(owner)
+CircleComponent::CircleComponent(Actor2D* owner) : Component2D(owner)
 {
 
 }
 
 const Vector2& CircleComponent::GetCenter() const
 {
-    return dynamic_cast<Actor2D*>(mOwner)->GetPosition();
+    return mOwner->GetPosition();
 }
 
 bool Intersect(const CircleComponent& a, const CircleComponent& b)

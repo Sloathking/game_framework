@@ -5,13 +5,13 @@
 #ifndef MESHCOMPONENT_H
 #define MESHCOMPONENT_H
 
-#include "Component.h"
+#include "Component3D.h"
 #include "Mesh.h"
 
-class MeshComponent : public Component
+class MeshComponent : public Component3D
 {
 public:
-    explicit MeshComponent(class Actor3D* owner);
+    explicit MeshComponent(Actor3D* owner);
     ~MeshComponent() override;
 
     // draw this mesh comp with provided shader

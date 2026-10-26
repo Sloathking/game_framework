@@ -11,8 +11,6 @@
 Tile::Tile(Engine* game) : Actor2D(game)
 {
     mSpriteComp = new SpriteComponent2D(this);
-    mSpriteComp->SetAnchor(SpriteComponent2D::CenterCenter);
-    mSpriteComp->SetCenter(SpriteComponent2D::CenterCenter);
     UpdateTexture();
 }
 

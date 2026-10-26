@@ -5,13 +5,13 @@
 #ifndef CAMERACOMPONENT_H
 #define CAMERACOMPONENT_H
 
-#include "Component.h"
+#include "Component3D.h"
 #include "Math.h"
 
-class CameraComponent : public Component
+class CameraComponent : public Component3D
 {
 public:
-    explicit CameraComponent(class Actor* owner, int updateOrder = 200);
+    explicit CameraComponent(class Actor3D* owner, int updateOrder = 200);
 
 protected:
     void SetViewMatrix(const Matrix4& view) const;

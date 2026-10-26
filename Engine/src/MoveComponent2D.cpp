@@ -5,29 +5,28 @@
 #include "include/MoveComponent2D.h"
 #include "include/Actor2D.h"
 
-MoveComponent2D::MoveComponent2D(Actor2D* owner, const int updateOrder) : Component(owner, updateOrder) {}
+MoveComponent2D::MoveComponent2D(Actor2D* owner, const int updateOrder) : Component2D(owner, updateOrder) {}
 
 void MoveComponent2D::Update(const float deltaTime)
 {
-    const auto owner = dynamic_cast<Actor2D*>(mOwner);
     if (!Math::NearZero(mAngularSpeed))
     {
-        float rot = owner->GetRotation();
+        float rot = mOwner->GetRotation();
         rot += mAngularSpeed * deltaTime;
-        owner->SetRotation(rot);
+        mOwner->SetRotation(rot);
     }
 
     if (!Math::NearZero(mForwardSpeed))
     {
-        Vector2 pos = owner->GetPosition();
-        pos += owner->GetForward() * mForwardSpeed * deltaTime;
-        owner->SetPosition(pos);
+        Vector2 pos = mOwner->GetPosition();
+        pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+        mOwner->SetPosition(pos);
     }
 
     if (!Math::NearZero(mStrafeSpeed))
     {
-        Vector2  pos = owner->GetPosition();
-        pos += owner->GetRight() * mStrafeSpeed * deltaTime;
-        owner->SetPosition(pos);
+        Vector2  pos = mOwner->GetPosition();
+        pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
+        mOwner->SetPosition(pos);
     }
 }

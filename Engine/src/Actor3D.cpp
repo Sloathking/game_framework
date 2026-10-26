@@ -3,7 +3,7 @@
 //
 
 #include "include/Actor3D.h"
-#include "include/Component.h"
+#include "include/Component3D.h"
 
 void Actor3D::Update(const float deltaTime)
 {

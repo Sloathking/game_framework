@@ -17,6 +17,10 @@ target_sources(Engine PRIVATE
         include/Actor3D.h
         src/Component.cpp
         include/Component.h
+        src/Component2D.cpp
+        include/Component2D.h
+        src/Component3D.cpp
+        include/Component3D.h
         src/SpriteComponent2D.cpp
         include/SpriteComponent2D.h
         src/SpriteComponent3D.cpp

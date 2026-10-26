@@ -23,16 +23,15 @@ void BGSpriteComponent::Update(const float deltaTime)
     }
 }
 
-void BGSpriteComponent::Draw(SDL_Renderer* renderer, Vector2 offset)
+void BGSpriteComponent::Draw(SDL_Renderer* renderer, Vector2 offset, const float scaleFactor)
 {
-    const auto owner = dynamic_cast<Actor2D*>(mOwner);
     for (auto& bg : mBGTextures)
     {
         SDL_FRect dstRect;
-        dstRect.w = mScreenSize.x;
-        dstRect.h = mScreenSize.y;
-        dstRect.x = owner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x;
-        dstRect.y = owner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y;
+        dstRect.w = mScreenSize.x * scaleFactor;
+        dstRect.h = mScreenSize.y * scaleFactor;
+        dstRect.x = (mOwner->GetPosition().x - dstRect.w * 0.5f + bg.mOffset.x) * scaleFactor;
+        dstRect.y = (mOwner->GetPosition().y - dstRect.h * 0.5f + bg.mOffset.y) * scaleFactor;
         SDL_RenderTexture(renderer, bg.mTexture, nullptr, &dstRect);
     }
 }
