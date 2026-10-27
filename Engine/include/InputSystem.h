@@ -56,6 +56,7 @@ public:
 
     // for mouse pos
     [[nodiscard]] const Vector2& GetPosition() const { return mMousePos; }
+    [[nodiscard]] const Vector2& GetPositionRelative() const { return mMousePosRelative; }
 
     // for buttons
     [[nodiscard]] bool GetButtonValue(MouseButton button) const;
@@ -64,8 +65,12 @@ public:
     // for scroll wheel
     [[nodiscard]] Vector2 GetScrollWheel() const { return mScrollWheel; }
 
+    // for mouse relative check
+    [[nodiscard]] bool GetMouseRelativeState() const { return mIsRelative; }
+
 private:
     Vector2 mMousePos{0, 0};
+    Vector2 mMousePosRelative{0, 0};
     SDL_MouseButtonFlags mCurrButtons{0};
     SDL_MouseButtonFlags mPrevButtons{0};
     Vector2 mScrollWheel{0, 0};

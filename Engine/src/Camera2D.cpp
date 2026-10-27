@@ -15,7 +15,16 @@ void Camera2D::Update(float deltaTime)
 
 }
 
-[[nodiscard]] Vector2 Camera2D::GetPosition() const
+// [[nodiscard]] Vector2 Camera2D::GetPosition() const
+// {
+//     Vector2 offset = mOwner->GetPosition();
+//     offset -= Vector2(mWindowWidth * 0.5f, mWindowHeight * 0.5f);
+//     return offset;
+// }
+
+Vector2 Camera2D::GetCameraOffset() const
 {
-    return mOwner->GetPosition();
+    Vector2 offset = mOwner->GetPosition();
+    offset -= Vector2(mWindowWidth * 0.5f, mWindowHeight * 0.5f);
+    return offset;
 }

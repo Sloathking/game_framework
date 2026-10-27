@@ -22,8 +22,6 @@ protected:
 
     class Cam2DActor* mCamActor;
 
-    int asteroidCount{0};
-
     class HexGridActor* mHexGrid;
 
 private:

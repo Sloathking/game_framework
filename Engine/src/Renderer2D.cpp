@@ -99,9 +99,7 @@ void Renderer2D::Draw() const
 
     if (mCamera)
     {
-        const Vector2 camPos = mCamera->GetPosition();
-        const auto halfView(Vector2(mWindowWidth * 0.5f / mRenderScale, mWindowHeight * 0.5f / mRenderScale));
-        const Vector2 camOffset = camPos - halfView;
+        const Vector2 camOffset = mCamera->GetCameraOffset();
         for (const auto sprite : mSprites)
         {
             const auto actorPos = sprite->GetOwner()->GetPosition();

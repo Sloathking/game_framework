@@ -74,12 +74,14 @@ void InputSystem::Update()
     mState.Keyboard.mCurrState = SDL_GetKeyboardState(nullptr);
 
     // mouse
-    float x = 0, y = 0;
-    if (mState.Mouse.mIsRelative)
-        mState.Mouse.mCurrButtons = SDL_GetRelativeMouseState(&x, &y);
-    else
-        mState.Mouse.mCurrButtons = SDL_GetMouseState(&x, &y);
+    float x = 0, y = 0, xRel = 0, yRel = 0;
+    // if (mState.Mouse.mIsRelative)
+    //     mState.Mouse.mCurrButtons = SDL_GetRelativeMouseState(&x, &y);
+    // else
+    SDL_GetRelativeMouseState(&xRel, &yRel);
+    mState.Mouse.mCurrButtons = SDL_GetMouseState(&x, &y);
     mState.Mouse.mMousePos = Vector2(x, y);
+    mState.Mouse.mMousePosRelative = Vector2(xRel, yRel);
 
     // controllers
     for (int gamepad = 0; gamepad < mGamepads.size(); gamepad++)
