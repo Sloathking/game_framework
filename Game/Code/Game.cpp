@@ -4,9 +4,10 @@
 
 #include "Game.h"
 #include "Cam2DActor.h"
+#include "PauseScreen.h"
 #include "HexGridActor.h"
-#include <Engine/include/Actor2D.h>
 #include <Engine/include/Engine.h>
+#include <Engine/include/Actor2D.h>
 #include <Engine/include/Renderer2D.h>
 #include <Engine/include/InputSystem.h>
 
@@ -19,18 +20,22 @@ void Game::ProcessInput()
     Engine::ProcessInput();
 
     const InputState& state = mInputSystem->GetState();
+    if (state.Keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == EPressed)
+        new PauseScreen(this);
     if (state.Mouse.GetButtonState(MouseState::Left) == EPressed)
     {
         // convert mouse position Screen Space -> World Space
-        auto renderScale = static_cast<Renderer2D*>(mRenderer)->GetRenderScale();
-        const Vector2 camOffset = mCamActor->GetCamOffset();
+        const auto renderScale = static_cast<Renderer2D*>(mRenderer)->GetRenderScale();
+        const Vector2 camOffset = mCamActor->GetCamOffset(renderScale);
         Vector2 mousePos = state.Mouse.GetPosition();
         mousePos.x /= renderScale;
         mousePos.y /= renderScale;
         mousePos += camOffset;
         const Vector2 hexPos{mousePos.x / 256.f, mousePos.y / (256.f * 0.75f)};
-        auto hex = mHexGrid->GetHex(static_cast<int>(hexPos.x), static_cast<int>(hexPos.y));
+        SDL_Log("X: %d | Y: %d", static_cast<int>(hexPos.x), static_cast<int>(hexPos.y));
+        // auto hex = mHexGrid->GetHex(static_cast<int>(hexPos.x), static_cast<int>(hexPos.y));
     }
+
 }
 
 bool Game::ProcessGameEvent(SDL_Event* event)
@@ -44,7 +49,6 @@ bool Game::ProcessGameEvent(SDL_Event* event)
 
 void Game::LoadData()
 {
-    //mInputSystem->SetRelativeMouseMode(true);
     mCamActor = new Cam2DActor(this);
     mCamActor->SetPosition(Vector2(0, 0));
 
@@ -55,7 +59,5 @@ void Game::LoadData()
 
 void Game::UnloadData()
 {
-    // delete actors
-    while (!mActors.empty())
-        delete mActors.back();
+    Engine::UnloadData();
 }

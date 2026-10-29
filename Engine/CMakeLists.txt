@@ -76,6 +76,10 @@ target_sources(Engine PRIVATE
         include/OrbitCamera.h
         src/Camera2D.cpp
         include/Camera2D.h
+        src/Font.cpp
+        include/Font.h
+        src/UIScreen.cpp
+        include/UIScreen.h
 )
 
 target_include_directories(Engine

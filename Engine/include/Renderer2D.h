@@ -22,7 +22,7 @@ public:
     // init / shutdown
     bool Initialize(float windowWidth, float windowHeight) override;
     void Shutdown() override;
-    void UnloadData();
+    void UnloadData() override;
 
     void Draw() const override;
 
@@ -37,7 +37,8 @@ public:
     void RemoveSprite(const SpriteComponent2D* sprite);
 
     // getters / setters
-    [[nodiscard]] Vector2 GetScreenSize() const { return Vector2(mWindowWidth, mWindowHeight); }
+    [[nodiscard]] SDL_Renderer* GetSDLRenderer() const { return mRenderer; }
+    [[nodiscard]] Vector2 GetWindowSize() const { return Vector2(mWindowWidth, mWindowHeight); }
 
     float GetRenderScale() const { return mRenderScale; }
     void SetRenderScale(float scale);
@@ -55,6 +56,11 @@ private:
     float mMaxRenderScale{2.0f};
     float mMinRenderScale{0.1f};
 
+    // UI scale
+    float mUIScale{1.0f};
+    float mMaxUIScale{2.0f};
+    float mMinUIScale{0.1f};
+
     // map of loaded Textures
     std::unordered_map<std::string, SDL_Texture*> mTextures{};
 
@@ -63,9 +69,6 @@ private:
 
     float mWindowWidth{};
     float mWindowHeight{};
-
-    // float mScreenWidth{};
-    // float mScreenHeight{};
 
     Camera2D* mCamera{};
 

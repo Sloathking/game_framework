@@ -23,13 +23,13 @@ public:
 
     virtual void ProcessEvent(const SDL_Event& event) {}
 
+    virtual void UnloadData() = 0;
+
     [[nodiscard]] SDL_Window* GetWindow() const { return mWindow; }
 
 protected:
     SDL_Window* mWindow{nullptr};
     Engine* mGame{nullptr};
-
-private:
 
 };
 

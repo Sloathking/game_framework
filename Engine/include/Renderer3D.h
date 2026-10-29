@@ -28,7 +28,7 @@ public:
     // init / shutdown
     bool Initialize(float screenWidth, float screenHeight) override;
     void Shutdown() override;
-    void UnloadData();
+    void UnloadData() override;
 
     void Draw() const override;
 

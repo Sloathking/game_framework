@@ -5,6 +5,7 @@
 #include "include/Renderer2D.h"
 #include "include/Engine.h"
 #include "include/Constants.h"
+#include "include/UIScreen.h"
 #include "include/Camera2D.h"
 #include "include/Actor2D.h"
 #include "include/SpriteComponent2D.h"
@@ -97,9 +98,11 @@ void Renderer2D::Draw() const
     SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
     SDL_RenderClear(mRenderer);
 
+    SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale);
+
     if (mCamera)
     {
-        const Vector2 camOffset = mCamera->GetCameraOffset();
+        const Vector2 camOffset = mCamera->GetCameraOffset(mRenderScale);
         for (const auto sprite : mSprites)
         {
             const auto actorPos = sprite->GetOwner()->GetPosition();
@@ -113,6 +116,13 @@ void Renderer2D::Draw() const
             }
         }
     }
+
+    // collection of UI elements
+    // iterate through them calling Draw() function
+    // draw gets called in an order that gives it correct layers
+    SDL_SetRenderScale(mRenderer, mUIScale, mUIScale);
+    for (const auto ui : mGame->GetUIStack())
+        ui->Draw(mRenderer, mUIScale);
 
     SDL_RenderPresent(mRenderer);
 }
