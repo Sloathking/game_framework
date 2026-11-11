@@ -5,7 +5,7 @@
 #include "include/Renderer2D.h"
 #include "include/Engine.h"
 #include "include/Constants.h"
-#include "include/UIScreen.h"
+#include "include/UIScreen2D.h"
 #include "include/Camera2D.h"
 #include "include/Actor2D.h"
 #include "include/SpriteComponent2D.h"
@@ -65,8 +65,8 @@ void Renderer2D::ProcessEvent(const SDL_Event& event)
             //mIsRunning = false;
             break;
         }
-        mWindowWidth = x;
-        mWindowHeight = y;
+        mWindowWidth = static_cast<float>(x);
+        mWindowHeight = static_cast<float>(y);
         mCamera->SetWindowSize(mWindowWidth, mWindowHeight);
         if (!SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale))
             SDL_Log("Unable to set Render Scale! SDL Error: %s", SDL_GetError());
@@ -87,15 +87,15 @@ void Renderer2D::UnloadData()
 
 bool Renderer2D::IsInCamera(const Vector2& spritePos, const int texWidth) const
 {
-    if (spritePos.x >= 0 - texWidth and spritePos.x <= mWindowWidth + texWidth
-        and spritePos.y >= 0 - texWidth and spritePos.y <= mWindowHeight + texWidth)
+    if (spritePos.x >= 0.f - static_cast<float>(texWidth) and spritePos.x <= mWindowWidth + static_cast<float>(texWidth)
+        and spritePos.y >= 0.f - static_cast<float>(texWidth) and spritePos.y <= mWindowHeight + static_cast<float>(texWidth))
         return true;
     return false;
 }
 
 void Renderer2D::Draw() const
 {
-    SDL_SetRenderDrawColor(mRenderer, 25, 25, 25, 255);
+    SDL_SetRenderDrawColor(mRenderer, 75, 75, 75, 255);
     SDL_RenderClear(mRenderer);
 
     SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale);
@@ -110,16 +110,13 @@ void Renderer2D::Draw() const
             {
                 sprite->Draw(mRenderer, camOffset, 1.0f);
 
-                SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-                SDL_FRect rect{ .x = actorOffset.x - 1, .y = actorOffset.y - 1, .w = 2, .h = 2 };
-                SDL_RenderFillRect(mRenderer, &rect);
+                // SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+                // SDL_FRect rect{ .x = actorOffset.x - 1, .y = actorOffset.y - 1, .w = 2, .h = 2 };
+                // SDL_RenderFillRect(mRenderer, &rect);
             }
         }
     }
 
-    // collection of UI elements
-    // iterate through them calling Draw() function
-    // draw gets called in an order that gives it correct layers
     SDL_SetRenderScale(mRenderer, mUIScale, mUIScale);
     for (const auto ui : mGame->GetUIStack())
         ui->Draw(mRenderer, mUIScale);
@@ -141,12 +138,12 @@ bool Renderer2D::SetVSync()
 SDL_Texture* Renderer2D::GetTexture(const std::string& fileName)
 {
     SDL_Texture* tex{ nullptr };
-
+    std::string filePath = GamePath + fileName;
     // is texture already in map
     if (const auto iter = mTextures.find(fileName); iter != mTextures.end()) tex = iter->second;
     else
     {
-        if (SDL_Surface* surf = IMG_Load(fileName.c_str()); !surf)
+        if (SDL_Surface* surf = IMG_Load(filePath.c_str()); !surf)
         {
             SDL_Log("Failed to load texture file: %s", fileName.c_str());
         }
@@ -184,4 +181,9 @@ void Renderer2D::SetRenderScale(const float scale)
     mRenderScale = Math::Clamp(scale, mMinRenderScale, mMaxRenderScale);
     if (!SDL_SetRenderScale(mRenderer, mRenderScale, mRenderScale))
         SDL_Log("Unable to set Render Scale! SDL Error: %s", SDL_GetError());
+}
+
+void Renderer2D::SetUIRenderScale(const float val)
+{
+    mUIScale = Math::Clamp(val, mMinUIScale, mMaxUIScale);
 }

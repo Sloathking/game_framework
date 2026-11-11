@@ -43,6 +43,9 @@ public:
     float GetRenderScale() const { return mRenderScale; }
     void SetRenderScale(float scale);
 
+    float GetUIRenderScale() const { return mUIScale; }
+    void SetUIRenderScale(float val);
+
     void SetCamera(Camera2D* cam) { mCamera = cam; mCamera->SetWindowSize(mWindowWidth, mWindowHeight); }
 
 private:
@@ -52,14 +55,14 @@ private:
     SDL_Renderer* mRenderer{nullptr};
 
     // render scaling
-    float mRenderScale{1.0f};
     float mMaxRenderScale{2.0f};
-    float mMinRenderScale{0.1f};
+    float mMinRenderScale{0.05f};
+    float mRenderScale{mMinRenderScale};
 
     // UI scale
-    float mUIScale{1.0f};
     float mMaxUIScale{2.0f};
     float mMinUIScale{0.1f};
+    float mUIScale{1.0f};
 
     // map of loaded Textures
     std::unordered_map<std::string, SDL_Texture*> mTextures{};

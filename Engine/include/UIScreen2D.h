@@ -2,8 +2,8 @@
 // Created by sloath on 10/28/26.
 //
 
-#ifndef UISCREEN_H
-#define UISCREEN_H
+#ifndef UISCREEN2D_H
+#define UISCREEN2D_H
 
 #include "Engine.h"
 #include "Math.h"
@@ -39,13 +39,13 @@ private:
     bool mHighlighted{false};
 };
 
-class UIScreen
+class UIScreen2D
 {
 public:
     enum UIState { EActive, EClosing };
 
-    explicit UIScreen(Engine * game);
-    virtual ~UIScreen();
+    explicit UIScreen2D(Engine * game);
+    virtual ~UIScreen2D();
 
     // UIScreen subclasses can override these
     virtual void Update(float deltaTime);
@@ -81,4 +81,4 @@ protected:
     std::vector<Button *> mButtons{};
 };
 
-#endif // UISCREEN_H
+#endif // UISCREEN2D_H

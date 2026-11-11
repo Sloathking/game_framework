@@ -7,7 +7,7 @@
 #include "include/Renderer.h"
 #include "include/Renderer2D.h"
 #include "include/Renderer3D.h"
-#include "include/UIScreen.h"
+#include "include/UIScreen2D.h"
 #include "include/InputSystem.h"
 #include "include/Actor.h"
 #include "include/Actor3D.h"
@@ -134,11 +134,12 @@ void Engine::RemoveActor(const Actor* actor)
 
 [[nodiscard]] Font* Engine::GetFont(const std::string& fileName)
 {
+    const std::string filePath = GamePath + fileName;
     auto it =  mFonts.find(fileName);
     if (it != mFonts.end()) return it->second;
 
     auto font = new Font(this);
-    if (font->Load(fileName)) mFonts.emplace(fileName, font);
+    if (font->Load(filePath)) mFonts.emplace(fileName, font);
     else
     {
         font->Unload();
@@ -159,8 +160,8 @@ void Engine::UpdateGame()
 	while (fpsCapEnabled and SDL_GetTicksNS() < mTicksCount + 16000000) {}
 
 	// difference in ticks from last frame
-	float deltaTime = (SDL_GetTicksNS() - mTicksCount) / static_cast<float>(SDL_NS_PER_SECOND);
-	if (deltaTime > 0.05f) deltaTime = 0.05f;
+    const float deltaTime = (SDL_GetTicksNS() - mTicksCount) / static_cast<float>(SDL_NS_PER_SECOND);
+	// if (deltaTime > 0.05f) deltaTime = 0.05f;
 	mTicksCount = SDL_GetTicksNS();
 
     if (mGameState == EGameplay)
@@ -197,14 +198,14 @@ void Engine::UpdateGame()
 
     // update UI screens
     for (const auto ui : mUIStack)
-        if (ui->GetState() == UIScreen::EActive)
+        if (ui->GetState() == UIScreen2D::EActive)
             ui->Update(deltaTime);
 
     // remove any closing UI screens
     auto it = mUIStack.begin();
     while (it != mUIStack.end())
     {
-        if ((*it)->GetState() == UIScreen::EClosing)
+        if ((*it)->GetState() == UIScreen2D::EClosing)
         {
             delete *it;
             it = mUIStack.erase(it);
@@ -228,9 +229,9 @@ void Engine::ProcessInput()
     {
         switch (event.type)
         {
-        // case SDL_EVENT_QUIT:
-        //     mGameState = EQuit;
-        //     break;
+        case SDL_EVENT_QUIT:
+            mGameState = EQuit;
+            break;
         case SDL_EVENT_WINDOW_RESIZED:
             mRenderer->ProcessEvent(event);
             break;
@@ -266,15 +267,16 @@ void Engine::ProcessInput()
         else if (mGameState == EPaused) mGameState = EGameplay;
     }
 
-    if (mGameState == EGameplay)
+    if (!mUIStack.empty())
+        mUIStack.back()->ProcessInput(state);
+
+    else if (mGameState == EGameplay)
     {
         mUpdatingActors = true;
         for (const auto actor : mActors)
             actor->ProcessInput(state);
         mUpdatingActors = false;
     }
-    else if (!mUIStack.empty())
-        mUIStack.back()->ProcessInput(state);
 }
 
 void Engine::GenerateOutput() const

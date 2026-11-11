@@ -29,13 +29,14 @@ public:
 
     [[nodiscard]] GameState GetState() const { return mGameState; }
     void SetState(const GameState state) { mGameState = state; }
+    void Quit() { mGameState = EQuit; }
 
     [[nodiscard]] class Renderer* GetRenderer() const { return mRenderer; }
 
     [[nodiscard]] class Font* GetFont(const std::string& fileName);
 
-    [[nodiscard]] std::vector<class UIScreen*>& GetUIStack() { return mUIStack;}
-    void PushUI(UIScreen* screen) { mUIStack.emplace_back(screen); }
+    [[nodiscard]] std::vector<class UIScreen2D*>& GetUIStack() { return mUIStack;}
+    void PushUI(UIScreen2D* screen) { mUIStack.emplace_back(screen); }
 
     void SetRelativeMouseMode(bool value) const;
 
@@ -67,7 +68,7 @@ protected:
     std::unordered_map<std::string, Font*> mFonts;
 
     // UI stuff
-    std::vector<UIScreen*> mUIStack;
+    std::vector<UIScreen2D*> mUIStack;
 
 private:
     // helper functions for the game loop

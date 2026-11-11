@@ -78,8 +78,8 @@ target_sources(Engine PRIVATE
         include/Camera2D.h
         src/Font.cpp
         include/Font.h
-        src/UIScreen.cpp
-        include/UIScreen.h
+        src/UIScreen2D.cpp
+        include/UIScreen2D.h
 )
 
 target_include_directories(Engine

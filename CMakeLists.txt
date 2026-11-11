@@ -29,6 +29,10 @@ link_directories(libs/stb_image)
 include_directories(libs/json)
 link_directories(libs/json)
 
+# fastnoiselite
+include_directories(libs/FastNoiseLite)
+link_directories(libs/FastNoiseLite)
+
 # create list to iterate over
 set(LIBS)
 

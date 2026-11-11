@@ -21,8 +21,11 @@ protected:
     void UnloadData() override;
 
 private:
-    class Cam2DActor* mCamActor;
-    class HexGridActor* mHexGrid;
+    class Cam2DActor* mCamActor{};
+    class HexGridActor* mHexGrid{};
+
+    int mCols{100};
+    int mRows{100};
 
 };
 

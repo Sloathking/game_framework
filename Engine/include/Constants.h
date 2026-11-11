@@ -16,4 +16,7 @@ inline bool vSyncEnabled{ true };
 inline bool fpsCapEnabled{ true };
 inline bool logFPSandVSYNC{ false };
 
+// file paths
+inline std::string GamePath;
+
 #endif //CONSTANTS_H
